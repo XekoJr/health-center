@@ -1,0 +1,651 @@
+<!-- Checklist (sem requisitos marcados como "Exame") -->
+<!-- Baseado no enunciado: :contentReference[oaicite:0]{index=0} -->
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Checklist de Requisitos</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --card:#121926;
+      --text:#e7edf6;
+      --muted:#a8b3c5;
+      --line:#22304a;
+      --ok:#28d17c;
+      --accent:#6aa6ff;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:linear-gradient(180deg, #0b0f14, #0a1220);
+      color:var(--text);
+      padding:24px;
+    }
+    .wrap{max-width:980px;margin:0 auto}
+    header{
+      display:flex;gap:14px;align-items:flex-start;justify-content:space-between;
+      margin-bottom:18px;
+    }
+    h1{font-size:20px;margin:0 0 6px 0}
+    .sub{color:var(--muted);font-size:13px;line-height:1.35}
+    .pill{
+      display:inline-block;
+      padding:6px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:14px;
+    }
+    @media (max-width: 860px){
+      .grid{grid-template-columns:1fr}
+    }
+    section{
+      background:rgba(18,25,38,.92);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+    }
+    section h2{
+      margin:0 0 10px 0;
+      font-size:14px;
+      color:#dbe7ff;
+      letter-spacing:.2px;
+    }
+    .item{
+      display:flex;align-items:flex-start;gap:10px;
+      padding:10px 10px;
+      border-top:1px dashed rgba(34,48,74,.7);
+    }
+    .item:first-of-type{border-top:none}
+    input[type="checkbox"]{
+      margin-top:2px;
+      width:18px;height:18px;
+      accent-color:var(--ok);
+      flex:0 0 auto;
+    }
+    label{cursor:pointer;display:block}
+    .code{
+      font-weight:700;
+      color:var(--accent);
+      margin-right:6px;
+    }
+    .desc{color:var(--text);font-size:13px;line-height:1.35}
+    .hint{color:var(--muted);font-size:12px;margin-top:2px}
+    footer{
+      margin-top:14px;
+      color:var(--muted);
+      font-size:12px;
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Checklist de Requisitos (sem os que dizem “Exame”)</h1>
+      <span class="sub">
+        Marca o que já implementaste. Agrupado por secções do enunciado.
+      </span>
+    </div>
+    <span class="pill">Curso LEI · Programação · AP3</span>
+  </header>
+
+  <div class="grid">
+    <!-- Gestão de acesso e utilizadores -->
+    <section>
+      <h2>Gestão de acesso e utilizadores</h2>
+
+      <span class="item">
+        <input id="r1" type="checkbox" checked>
+        <label for="r1">
+          <span class="desc"><span class="code">R1</span> Registo e autenticação; vários utilizadores.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r2" type="checkbox" checked>
+        <label for="r2">
+          <span class="desc"><span class="code">R2</span> 3 tipos de utilizador: admins, técnicos, clientes.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r3" type="checkbox" checked>
+        <label for="r3">
+          <span class="desc"><span class="code">R3</span> Atributos de utilizador: username, password, nome, estado, email, tipo.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r4" type="checkbox" checked>
+        <label for="r4">
+          <span class="desc"><span class="code">R4</span> Cada utilizador só altera a própria info; sem ver/alterar outros; sem criar users.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r5" type="checkbox" checked>
+        <label for="r5">
+          <span class="desc"><span class="code">R5</span> Username e email únicos.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r6" type="checkbox" checked>
+        <label for="r6">
+          <span class="desc"><span class="code">R6</span> Clientes e técnicos: NIF, morada, telefone; NIF e telefone únicos.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r7" type="checkbox" checked>
+        <label for="r7">
+          <span class="desc"><span class="code">R7</span> Se não existirem utilizadores, solicitar criação de admin.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r8" type="checkbox" checked>
+        <label for="r8">
+          <span class="desc"><span class="code">R8</span> Após login: mostrar “Bem-vindo [nome utilizador]”.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r9" type="checkbox" checked>
+        <label for="r9">
+          <span class="desc"><span class="code">R9</span> Ao encerrar: “Adeus [nome utilizador]”.</span>
+        </label>
+      </span>
+    </section>
+
+    <!-- Funções -->
+    <section>
+      <h2>Funções (por tipo de utilizador)</h2>
+
+      <span class="item">
+        <input id="r10" type="checkbox" checked>
+        <label for="r10">
+          <span class="desc"><span class="code">R10</span> Admin aprova pedidos de registo antes de poderem autenticar.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r11" type="checkbox" checked>
+        <label for="r11">
+          <span class="desc"><span class="code">R11</span> Admin associa técnico responsável a cada serviço.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r12" type="checkbox" checked>
+        <label for="r12">
+          <span class="desc"><span class="code">R12</span> Técnicos introduzem análises, categorias, testes, áreas médicas, fornecedores e encomendas.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r13" type="checkbox" checked>
+        <label for="r13">
+          <span class="desc"><span class="code">R13</span> Clientes fazem pedidos de serviços; técnicos aprovam.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r14" type="checkbox" checked>
+        <label for="r14">
+          <span class="desc"><span class="code">R14</span> Admin pode gerir todos os serviços.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r15" type="checkbox" checked>
+        <label for="r15">
+          <span class="desc"><span class="code">R15</span> Técnico só gere os seus serviços realizados.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r16" type="checkbox" checked>
+        <label for="r16">
+          <span class="desc"><span class="code">R16</span> Cliente só gere os seus serviços pedidos.</span>
+        </label>
+      </span>
+    </section>
+
+    <!-- Acções / Modelo de dados -->
+    <section>
+      <h2>Acções e entidades (serviços, análises, etc.)</h2>
+
+      <span class="item">
+        <input id="r17" type="checkbox" checked>
+        <label for="r17">
+          <span class="desc"><span class="code">R17</span> Processo inicia com cliente a submeter pedido de serviço.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r18" type="checkbox" checked>
+        <label for="r18">
+          <span class="desc"><span class="code">R18</span> Admin aprova/rejeita e associa técnico responsável.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r19" type="checkbox" checked>
+        <label for="r19">
+          <span class="desc"><span class="code">R19</span> Serviço: código, lista de análises, valor total, estado + datas (pedido e conclusão).</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r20" type="checkbox" checked>
+        <label for="r20">
+          <span class="desc"><span class="code">R20</span> Estados do serviço: iniciado, aprovado, rejeitado, execução, terminado.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r21" type="checkbox" checked>
+        <label for="r21">
+          <span class="desc"><span class="code">R21</span> Nova análise: código, designação, certificação, laboratório, técnicos, componentes; testes; data/resultado.</span>
+          <span class="hint">Testes acedidos por técnico isoladamente em cada acesso.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r22" type="checkbox" checked>
+        <label for="r22">
+          <span class="desc"><span class="code">R22</span> Cada serviço tem um técnico responsável.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r23" type="checkbox" checked>
+        <label for="r23">
+          <span class="desc"><span class="code">R23</span> Técnico responsável indica o técnico por cada análise.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r24" type="checkbox" checked>
+        <label for="r24">
+          <span class="desc"><span class="code">R24</span> Códigos de análise e serviço são únicos.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r25" type="checkbox" checked>
+        <label for="r25">
+          <span class="desc"><span class="code">R25</span> Análise tem até 6 fornecedores; pode adicionar fornecedor a qualquer momento.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r26" type="checkbox" checked>
+        <label for="r26">
+          <span class="desc"><span class="code">R26</span> Fornecedor: nome, morada, telefone.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r27" type="checkbox" checked>
+        <label for="r27">
+          <span class="desc"><span class="code">R27</span> Análise tem até 4 áreas médicas; pode introduzir nova análise a qualquer momento.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r28" type="checkbox" checked>
+        <label for="r28">
+          <span class="desc"><span class="code">R28</span> Área médica: designação e família.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r29" type="checkbox" checked>
+        <label for="r29">
+          <span class="desc"><span class="code">R29</span> Certificação: nível e grau.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r30" type="checkbox" checked>
+        <label for="r30">
+          <span class="desc"><span class="code">R30</span> Componente químico: designação, alfa, beta, código único, quantidade em stock.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r31" type="checkbox" checked>
+        <label for="r31">
+          <span class="desc"><span class="code">R31</span> Encomendas: lista de componentes, quantidades, datas (pedido/entrega), código único.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r32" type="checkbox" checked>
+        <label for="r32">
+          <span class="desc"><span class="code">R32</span> Ao comprar componentes, incrementar stock.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r33" type="checkbox" checked>
+        <label for="r33">
+          <span class="desc"><span class="code">R33</span> Teste: designação, valor medido, valor de referência, unidade.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r34" type="checkbox" checked>
+        <label for="r34">
+          <span class="desc"><span class="code">R34</span> Acrescentar/remover testes numa análise.</span>
+        </label>
+      </span>
+    </section>
+
+    <!-- Listagens e pesquisas -->
+    <section>
+      <h2>Listagens e pesquisas</h2>
+
+      <span class="item">
+        <input id="r38" type="checkbox" checked>
+        <label for="r38">
+          <span class="desc"><span class="code">R38</span> Ordenar utilizadores por ordem alfabética do nome.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r40" type="checkbox" checked>
+        <label for="r40">
+          <span class="desc"><span class="code">R40</span> Ordenar serviços por código.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r42" type="checkbox" checked>
+        <label for="r42">
+          <span class="desc"><span class="code">R42</span> Ordenar serviços por valor total.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r43" type="checkbox" checked>
+        <label for="r43">
+          <span class="desc"><span class="code">R43</span> Ordenar análises por código.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r45" type="checkbox" checked>
+        <label for="r45">
+          <span class="desc"><span class="code">R45</span> Ordenar encomendas por código.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r47" type="checkbox" checked>
+        <label for="r47">
+          <span class="desc"><span class="code">R47</span> Listar todos os utilizadores.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r48" type="checkbox" checked>
+        <label for="r48">
+          <span class="desc"><span class="code">R48</span> Listar utilizadores por tipo.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r49" type="checkbox" checked>
+        <label for="r49">
+          <span class="desc"><span class="code">R49</span> Listar todos os serviços.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r50" type="checkbox" checked>
+        <label for="r50">
+          <span class="desc"><span class="code">R50</span> Listar serviços associados a um cliente.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r51" type="checkbox" checked>
+        <label for="r51">
+          <span class="desc"><span class="code">R51</span> Listar serviços por estado (qualquer estado possível).</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r52" type="checkbox" checked>
+        <label for="r52">
+          <span class="desc"><span class="code">R52</span> Listar serviços que possuem uma análise específica.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r53" type="checkbox" checked>
+        <label for="r53">
+          <span class="desc"><span class="code">R53</span> Listar serviços onde foi usado um componente químico específico.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r55" type="checkbox" checked>
+        <label for="r55">
+          <span class="desc"><span class="code">R55</span> Listar todas as análises.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r57" type="checkbox" checked>
+        <label for="r57">
+          <span class="desc"><span class="code">R57</span> Listar testes realizados por análise.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r58" type="checkbox" checked>
+        <label for="r58">
+          <span class="desc"><span class="code">R58</span> Listar todos os componentes químicos.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r60" type="checkbox" checked>
+        <label for="r60">
+          <span class="desc"><span class="code">R60</span> Listar todas as encomendas.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r61" type="checkbox" checked>
+        <label for="r61">
+          <span class="desc"><span class="code">R61</span> Listar encomendas realizadas mas não entregues.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r62" type="checkbox" checked>
+        <label for="r62">
+          <span class="desc"><span class="code">R62</span> Pesquisar utilizadores por username ou nome.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r63" type="checkbox" checked>
+        <label for="r63">
+          <span class="desc"><span class="code">R63</span> Pesquisar serviços por código ou palavra na descrição.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r64" type="checkbox" checked>
+        <label for="r64">
+          <span class="desc"><span class="code">R64</span> Pesquisar análises por código.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r65" type="checkbox" checked>
+        <label for="r65">
+          <span class="desc"><span class="code">R65</span> Pesquisar análises que usaram um componente químico.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r66" type="checkbox" checked>
+        <label for="r66">
+          <span class="desc"><span class="code">R66</span> Pesquisas avançadas com termo parcial (ex.: “Ana”).</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r67" type="checkbox" checked>
+        <label for="r67">
+          <span class="desc"><span class="code">R67</span> Clientes listam/pesquisam os serviços que realizaram.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r68" type="checkbox" checked>
+        <label for="r68">
+          <span class="desc"><span class="code">R68</span> Técnicos listam/pesquisam os serviços que processaram.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r69" type="checkbox" checked>
+        <label for="r69">
+          <span class="desc"><span class="code">R69</span> Admins listam/pesquisam todos os serviços.</span>
+        </label>
+      </span>
+    </section>
+
+    <!-- Manipulação e armazenamento -->
+    <section>
+      <h2>Armazenamento persistente</h2>
+
+      <span class="item">
+        <input id="r70" type="checkbox" checked>
+        <label for="r70">
+          <span class="desc"><span class="code">R70</span> Credenciais em “credenciais_acesso.txt”.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r71" type="checkbox" checked>
+        <label for="r71">
+          <span class="desc"><span class="code">R71</span> Ao encerrar, guardar dados em “dados_apl.dat”.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r72" type="checkbox" checked>
+        <label for="r72">
+          <span class="desc"><span class="code">R72</span> No arranque, ler “dados_apl.dat” (se existir) e informar sucesso/indisponibilidade.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r73" type="checkbox" checked>
+        <label for="r73">
+          <span class="desc"><span class="code">R73</span> Exportar serviços realizados para CSV: &lt;data&gt;,&lt;valor&gt;,&lt;cliente&gt;,&lt;análises&gt; (mais recente → mais antigo).</span>
+        </label>
+      </span>
+    </section>
+
+    <!-- Monitorização -->
+    <section>
+      <h2>Monitorização de acessos</h2>
+
+      <span class="item">
+        <input id="r75" type="checkbox" checked>
+        <label for="r75">
+          <span class="desc"><span class="code">R75</span> Log de acções em “log.txt” (mais recentes no início): &lt;utilizador&gt; &lt;acção&gt;.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r76" type="checkbox" checked>
+        <label for="r76">
+          <span class="desc"><span class="code">R76</span> Consultar log através da aplicação.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r77" type="checkbox" checked>
+        <label for="r77">
+          <span class="desc"><span class="code">R77</span> Guardar nº total de execuções + último username em “info_sistema.dat” (ler/atualizar/guardar).</span>
+        </label>
+      </span>
+    </section>
+
+    <!-- Gestão geral -->
+    <section>
+      <h2>Gestão geral (UI texto, POO, validações)</h2>
+
+      <span class="item">
+        <input id="r78" type="checkbox" checked>
+        <label for="r78">
+          <span class="desc"><span class="code">R78</span> Interface em modo texto para interagir e controlar a aplicação.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r79" type="checkbox" checked>
+        <label for="r79">
+          <span class="desc"><span class="code">R79</span> Estrutura correcta em POO (Java).</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r80" type="checkbox" checked>
+        <label for="r80">
+          <span class="desc"><span class="code">R80</span> Sem lambdas/streams; listagens com Enumeration/Iterator (sem for/foreach).</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r81" type="checkbox" checked>
+        <label for="r81">
+          <span class="desc"><span class="code">R81</span> Estruturas de armazenamento necessárias, otimizando recursos.</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r82" type="checkbox" checked>
+        <label for="r82">
+          <span class="desc"><span class="code">R82</span> Validar todas as leituras do utilizador (ex.: unicidade de nomes).</span>
+        </label>
+      </span>
+
+      <span class="item">
+        <input id="r83" type="checkbox" checked>
+        <label for="r83">
+          <span class="desc"><span class="code">R83</span> Mensagens informativas; indicar sucesso/insucesso de acções.</span>
+        </label>
+      </span>
+    </section>
+  </div>
+
+  <footer>
+    Nota: Foram removidos os requisitos marcados como “(Exame)”. :contentReference[oaicite:1]{index=1}
+  </footer>
+</div>
+</body>
+</html>

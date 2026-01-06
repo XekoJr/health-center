@@ -58,6 +58,32 @@ public class ManageUsers {
             if (user.getUsername().equals(aUser.getUsername())) {
                 return false;
             }
+            if (user.getEmail().equals(aUser.getEmail())) {
+                return false;
+            }
+            
+            // Check NIF and phone uniqueness for Client and Technician
+            if (aUser instanceof Client && user instanceof Client) {
+                Client newClient = (Client) aUser;
+                Client existingClient = (Client) user;
+                if (newClient.getNif().equals(existingClient.getNif())) {
+                    return false;
+                }
+                if (newClient.getPhone().equals(existingClient.getPhone())) {
+                    return false;
+                }
+            }
+            
+            if (aUser instanceof Technician && user instanceof Technician) {
+                Technician newTech = (Technician) aUser;
+                Technician existingTech = (Technician) user;
+                if (newTech.getNif().equals(existingTech.getNif())) {
+                    return false;
+                }
+                if (newTech.getPhone().equals(existingTech.getPhone())) {
+                    return false;
+                }
+            }
         }
         return true;
     }
@@ -112,10 +138,18 @@ public class ManageUsers {
     }
 
     public boolean sortUsersByName(boolean ascending) {
-        if (ascending) {
-            users.sort(Comparator.comparing(User::getName));
-        } else {
-            users.sort(Comparator.comparing(User::getName).reversed());
+        for (int i = 0; i < users.size() - 1; i++) {
+            for (int j = 0; j < users.size() - i - 1; j++) {
+                String name1 = users.get(j).getName();
+                String name2 = users.get(j + 1).getName();
+                boolean shouldSwap = ascending ? name1.compareTo(name2) > 0 : name1.compareTo(name2) < 0;
+                
+                if (shouldSwap) {
+                    User temp = users.get(j);
+                    users.set(j, users.get(j + 1));
+                    users.set(j + 1, temp);
+                }
+            }
         }
         return true;
     }

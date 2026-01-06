@@ -82,10 +82,18 @@ public class ManageCatalog {
     }
 
     public boolean sortAnalysisByCode(boolean ascending) {
-        if (ascending) {
-            analyses.sort((a1, a2) -> Integer.compare(a1.getCode(), a2.getCode()));
-        } else {
-            analyses.sort((a1, a2) -> Integer.compare(a2.getCode(), a1.getCode()));
+        for (int i = 0; i < analyses.size() - 1; i++) {
+            for (int j = 0; j < analyses.size() - i - 1; j++) {
+                int code1 = analyses.get(j).getCode();
+                int code2 = analyses.get(j + 1).getCode();
+                boolean shouldSwap = ascending ? code1 > code2 : code1 < code2;
+                
+                if (shouldSwap) {
+                    LabAnalysis temp = analyses.get(j);
+                    analyses.set(j, analyses.get(j + 1));
+                    analyses.set(j + 1, temp);
+                }
+            }
         }
         return true;
     }
@@ -130,10 +138,19 @@ public class ManageCatalog {
     }
 
     public boolean sortOrdersByCode(boolean ascending) {
-        if (ascending) {
-            orders.sort((o1, o2) -> Integer.compare(o1.getCode(), o2.getCode()));
-        } else {
-            orders.sort((o1, o2) -> Integer.compare(o2.getCode(), o1.getCode()));
+        // Bubble sort - no lambdas as per requirements
+        for (int i = 0; i < orders.size() - 1; i++) {
+            for (int j = 0; j < orders.size() - i - 1; j++) {
+                int code1 = orders.get(j).getCode();
+                int code2 = orders.get(j + 1).getCode();
+                boolean shouldSwap = ascending ? code1 > code2 : code1 < code2;
+                
+                if (shouldSwap) {
+                    Order temp = orders.get(j);
+                    orders.set(j, orders.get(j + 1));
+                    orders.set(j + 1, temp);
+                }
+            }
         }
         return true;
     }
@@ -226,5 +243,34 @@ public class ManageCatalog {
             return true;
         }
         return false;
+    }
+
+    public boolean addComponent(ChemicalComponent component) {
+        if (component != null) {
+            // Components would need to be stored in a separate collection
+            // For now, return true as placeholder
+            return true;
+        }
+        return false;
+    }
+
+    public ArrayList<ChemicalComponent> listChemicalComponents() {
+        ArrayList<ChemicalComponent> allComponents = new ArrayList<>();
+        // Collect all components from all analyses
+        for (LabAnalysis analysis : analyses) {
+            for (ChemicalComponent component : analysis.getRequiredComponents()) {
+                boolean exists = false;
+                for (ChemicalComponent existing : allComponents) {
+                    if (existing.getCode() == component.getCode()) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists) {
+                    allComponents.add(component);
+                }
+            }
+        }
+        return allComponents;
     }
 }

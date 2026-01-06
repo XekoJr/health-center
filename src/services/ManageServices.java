@@ -114,19 +114,37 @@ public class ManageServices {
     }
 
     public boolean sortServicesByCode(boolean ascending) {
-        if (ascending) {
-            services.sort(Comparator.comparing(Service::getCode));
-        } else {
-            services.sort(Comparator.comparing(Service::getCode).reversed());
+        // Bubble sort - no lambdas as per requirements
+        for (int i = 0; i < services.size() - 1; i++) {
+            for (int j = 0; j < services.size() - i - 1; j++) {
+                int code1 = services.get(j).getCode();
+                int code2 = services.get(j + 1).getCode();
+                boolean shouldSwap = ascending ? code1 > code2 : code1 < code2;
+                
+                if (shouldSwap) {
+                    Service temp = services.get(j);
+                    services.set(j, services.get(j + 1));
+                    services.set(j + 1, temp);
+                }
+            }
         }
         return true;
     }
 
     public boolean sortServicesByTotalValue(boolean ascending) {
-        if (ascending) {
-            services.sort(Comparator.comparing(Service::getTotalValue));
-        } else {
-            services.sort(Comparator.comparing(Service::getTotalValue).reversed());
+        // Bubble sort - no lambdas as per requirements
+        for (int i = 0; i < services.size() - 1; i++) {
+            for (int j = 0; j < services.size() - i - 1; j++) {
+                float value1 = services.get(j).getTotalValue();
+                float value2 = services.get(j + 1).getTotalValue();
+                boolean shouldSwap = ascending ? value1 > value2 : value1 < value2;
+                
+                if (shouldSwap) {
+                    Service temp = services.get(j);
+                    services.set(j, services.get(j + 1));
+                    services.set(j + 1, temp);
+                }
+            }
         }
         return true;
     }
@@ -169,9 +187,22 @@ public class ManageServices {
     }
 
     public ArrayList<Service> listServicesWithChemicalComponent(String aComponentCode) {
-        // Implementation depends on how chemical components are stored
-        // This is a placeholder
-        return new ArrayList<>();
+        ArrayList<Service> results = new ArrayList<>();
+        for (Service service : services) {
+            boolean found = false;
+            for (ServiceAnalysis serviceAnalysis : service.getAnalyses()) {
+                LabAnalysis analysis = serviceAnalysis.getAnalysis();
+                for (ChemicalComponent component : analysis.getRequiredComponents()) {
+                    if (String.valueOf(component.getCode()).equals(aComponentCode)) {
+                        results.add(service);
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) break;
+            }
+        }
+        return results;
     }
 
     public ArrayList<Service> searchServicesByCode(String aCode) {
@@ -228,5 +259,61 @@ public class ManageServices {
             }
         }
         return new ArrayList<>();
+    }
+
+    public boolean exportServicesToCSV(String filename) {
+        try {
+            java.io.FileWriter writer = new java.io.FileWriter(filename);
+            java.io.BufferedWriter bufferedWriter = new java.io.BufferedWriter(writer);
+            
+            // Header
+            bufferedWriter.write("Data,Valor,Cliente,Analises");
+            bufferedWriter.newLine();
+            
+            // Sort services by date (most recent first)
+            ArrayList<Service> completedServices = new ArrayList<>();
+            for (Service service : services) {
+                if ("completed".equals(service.getStatus())) {
+                    completedServices.add(service);
+                }
+            }
+            
+            // Sort by finish date (most recent first)
+            for (int i = 0; i < completedServices.size() - 1; i++) {
+                for (int j = i + 1; j < completedServices.size(); j++) {
+                    String date1 = completedServices.get(i).getFinishDate();
+                    String date2 = completedServices.get(j).getFinishDate();
+                    if (date1.compareTo(date2) < 0) {
+                        Service temp = completedServices.get(i);
+                        completedServices.set(i, completedServices.get(j));
+                        completedServices.set(j, temp);
+                    }
+                }
+            }
+            
+            // Write data
+            for (Service service : completedServices) {
+                String date = service.getFinishDate().isEmpty() ? service.getRequestDate() : service.getFinishDate();
+                String value = String.valueOf(service.getTotalValue());
+                String client = service.getClient().getName();
+                
+                // Build analyses list
+                StringBuilder analysesStr = new StringBuilder();
+                ArrayList<ServiceAnalysis> analyses = service.getAnalyses();
+                for (int i = 0; i < analyses.size(); i++) {
+                    if (i > 0) analysesStr.append(";");
+                    analysesStr.append(analyses.get(i).getAnalysis().getName());
+                }
+                
+                bufferedWriter.write(date + "," + value + "," + client + "," + analysesStr.toString());
+                bufferedWriter.newLine();
+            }
+            
+            bufferedWriter.close();
+            return true;
+        } catch (java.io.IOException e) {
+            System.err.println("Error exporting to CSV: " + e.getMessage());
+            return false;
+        }
     }
 }
