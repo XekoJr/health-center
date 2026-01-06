@@ -1,7 +1,6 @@
 package users;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class ManageUsers {
     private ArrayList<User> users;
