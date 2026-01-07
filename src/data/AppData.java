@@ -10,8 +10,10 @@ import services.Supplier;
 import services.Order;
 import services.ChemicalComponent;
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class AppData {
+public class AppData implements Serializable {
+    private static final long serialVersionUID = 1L;
     private ArrayList<User> users;
     private ArrayList<Service> services;
     private ArrayList<LabAnalysis> analyses;

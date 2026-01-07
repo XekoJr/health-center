@@ -5,7 +5,6 @@ import users.Client;
 import users.Technician;
 import users.User;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class ManageServices {
     private ArrayList<Service> services;

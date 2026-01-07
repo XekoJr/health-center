@@ -19,17 +19,17 @@ public class App {
         CredentialsManager credentialsManager = new CredentialsManager(credentialsPath);
         
         // Display system info
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║   SISTEMA DE GESTÃO LABORATORIAL      ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("==========================================");
+        System.out.println("   SISTEMA DE GESTAO LABORATORIAL");
+        System.out.println("==========================================");
         System.out.println();
         
         // Increment execution count
         systemInfo.incrementExecutionCount();
         
-        System.out.println("Nº de execuções: " + systemInfo.getExecutionCount());
+        System.out.println("N de execucoes: " + systemInfo.getExecutionCount());
         if (!systemInfo.getLastUsername().isEmpty()) {
-            System.out.println("Último utilizador: " + systemInfo.getLastUsername());
+            System.out.println("ultimo utilizador: " + systemInfo.getLastUsername());
         }
         System.out.println();
         
@@ -38,9 +38,9 @@ public class App {
         boolean dataLoaded = appManager.startup();
         
         if (dataLoaded) {
-            System.out.println(" ✓ Dados carregados com sucesso!");
+            System.out.println("Dados carregados com sucesso!");
         } else {
-            System.out.println(" ⓘ Nenhum ficheiro de dados encontrado. A iniciar sistema novo.");
+            System.out.println("Nenhum ficheiro de dados encontrado. A iniciar sistema novo.");
         }
         
         System.out.println();
@@ -60,9 +60,9 @@ public class App {
         System.out.print("A guardar dados...");
         
         if (appManager.shutdown()) {
-            System.out.println(" ✓ Dados guardados com sucesso!");
+            System.out.println("Dados guardados com sucesso!");
         } else {
-            System.out.println(" ✗ Erro ao guardar dados!");
+            System.out.println("Erro ao guardar dados!");
         }
         
         // Save credentials

@@ -22,15 +22,15 @@ public class MenuManager {
     public void showMainMenu() {
         while (true) {
             clearScreen();
-            System.out.println("╔════════════════════════════════════════╗");
-            System.out.println("║     SISTEMA DE GESTÃO LABORATORIAL    ║");
-            System.out.println("╚════════════════════════════════════════╝");
+            System.out.println("+========================================+");
+            System.out.println("|     SISTEMA DE GESTAO LABORATORIAL     |");
+            System.out.println("+========================================+");
             System.out.println();
             System.out.println("1. Login");
             System.out.println("2. Registar novo utilizador");
             System.out.println("0. Sair");
             System.out.println();
-            System.out.print("Escolha uma opção: ");
+            System.out.print("Escolha uma opcao: ");
             
             int choice = readInt();
             
@@ -44,7 +44,7 @@ public class MenuManager {
                 case 0:
                     return;
                 default:
-                    showError("Opção inválida!");
+                    showError("Opcao invalida!");
                     pause();
             }
         }
@@ -54,9 +54,9 @@ public class MenuManager {
     
     private void handleLogin() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║              LOGIN                     ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|              LOGIN                     |");
+        System.out.println("+========================================+");
         System.out.println();
         
         System.out.print("Username: ");
@@ -68,19 +68,19 @@ public class MenuManager {
         User user = appManager.getManageUsers().login(username, password);
         
         if (user == null) {
-            showError("Credenciais inválidas!");
+            showError("Credenciais invalidas!");
             pause();
             return;
         }
         
         if (!user.getReviewed()) {
-            showError("Conta pendente de aprovação por um administrador.");
+            showError("Conta pendente de aprovacao por um administrador.");
             pause();
             return;
         }
         
         if (!"approved".equals(user.getStatus())) {
-            showError("Conta não aprovada. Estado: " + user.getStatus());
+            showError("Conta nao aprovada. Estado: " + user.getStatus());
             pause();
             return;
         }
@@ -90,9 +90,9 @@ public class MenuManager {
         logManager.log(username, "Login realizado");
         
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║          BEM-VINDO                     ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|          BEM-VINDO                     |");
+        System.out.println("+========================================+");
         System.out.println();
         System.out.println("Bem-vindo, " + user.getName() + "!");
         System.out.println();
@@ -119,9 +119,9 @@ public class MenuManager {
     
     private void handleRegister() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║          REGISTO DE UTILIZADOR         ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|          REGISTO DE UTILIZADOR         |");
+        System.out.println("+========================================+");
         System.out.println();
         
         // Check if this is the first user (must be admin)
@@ -129,8 +129,8 @@ public class MenuManager {
         boolean isFirstUser = users.isEmpty();
         
         if (isFirstUser) {
-            System.out.println("⚠ Não existem utilizadores no sistema.");
-            System.out.println("  O primeiro utilizador será criado como ADMINISTRADOR.");
+            System.out.println("AVISO: Nao existem utilizadores no sistema.");
+            System.out.println("  O primeiro utilizador sera criado como ADMINISTRADOR.");
             System.out.println();
         }
         
@@ -138,7 +138,7 @@ public class MenuManager {
         String username = scanner.nextLine().trim();
         
         if (username.isEmpty()) {
-            showError("Username não pode estar vazio!");
+            showError("Username nao pode estar vazio!");
             pause();
             return;
         }
@@ -147,7 +147,7 @@ public class MenuManager {
         String email = scanner.nextLine().trim();
         
         if (email.isEmpty()) {
-            showError("Email não pode estar vazio!");
+            showError("Email nao pode estar vazio!");
             pause();
             return;
         }
@@ -156,7 +156,7 @@ public class MenuManager {
         String password = scanner.nextLine().trim();
         
         if (password.isEmpty()) {
-            showError("Password não pode estar vazia!");
+            showError("Password nao pode estar vazia!");
             pause();
             return;
         }
@@ -165,7 +165,7 @@ public class MenuManager {
         String name = scanner.nextLine().trim();
         
         if (name.isEmpty()) {
-            showError("Nome não pode estar vazio!");
+            showError("Nome nao pode estar vazio!");
             pause();
             return;
         }
@@ -180,7 +180,7 @@ public class MenuManager {
             System.out.println();
             System.out.println("Tipo de utilizador:");
             System.out.println("1. Cliente");
-            System.out.println("2. Técnico");
+            System.out.println("2. Tecnico");
             System.out.print("Escolha: ");
             
             int typeChoice = readInt();
@@ -206,7 +206,7 @@ public class MenuManager {
                 
                 newUser = new Technician(username, email, password, name, "pending", type, false, nif, address, phone);
             } else {
-                showError("Opção inválida!");
+                showError("Opcao invalida!");
                 pause();
                 return;
             }
@@ -215,11 +215,11 @@ public class MenuManager {
         if (appManager.getManageUsers().register(newUser)) {
             showSuccess("Utilizador registado com sucesso!");
             if (!isFirstUser) {
-                System.out.println("A sua conta ficará pendente até ser aprovada por um administrador.");
+                System.out.println("A sua conta ficara pendente ate ser aprovada por um administrador.");
             }
             logManager.log("SYSTEM", "Novo registo: " + username + " (" + type + ")");
         } else {
-            showError("Erro ao registar utilizador. Username ou email já existem.");
+            showError("Erro ao registar utilizador. Username ou email ja existem.");
         }
         
         pause();
@@ -232,25 +232,25 @@ public class MenuManager {
             clearScreen();
             User currentUser = appManager.getSession().getCurrentUser();
             
-            System.out.println("╔════════════════════════════════════════╗");
-            System.out.println("║         MENU ADMINISTRADOR             ║");
-            System.out.println("╚════════════════════════════════════════╝");
+            System.out.println("+========================================+");
+            System.out.println("|         MENU ADMINISTRADOR             |");
+            System.out.println("+========================================+");
             System.out.println("Utilizador: " + currentUser.getName());
             System.out.println();
             System.out.println("1.  Aprovar utilizadores pendentes");
             System.out.println("2.  Listar todos os utilizadores");
             System.out.println("3.  Pesquisar utilizadores");
-            System.out.println("4.  Gerir serviços");
-            System.out.println("5.  Associar técnico a serviço");
-            System.out.println("6.  Aprovar/Rejeitar serviços");
-            System.out.println("7.  Listar análises");
+            System.out.println("4.  Gerir servicos");
+            System.out.println("5.  Associar tecnico a servico");
+            System.out.println("6.  Aprovar/Rejeitar servicos");
+            System.out.println("7.  Listar analises");
             System.out.println("8.  Listar encomendas");
-            System.out.println("9.  Exportar serviços para CSV");
+            System.out.println("9.  Exportar servicos para CSV");
             System.out.println("10. Consultar log do sistema");
             System.out.println("11. Editar meu perfil");
             System.out.println("0.  Logout");
             System.out.println();
-            System.out.print("Escolha uma opção: ");
+            System.out.print("Escolha uma opcao: ");
             
             int choice = readInt();
             
@@ -291,7 +291,7 @@ public class MenuManager {
                 case 0:
                     return;
                 default:
-                    showError("Opção inválida!");
+                    showError("Opcao invalida!");
                     pause();
             }
         }
@@ -299,20 +299,20 @@ public class MenuManager {
     
     private void approveUsers() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║      APROVAR UTILIZADORES PENDENTES    ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|      APROVAR UTILIZADORES PENDENTES    |");
+        System.out.println("+========================================+");
         System.out.println();
         
         ArrayList<User> pendingUsers = appManager.getManageUsers().searchUser("status", "pending");
         
         if (pendingUsers.isEmpty()) {
-            System.out.println("Não existem utilizadores pendentes.");
+            System.out.println("Nao existem utilizadores pendentes.");
             pause();
             return;
         }
         
-        System.out.println("Utilizadores pendentes de aprovação:");
+        System.out.println("Utilizadores pendentes de aprovacao:");
         System.out.println();
         
         int index = 1;
@@ -330,7 +330,7 @@ public class MenuManager {
             index++;
         }
         
-        System.out.print("Escolha o número do utilizador (0 para cancelar): ");
+        System.out.print("Escolha o numero do utilizador (0 para cancelar): ");
         int choice = readInt();
         
         if (choice < 1 || choice > pendingUsers.size()) {
@@ -369,14 +369,14 @@ public class MenuManager {
     
     private void listAllUsers() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║        LISTAR UTILIZADORES             ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|        LISTAR UTILIZADORES             |");
+        System.out.println("+========================================+");
         System.out.println();
         
         System.out.println("1. Todos os utilizadores");
         System.out.println("2. Apenas Administradores");
-        System.out.println("3. Apenas Técnicos");
+        System.out.println("3. Apenas Tecnicos");
         System.out.println("4. Apenas Clientes");
         System.out.print("Escolha: ");
         
@@ -397,7 +397,7 @@ public class MenuManager {
                 users = appManager.getManageUsers().listUsersByType("client");
                 break;
             default:
-                showError("Opção inválida!");
+                showError("Opcao invalida!");
                 pause();
                 return;
         }
@@ -409,7 +409,7 @@ public class MenuManager {
         appManager.getManageUsers().sortUsersByName(true);
         
         for (User user : users) {
-            System.out.println("─────────────────────────────────────────");
+            System.out.println("-----------------------------------------");
             System.out.println("Username: " + user.getUsername());
             System.out.println("Nome: " + user.getName());
             System.out.println("Email: " + user.getEmail());
@@ -429,22 +429,22 @@ public class MenuManager {
             }
         }
         
-        System.out.println("─────────────────────────────────────────");
+        System.out.println("-----------------------------------------");
         pause();
     }
     
     private void searchUsers() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║        PESQUISAR UTILIZADORES          ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|        PESQUISAR UTILIZADORES          |");
+        System.out.println("+========================================+");
         System.out.println();
         
         System.out.print("Termo de pesquisa (username ou nome): ");
         String term = scanner.nextLine().trim();
         
         if (term.isEmpty()) {
-            showError("Termo não pode estar vazio!");
+            showError("Termo nao pode estar vazio!");
             pause();
             return;
         }
@@ -456,7 +456,7 @@ public class MenuManager {
         System.out.println();
         
         for (User user : results) {
-            System.out.println("─────────────────────────────────────────");
+            System.out.println("-----------------------------------------");
             System.out.println("Username: " + user.getUsername());
             System.out.println("Nome: " + user.getName());
             System.out.println("Email: " + user.getEmail());
@@ -465,7 +465,7 @@ public class MenuManager {
         }
         
         if (!results.isEmpty()) {
-            System.out.println("─────────────────────────────────────────");
+            System.out.println("-----------------------------------------");
         }
         
         pause();
@@ -473,14 +473,14 @@ public class MenuManager {
     
     private void manageServices() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║          GERIR SERVIÇOS                ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|          GERIR SERVICOS                |");
+        System.out.println("+========================================+");
         System.out.println();
         
-        System.out.println("1. Listar todos os serviços");
-        System.out.println("2. Listar serviços por estado");
-        System.out.println("3. Pesquisar serviços");
+        System.out.println("1. Listar todos os servicos");
+        System.out.println("2. Listar servicos por estado");
+        System.out.println("3. Pesquisar servicos");
         System.out.println("0. Voltar");
         System.out.print("Escolha: ");
         
@@ -503,7 +503,7 @@ public class MenuManager {
         clearScreen();
         ArrayList<Service> services = appManager.getManageServices().listAllServices();
         
-        System.out.println("Total de serviços: " + services.size());
+        System.out.println("Total de servicos: " + services.size());
         System.out.println();
         
         appManager.getManageServices().sortServicesByCode(true);
@@ -517,16 +517,16 @@ public class MenuManager {
     
     private void listServicesByStatus() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║      LISTAR SERVIÇOS POR ESTADO        ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|      LISTAR SERVICOS POR ESTADO        |");
+        System.out.println("+========================================+");
         System.out.println();
         
-        System.out.println("Estados disponíveis:");
+        System.out.println("Estados disponiveis:");
         System.out.println("1. pending (Pendente)");
         System.out.println("2. approved (Aprovado)");
         System.out.println("3. rejected (Rejeitado)");
-        System.out.println("4. in_progress (Em execução)");
+        System.out.println("4. in_progress (Em execucao)");
         System.out.println("5. completed (Terminado)");
         System.out.print("Escolha: ");
         
@@ -540,7 +540,7 @@ public class MenuManager {
             case 4: status = "in_progress"; break;
             case 5: status = "completed"; break;
             default:
-                showError("Opção inválida!");
+                showError("Opcao invalida!");
                 pause();
                 return;
         }
@@ -548,7 +548,7 @@ public class MenuManager {
         ArrayList<Service> services = appManager.getManageServices().listServicesByStatus(status);
         
         clearScreen();
-        System.out.println("Serviços com estado '" + status + "': " + services.size());
+        System.out.println("Servicos com estado '" + status + "': " + services.size());
         System.out.println();
         
         for (Service service : services) {
@@ -560,16 +560,16 @@ public class MenuManager {
     
     private void searchServices() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║        PESQUISAR SERVIÇOS              ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|        PESQUISAR SERVICOS              |");
+        System.out.println("+========================================+");
         System.out.println();
         
-        System.out.print("Termo de pesquisa (código ou descrição): ");
+        System.out.print("Termo de pesquisa (codigo ou descricao): ");
         String term = scanner.nextLine().trim();
         
         if (term.isEmpty()) {
-            showError("Termo não pode estar vazio!");
+            showError("Termo nao pode estar vazio!");
             pause();
             return;
         }
@@ -589,24 +589,24 @@ public class MenuManager {
     
     private void assignTechnicianToService() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║    ASSOCIAR TÉCNICO A SERVIÇO          ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|    ASSOCIAR TECNICO A SERVICO          |");
+        System.out.println("+========================================+");
         System.out.println();
         
-        System.out.print("Código do serviço: ");
+        System.out.print("Codigo do servico: ");
         int serviceCode = readInt();
         
         ArrayList<User> technicians = appManager.getManageUsers().listUsersByType("technician");
         
         if (technicians.isEmpty()) {
-            showError("Não existem técnicos registados!");
+            showError("Nao existem tecnicos registados!");
             pause();
             return;
         }
         
         System.out.println();
-        System.out.println("Técnicos disponíveis:");
+        System.out.println("Tecnicos disponiveis:");
         
         int index = 1;
         for (User tech : technicians) {
@@ -614,11 +614,11 @@ public class MenuManager {
             index++;
         }
         
-        System.out.print("Escolha o técnico: ");
+        System.out.print("Escolha o tecnico: ");
         int choice = readInt();
         
         if (choice < 1 || choice > technicians.size()) {
-            showError("Escolha inválida!");
+            showError("Escolha invalida!");
             pause();
             return;
         }
@@ -627,11 +627,11 @@ public class MenuManager {
         
         if (appManager.getManageServices().assignTechnician((Admin) appManager.getSession().getCurrentUser(), 
                                                             serviceCode, selectedTech)) {
-            showSuccess("Técnico associado ao serviço com sucesso!");
+            showSuccess("Tecnico associado ao servico com sucesso!");
             logManager.log(appManager.getSession().getCurrentUser().getUsername(), 
-                          "Associou técnico " + selectedTech.getUsername() + " ao serviço " + serviceCode);
+                          "Associou tecnico " + selectedTech.getUsername() + " ao servico " + serviceCode);
         } else {
-            showError("Erro ao associar técnico. Verifique se o código do serviço está correto.");
+            showError("Erro ao associar tecnico. Verifique se o codigo do servico esta correto.");
         }
         
         pause();
@@ -639,33 +639,33 @@ public class MenuManager {
     
     private void approveRejectServices() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║      APROVAR/REJEITAR SERVIÇOS         ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|      APROVAR/REJEITAR SERVICOS         |");
+        System.out.println("+========================================+");
         System.out.println();
         
         ArrayList<Service> pendingServices = appManager.getManageServices().listServicesByStatus("pending");
         
         if (pendingServices.isEmpty()) {
-            System.out.println("Não existem serviços pendentes.");
+            System.out.println("Nao existem servicos pendentes.");
             pause();
             return;
         }
         
-        System.out.println("Serviços pendentes:");
+        System.out.println("Servicos pendentes:");
         System.out.println();
         
         int index = 1;
         for (Service service : pendingServices) {
-            System.out.println(index + ". Código: " + service.getCode());
+            System.out.println(index + ". Codigo: " + service.getCode());
             System.out.println("   Cliente: " + service.getClient().getName());
-            System.out.println("   Descrição: " + service.getDescription());
+            System.out.println("   Descricao: " + service.getDescription());
             System.out.println("   Data pedido: " + service.getRequestDate());
             System.out.println();
             index++;
         }
         
-        System.out.print("Escolha o serviço (0 para cancelar): ");
+        System.out.print("Escolha o servico (0 para cancelar): ");
         int choice = readInt();
         
         if (choice < 1 || choice > pendingServices.size()) {
@@ -675,7 +675,7 @@ public class MenuManager {
         Service selectedService = pendingServices.get(choice - 1);
         
         System.out.println();
-        System.out.println("1. Aprovar (e associar técnico)");
+        System.out.println("1. Aprovar (e associar tecnico)");
         System.out.println("2. Rejeitar");
         System.out.print("Escolha: ");
         
@@ -685,13 +685,13 @@ public class MenuManager {
             ArrayList<User> technicians = appManager.getManageUsers().listUsersByType("technician");
             
             if (technicians.isEmpty()) {
-                showError("Não existem técnicos para associar!");
+                showError("Nao existem tecnicos para associar!");
                 pause();
                 return;
             }
             
             System.out.println();
-            System.out.println("Escolha o técnico responsável:");
+            System.out.println("Escolha o tecnico responsavel:");
             
             int techIndex = 1;
             for (User tech : technicians) {
@@ -703,7 +703,7 @@ public class MenuManager {
             int techChoice = readInt();
             
             if (techChoice < 1 || techChoice > technicians.size()) {
-                showError("Escolha inválida!");
+                showError("Escolha invalida!");
                 pause();
                 return;
             }
@@ -712,20 +712,20 @@ public class MenuManager {
             
             if (appManager.getManageServices().approveService((Admin) appManager.getSession().getCurrentUser(), 
                                                              selectedService.getCode(), selectedTech, true)) {
-                showSuccess("Serviço aprovado e técnico associado!");
+                showSuccess("Servico aprovado e tecnico associado!");
                 logManager.log(appManager.getSession().getCurrentUser().getUsername(), 
-                              "Aprovou serviço " + selectedService.getCode());
+                              "Aprovou servico " + selectedService.getCode());
             } else {
-                showError("Erro ao aprovar serviço.");
+                showError("Erro ao aprovar servico.");
             }
         } else if (action == 2) {
             if (appManager.getManageServices().approveService((Admin) appManager.getSession().getCurrentUser(), 
                                                              selectedService.getCode(), null, false)) {
-                showSuccess("Serviço rejeitado.");
+                showSuccess("Servico rejeitado.");
                 logManager.log(appManager.getSession().getCurrentUser().getUsername(), 
-                              "Rejeitou serviço " + selectedService.getCode());
+                              "Rejeitou servico " + selectedService.getCode());
             } else {
-                showError("Erro ao rejeitar serviço.");
+                showError("Erro ao rejeitar servico.");
             }
         }
         
@@ -739,26 +739,26 @@ public class MenuManager {
             clearScreen();
             User currentUser = appManager.getSession().getCurrentUser();
             
-            System.out.println("╔════════════════════════════════════════╗");
-            System.out.println("║           MENU TÉCNICO                 ║");
-            System.out.println("╚════════════════════════════════════════╝");
+            System.out.println("+========================================+");
+            System.out.println("|           MENU TECNICO                 |");
+            System.out.println("+========================================+");
             System.out.println("Utilizador: " + currentUser.getName());
             System.out.println();
-            System.out.println("1.  Listar meus serviços");
-            System.out.println("2.  Iniciar execução de serviço");
-            System.out.println("3.  Finalizar serviço");
-            System.out.println("4.  Criar análise");
-            System.out.println("5.  Listar análises");
-            System.out.println("6.  Adicionar componente químico");
-            System.out.println("7.  Listar componentes químicos");
+            System.out.println("1.  Listar meus servicos");
+            System.out.println("2.  Iniciar execucao de servico");
+            System.out.println("3.  Finalizar servico");
+            System.out.println("4.  Criar analise");
+            System.out.println("5.  Listar analises");
+            System.out.println("6.  Adicionar componente quimico");
+            System.out.println("7.  Listar componentes quimicos");
             System.out.println("8.  Criar fornecedor");
-            System.out.println("9.  Criar área médica");
+            System.out.println("9.  Criar area medica");
             System.out.println("10. Criar encomenda");
             System.out.println("11. Listar encomendas");
             System.out.println("12. Editar meu perfil");
             System.out.println("0.  Logout");
             System.out.println();
-            System.out.print("Escolha uma opção: ");
+            System.out.print("Escolha uma opcao: ");
             
             int choice = readInt();
             
@@ -802,7 +802,7 @@ public class MenuManager {
                 case 0:
                     return;
                 default:
-                    showError("Opção inválida!");
+                    showError("Opcao invalida!");
                     pause();
             }
         }
@@ -810,9 +810,9 @@ public class MenuManager {
     
     private void listMyServices() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║         MEUS SERVIÇOS                  ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|         MEUS SERVICOS                  |");
+        System.out.println("+========================================+");
         System.out.println();
         
         Technician currentTech = (Technician) appManager.getSession().getCurrentUser();
@@ -826,7 +826,7 @@ public class MenuManager {
             }
         }
         
-        System.out.println("Total: " + myServices.size() + " serviços");
+        System.out.println("Total: " + myServices.size() + " servicos");
         System.out.println();
         
         for (Service service : myServices) {
@@ -838,21 +838,21 @@ public class MenuManager {
     
     private void startServiceExecution() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║    INICIAR EXECUÇÃO DE SERVIÇO         ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|    INICIAR EXECUCAO DE SERVICO         |");
+        System.out.println("+========================================+");
         System.out.println();
         
-        System.out.print("Código do serviço: ");
+        System.out.print("Codigo do servico: ");
         int serviceCode = readInt();
         
         Technician currentTech = (Technician) appManager.getSession().getCurrentUser();
         
         if (appManager.getManageServices().startExecution(currentTech, serviceCode)) {
-            showSuccess("Serviço iniciado com sucesso!");
-            logManager.log(currentTech.getUsername(), "Iniciou execução do serviço " + serviceCode);
+            showSuccess("Servico iniciado com sucesso!");
+            logManager.log(currentTech.getUsername(), "Iniciou execucao do servico " + serviceCode);
         } else {
-            showError("Erro ao iniciar serviço. Verifique se o código está correto e se é responsável por este serviço.");
+            showError("Erro ao iniciar servico. Verifique se o codigo esta correto e se e responsavel por este servico.");
         }
         
         pause();
@@ -860,21 +860,21 @@ public class MenuManager {
     
     private void finishService() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║        FINALIZAR SERVIÇO               ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|        FINALIZAR SERVICO               |");
+        System.out.println("+========================================+");
         System.out.println();
         
-        System.out.print("Código do serviço: ");
+        System.out.print("Codigo do servico: ");
         int serviceCode = readInt();
         
         Technician currentTech = (Technician) appManager.getSession().getCurrentUser();
         
         if (appManager.getManageServices().finishService(currentTech, serviceCode)) {
-            showSuccess("Serviço finalizado com sucesso!");
-            logManager.log(currentTech.getUsername(), "Finalizou serviço " + serviceCode);
+            showSuccess("Servico finalizado com sucesso!");
+            logManager.log(currentTech.getUsername(), "Finalizou servico " + serviceCode);
         } else {
-            showError("Erro ao finalizar serviço. Verifique se o código está correto e se é responsável por este serviço.");
+            showError("Erro ao finalizar servico. Verifique se o codigo esta correto e se e responsavel por este servico.");
         }
         
         pause();
@@ -882,31 +882,31 @@ public class MenuManager {
     
     private void createAnalysis() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║          CRIAR ANÁLISE                 ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|          CRIAR ANALISE                 |");
+        System.out.println("+========================================+");
         System.out.println();
         
-        System.out.print("Código da análise: ");
+        System.out.print("Codigo da analise: ");
         int code = readInt();
         
         System.out.print("Nome: ");
         String name = scanner.nextLine().trim();
         
-        System.out.print("Certificação: ");
+        System.out.print("Certificacao: ");
         String certification = scanner.nextLine().trim();
         
-        System.out.print("Métodos: ");
+        System.out.print("Metodos: ");
         String methods = scanner.nextLine().trim();
         
         LabAnalysis analysis = new LabAnalysis(code, name, certification, methods);
         
         if (appManager.getManageCatalog().addAnalysis(analysis)) {
-            showSuccess("Análise criada com sucesso!");
+            showSuccess("Analise criada com sucesso!");
             logManager.log(appManager.getSession().getCurrentUser().getUsername(), 
-                          "Criou análise " + code);
+                          "Criou analise " + code);
         } else {
-            showError("Erro ao criar análise.");
+            showError("Erro ao criar analise.");
         }
         
         pause();
@@ -914,31 +914,31 @@ public class MenuManager {
     
     private void listAnalyses() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║          LISTAR ANÁLISES               ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|          LISTAR ANALISES               |");
+        System.out.println("+========================================+");
         System.out.println();
         
         ArrayList<LabAnalysis> analyses = appManager.getManageCatalog().listAnalysis();
         
-        System.out.println("Total de análises: " + analyses.size());
+        System.out.println("Total de analises: " + analyses.size());
         System.out.println();
         
         appManager.getManageCatalog().sortAnalysisByCode(true);
         
         for (LabAnalysis analysis : analyses) {
-            System.out.println("─────────────────────────────────────────");
-            System.out.println("Código: " + analysis.getCode());
+            System.out.println("-----------------------------------------");
+            System.out.println("Codigo: " + analysis.getCode());
             System.out.println("Nome: " + analysis.getName());
-            System.out.println("Certificação: " + analysis.getCertification());
-            System.out.println("Métodos: " + analysis.getMethods());
+            System.out.println("Certificacao: " + analysis.getCertification());
+            System.out.println("Metodos: " + analysis.getMethods());
             System.out.println("Fornecedores: " + analysis.getSuppliers().size());
-            System.out.println("Áreas médicas: " + analysis.getAreas().size());
+            System.out.println("Areas medicas: " + analysis.getAreas().size());
             System.out.println("Componentes: " + analysis.getRequiredComponents().size());
         }
         
         if (!analyses.isEmpty()) {
-            System.out.println("─────────────────────────────────────────");
+            System.out.println("-----------------------------------------");
         }
         
         pause();
@@ -946,12 +946,12 @@ public class MenuManager {
     
     private void addChemicalComponent() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║      ADICIONAR COMPONENTE QUÍMICO      ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|      ADICIONAR COMPONENTE QUIMICO      |");
+        System.out.println("+========================================+");
         System.out.println();
         
-        System.out.print("Código: ");
+        System.out.print("Codigo: ");
         int code = readInt();
         
         System.out.print("Nome: ");
@@ -969,11 +969,11 @@ public class MenuManager {
         ChemicalComponent component = new ChemicalComponent(code, name, alpha, beta, stock);
         
         if (appManager.getManageCatalog().addComponent(component)) {
-            showSuccess("Componente químico adicionado com sucesso!");
+            showSuccess("Componente quimico adicionado com sucesso!");
             logManager.log(appManager.getSession().getCurrentUser().getUsername(), 
-                          "Adicionou componente químico " + code);
+                          "Adicionou componente quimico " + code);
         } else {
-            showError("Erro ao adicionar componente químico.");
+            showError("Erro ao adicionar componente quimico.");
         }
         
         pause();
@@ -981,9 +981,9 @@ public class MenuManager {
     
     private void listChemicalComponents() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║      COMPONENTES QUÍMICOS              ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|      COMPONENTES QUIMICOS              |");
+        System.out.println("+========================================+");
         System.out.println();
         
         ArrayList<ChemicalComponent> components = appManager.getManageCatalog().listChemicalComponents();
@@ -992,8 +992,8 @@ public class MenuManager {
         System.out.println();
         
         for (ChemicalComponent comp : components) {
-            System.out.println("─────────────────────────────────────────");
-            System.out.println("Código: " + comp.getCode());
+            System.out.println("-----------------------------------------");
+            System.out.println("Codigo: " + comp.getCode());
             System.out.println("Nome: " + comp.getName());
             System.out.println("Alfa: " + comp.getAlphaValue());
             System.out.println("Beta: " + comp.getBetaValue());
@@ -1001,7 +1001,7 @@ public class MenuManager {
         }
         
         if (!components.isEmpty()) {
-            System.out.println("─────────────────────────────────────────");
+            System.out.println("-----------------------------------------");
         }
         
         pause();
@@ -1009,12 +1009,12 @@ public class MenuManager {
     
     private void createSupplier() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║         CRIAR FORNECEDOR               ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|         CRIAR FORNECEDOR               |");
+        System.out.println("+========================================+");
         System.out.println();
         
-        System.out.print("Código: ");
+        System.out.print("Codigo: ");
         int code = readInt();
         
         System.out.print("Nome: ");
@@ -1041,28 +1041,28 @@ public class MenuManager {
     
     private void createMedicalArea() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║        CRIAR ÁREA MÉDICA               ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|        CRIAR AREA MEDICA               |");
+        System.out.println("+========================================+");
         System.out.println();
         
-        System.out.print("Código: ");
+        System.out.print("Codigo: ");
         int code = readInt();
         
-        System.out.print("Designação: ");
+        System.out.print("Designacao: ");
         String designation = scanner.nextLine().trim();
         
-        System.out.print("Família: ");
+        System.out.print("Familia: ");
         String family = scanner.nextLine().trim();
         
         MedicalArea area = new MedicalArea(code, designation, family);
         
         if (appManager.getManageCatalog().addArea(area)) {
-            showSuccess("Área médica criada com sucesso!");
+            showSuccess("Area medica criada com sucesso!");
             logManager.log(appManager.getSession().getCurrentUser().getUsername(), 
-                          "Criou área médica " + code);
+                          "Criou area medica " + code);
         } else {
-            showError("Erro ao criar área médica.");
+            showError("Erro ao criar area medica.");
         }
         
         pause();
@@ -1070,24 +1070,24 @@ public class MenuManager {
     
     private void createOrder() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║         CRIAR ENCOMENDA                ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|         CRIAR ENCOMENDA                |");
+        System.out.println("+========================================+");
         System.out.println();
         
-        System.out.print("Código da encomenda: ");
+        System.out.print("Codigo da encomenda: ");
         int code = readInt();
         
         ArrayList<Supplier> suppliers = appManager.getManageCatalog().getSuppliers();
         
         if (suppliers.isEmpty()) {
-            showError("Não existem fornecedores registados!");
+            showError("Nao existem fornecedores registados!");
             pause();
             return;
         }
         
         System.out.println();
-        System.out.println("Fornecedores disponíveis:");
+        System.out.println("Fornecedores disponiveis:");
         int index = 1;
         for (Supplier supplier : suppliers) {
             System.out.println(index + ". " + supplier.getName());
@@ -1098,7 +1098,7 @@ public class MenuManager {
         int supplierChoice = readInt();
         
         if (supplierChoice < 1 || supplierChoice > suppliers.size()) {
-            showError("Escolha inválida!");
+            showError("Escolha invalida!");
             pause();
             return;
         }
@@ -1123,9 +1123,9 @@ public class MenuManager {
     
     private void listOrders() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║         LISTAR ENCOMENDAS              ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|         LISTAR ENCOMENDAS              |");
+        System.out.println("+========================================+");
         System.out.println();
         
         ArrayList<Order> orders = appManager.getManageCatalog().listOrders();
@@ -1136,17 +1136,17 @@ public class MenuManager {
         appManager.getManageCatalog().sortOrdersByCode(true);
         
         for (Order order : orders) {
-            System.out.println("─────────────────────────────────────────");
-            System.out.println("Código: " + order.getCode());
+            System.out.println("-----------------------------------------");
+            System.out.println("Codigo: " + order.getCode());
             System.out.println("Fornecedor: " + order.getSupplier().getName());
-            System.out.println("Técnico: " + order.getTechnician().getName());
+            System.out.println("Tecnico: " + order.getTechnician().getName());
             System.out.println("Data pedido: " + order.getRequestDate());
             System.out.println("Data entrega: " + (order.getDeliveryDate().isEmpty() ? "Pendente" : order.getDeliveryDate()));
             System.out.println("Estado: " + order.getStatus());
         }
         
         if (!orders.isEmpty()) {
-            System.out.println("─────────────────────────────────────────");
+            System.out.println("-----------------------------------------");
         }
         
         pause();
@@ -1159,18 +1159,18 @@ public class MenuManager {
             clearScreen();
             User currentUser = appManager.getSession().getCurrentUser();
             
-            System.out.println("╔════════════════════════════════════════╗");
-            System.out.println("║           MENU CLIENTE                 ║");
-            System.out.println("╚════════════════════════════════════════╝");
+            System.out.println("+========================================+");
+            System.out.println("|           MENU CLIENTE                 |");
+            System.out.println("+========================================+");
             System.out.println("Utilizador: " + currentUser.getName());
             System.out.println();
-            System.out.println("1. Pedir novo serviço");
-            System.out.println("2. Listar meus serviços");
-            System.out.println("3. Pesquisar meus serviços");
+            System.out.println("1. Pedir novo servico");
+            System.out.println("2. Listar meus servicos");
+            System.out.println("3. Pesquisar meus servicos");
             System.out.println("4. Editar meu perfil");
             System.out.println("0. Logout");
             System.out.println();
-            System.out.print("Escolha uma opção: ");
+            System.out.print("Escolha uma opcao: ");
             
             int choice = readInt();
             
@@ -1190,7 +1190,7 @@ public class MenuManager {
                 case 0:
                     return;
                 default:
-                    showError("Opção inválida!");
+                    showError("Opcao invalida!");
                     pause();
             }
         }
@@ -1198,19 +1198,19 @@ public class MenuManager {
     
     private void requestNewService() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║        PEDIR NOVO SERVIÇO              ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|        PEDIR NOVO SERVICO              |");
+        System.out.println("+========================================+");
         System.out.println();
         
-        System.out.print("Código do serviço: ");
+        System.out.print("Codigo do servico: ");
         int code = readInt();
         
-        System.out.print("Descrição do serviço: ");
+        System.out.print("Descricao do servico: ");
         String description = scanner.nextLine().trim();
         
         if (description.isEmpty()) {
-            showError("Descrição não pode estar vazia!");
+            showError("Descricao nao pode estar vazia!");
             pause();
             return;
         }
@@ -1222,11 +1222,11 @@ public class MenuManager {
         Service service = new Service(code, currentClient, description, requestDate);
         
         if (appManager.getManageServices().requestService(currentClient, service)) {
-            showSuccess("Serviço pedido com sucesso!");
-            System.out.println("O seu pedido ficará pendente até ser aprovado por um administrador.");
-            logManager.log(currentClient.getUsername(), "Pediu serviço " + code);
+            showSuccess("Servico pedido com sucesso!");
+            System.out.println("O seu pedido ficara pendente ate ser aprovado por um administrador.");
+            logManager.log(currentClient.getUsername(), "Pediu servico " + code);
         } else {
-            showError("Erro ao pedir serviço.");
+            showError("Erro ao pedir servico.");
         }
         
         pause();
@@ -1234,15 +1234,15 @@ public class MenuManager {
     
     private void listMyServicesAsClient() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║         MEUS SERVIÇOS                  ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|         MEUS SERVICOS                  |");
+        System.out.println("+========================================+");
         System.out.println();
         
         Client currentClient = (Client) appManager.getSession().getCurrentUser();
         ArrayList<Service> myServices = appManager.getManageServices().listServicesByClient(currentClient);
         
-        System.out.println("Total: " + myServices.size() + " serviços");
+        System.out.println("Total: " + myServices.size() + " servicos");
         System.out.println();
         
         for (Service service : myServices) {
@@ -1254,16 +1254,16 @@ public class MenuManager {
     
     private void searchMyServicesAsClient() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║      PESQUISAR MEUS SERVIÇOS           ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|      PESQUISAR MEUS SERVICOS           |");
+        System.out.println("+========================================+");
         System.out.println();
         
         System.out.print("Termo de pesquisa: ");
         String term = scanner.nextLine().trim();
         
         if (term.isEmpty()) {
-            showError("Termo não pode estar vazio!");
+            showError("Termo nao pode estar vazio!");
             pause();
             return;
         }
@@ -1294,9 +1294,9 @@ public class MenuManager {
     
     private void editMyProfile() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║         EDITAR MEU PERFIL              ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|         EDITAR MEU PERFIL              |");
+        System.out.println("+========================================+");
         System.out.println();
         
         User currentUser = appManager.getSession().getCurrentUser();
@@ -1405,17 +1405,17 @@ public class MenuManager {
     
     private void viewSystemLog() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║         LOG DO SISTEMA                 ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|         LOG DO SISTEMA                 |");
+        System.out.println("+========================================+");
         System.out.println();
         
         ArrayList<String> logs = logManager.readLog();
         
         if (logs.isEmpty()) {
-            System.out.println("Não existem registos no log.");
+            System.out.println("Nao existem registos no log.");
         } else {
-            System.out.println("Últimas " + Math.min(50, logs.size()) + " entradas:");
+            System.out.println("ultimas " + Math.min(50, logs.size()) + " entradas:");
             System.out.println();
             
             // Show last 50 entries (most recent first)
@@ -1431,16 +1431,16 @@ public class MenuManager {
     
     private void exportServicesToCSV() {
         clearScreen();
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║      EXPORTAR SERVIÇOS PARA CSV        ║");
-        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("+========================================+");
+        System.out.println("|      EXPORTAR SERVICOS PARA CSV        |");
+        System.out.println("+========================================+");
         System.out.println();
         
         System.out.print("Nome do ficheiro (ex: servicos.csv): ");
         String filename = scanner.nextLine().trim();
         
         if (filename.isEmpty()) {
-            showError("Nome do ficheiro não pode estar vazio!");
+            showError("Nome do ficheiro nao pode estar vazio!");
             pause();
             return;
         }
@@ -1450,34 +1450,34 @@ public class MenuManager {
         }
         
         if (appManager.getManageServices().exportServicesToCSV(filename)) {
-            showSuccess("Serviços exportados com sucesso para " + filename);
+            showSuccess("Servicos exportados com sucesso para " + filename);
             logManager.log(appManager.getSession().getCurrentUser().getUsername(), 
-                          "Exportou serviços para CSV");
+                          "Exportou servicos para CSV");
         } else {
-            showError("Erro ao exportar serviços.");
+            showError("Erro ao exportar servicos.");
         }
         
         pause();
     }
     
     private void displayService(Service service) {
-        System.out.println("─────────────────────────────────────────");
-        System.out.println("Código: " + service.getCode());
+        System.out.println("-----------------------------------------");
+        System.out.println("Codigo: " + service.getCode());
         System.out.println("Cliente: " + service.getClient().getName());
-        System.out.println("Descrição: " + service.getDescription());
+        System.out.println("Descricao: " + service.getDescription());
         System.out.println("Estado: " + service.getStatus());
         System.out.println("Data pedido: " + service.getRequestDate());
         
         if (service.getTechnician() != null) {
-            System.out.println("Técnico: " + service.getTechnician().getName());
+            System.out.println("Tecnico: " + service.getTechnician().getName());
         }
         
         if (!service.getFinishDate().isEmpty()) {
-            System.out.println("Data conclusão: " + service.getFinishDate());
+            System.out.println("Data conclusao: " + service.getFinishDate());
         }
         
-        System.out.println("Valor total: " + service.getTotalValue() + "€");
-        System.out.println("Análises: " + service.getAnalyses().size());
+        System.out.println("Valor total: " + service.getTotalValue() + " euros");
+        System.out.println("Analises: " + service.getAnalyses().size());
     }
 
     // ==================== UTILITY FUNCTIONS ====================
@@ -1490,13 +1490,13 @@ public class MenuManager {
     
     private void showSuccess(String message) {
         System.out.println();
-        System.out.println("✓ " + message);
+        System.out.println("OK: " + message);
         System.out.println();
     }
     
     private void showError(String message) {
         System.out.println();
-        System.out.println("✗ ERRO: " + message);
+        System.out.println("ERRO: " + message);
         System.out.println();
     }
     
@@ -1512,7 +1512,7 @@ public class MenuManager {
                 String input = scanner.nextLine().trim();
                 return Integer.parseInt(input);
             } catch (NumberFormatException e) {
-                System.out.print("Por favor, insira um número válido: ");
+                System.out.print("Por favor, insira um numero valido: ");
             }
         }
     }

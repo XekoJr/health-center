@@ -1,6 +1,9 @@
 package services;
 
-public class MedicalArea {
+import java.io.Serializable;
+
+public class MedicalArea implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int code;
     private String designation;
     private String family;

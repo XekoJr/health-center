@@ -3,8 +3,10 @@ package services;
 import users.Client;
 import users.Technician;
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Service {
+public class Service implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int code;
     private Client client;
     private Technician technician;

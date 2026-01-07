@@ -1,16 +1,12 @@
 package data;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import java.io.*;
 
 public class DataStorage {
     private String filePath;
-    private Gson gson;
 
     public DataStorage(String filePath) {
         this.filePath = filePath;
-        this.gson = new GsonBuilder().setPrettyPrinting().create();
     }
 
     public boolean loadData(AppData data) {
@@ -19,9 +15,11 @@ public class DataStorage {
                 return false;
             }
             
-            FileReader reader = new FileReader(filePath);
-            AppData loadedData = gson.fromJson(reader, AppData.class);
-            reader.close();
+            FileInputStream fileIn = new FileInputStream(filePath);
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+            AppData loadedData = (AppData) objectIn.readObject();
+            objectIn.close();
+            fileIn.close();
 
             if (loadedData != null) {
                 data.setUsers(loadedData.getUsers());
@@ -36,7 +34,7 @@ public class DataStorage {
                 return true;
             }
             return false;
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.err.println("Error loading data: " + e.getMessage());
             return false;
         }
@@ -44,9 +42,11 @@ public class DataStorage {
 
     public AppData saveData(AppData data) {
         try {
-            FileWriter writer = new FileWriter(filePath);
-            gson.toJson(data, writer);
-            writer.close();
+            FileOutputStream fileOut = new FileOutputStream(filePath);
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(data);
+            objectOut.close();
+            fileOut.close();
             return data;
         } catch (IOException e) {
             System.err.println("Error saving data: " + e.getMessage());

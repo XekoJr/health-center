@@ -1,0 +1,8 @@
+[2026-01-07 19:34:44] User: SYSTEM | Action: Novo registo: Eu (admin)
+[2026-01-07 19:34:59] User: Eu | Action: Login realizado
+[2026-01-07 19:35:05] User: Eu | Action: Logout realizado
+[2026-01-07 19:35:09] User: SYSTEM | Action: Sistema encerrado
+[2026-01-07 19:36:00] User: SYSTEM | Action: Sistema encerrado
+[2026-01-07 19:36:50] User: Eu | Action: Login realizado
+[2026-01-07 19:37:11] User: Eu | Action: Logout realizado
+[2026-01-07 19:37:13] User: SYSTEM | Action: Sistema encerrado

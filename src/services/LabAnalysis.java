@@ -1,8 +1,10 @@
 package services;
 
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class LabAnalysis {
+public class LabAnalysis implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int code;
     private String name;
     private String certification;
