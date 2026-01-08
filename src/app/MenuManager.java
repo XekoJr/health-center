@@ -512,7 +512,7 @@ public class MenuManager {
                     adminApproveRejectServices();
                     break;
                 case 2:
-                    approveRejectServices();
+                    associateTechnicianToServices();
                     break;
                 case 3:
                     listAllServices();
@@ -689,57 +689,7 @@ public class MenuManager {
         pause();
     }
 
-    private void assignTechnicianToService() {
-        clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|    ASSOCIAR TECNICO A SERVICO          |");
-        System.out.println("+========================================+");
-        System.out.println();
-
-        System.out.print("Codigo do servico: ");
-        int serviceCode = readInt();
-
-        ArrayList<User> technicians = appManager.getManageUsers().listUsersByType("technician");
-
-        if (technicians.isEmpty()) {
-            showError("Nao existem tecnicos registados!");
-            pause();
-            return;
-        }
-
-        System.out.println();
-        System.out.println("Tecnicos disponiveis:");
-
-        int index = 1;
-        for (User tech : technicians) {
-            System.out.println(index + ". " + tech.getUsername() + " - " + tech.getName());
-            index++;
-        }
-
-        System.out.print("Escolha o tecnico: ");
-        int choice = readInt();
-
-        if (choice < 1 || choice > technicians.size()) {
-            showError("Escolha invalida!");
-            pause();
-            return;
-        }
-
-        Technician selectedTech = (Technician) technicians.get(choice - 1);
-
-        if (appManager.getManageServices().assignTechnician((Admin) appManager.getSession().getCurrentUser(),
-                serviceCode, selectedTech)) {
-            showSuccess("Tecnico associado ao servico com sucesso!");
-            logManager.log(appManager.getSession().getCurrentUser().getUsername(),
-                    "Associou tecnico " + selectedTech.getUsername() + " ao servico " + serviceCode);
-        } else {
-            showError("Erro ao associar tecnico. Verifique se o codigo do servico esta correto.");
-        }
-
-        pause();
-    }
-
-    private void approveRejectServices() {
+    private void associateTechnicianToServices() {
         clearScreen();
         System.out.println("+========================================+");
         System.out.println("|    ASSOCIAR TECNICO A SERVICO          |");
