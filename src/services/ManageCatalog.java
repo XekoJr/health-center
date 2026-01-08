@@ -10,6 +10,11 @@ public class ManageCatalog {
     private ArrayList<MedicalArea> areas;
     private ArrayList<Supplier> suppliers;
     private ArrayList<Order> orders;
+    private int nextAnalysisCode;
+    private int nextComponentCode;
+    private int nextSupplierCode;
+    private int nextAreaCode;
+    private int nextOrderCode;
 
     public ManageCatalog() {
         this.analyses = new ArrayList<>();
@@ -18,6 +23,31 @@ public class ManageCatalog {
         this.areas = new ArrayList<>();
         this.suppliers = new ArrayList<>();
         this.orders = new ArrayList<>();
+        this.nextAnalysisCode = 1;
+        this.nextComponentCode = 1;
+        this.nextSupplierCode = 1;
+        this.nextAreaCode = 1;
+        this.nextOrderCode = 1;
+    }
+    
+    public int generateAnalysisCode() {
+        return nextAnalysisCode++;
+    }
+    
+    public int generateComponentCode() {
+        return nextComponentCode++;
+    }
+    
+    public int generateSupplierCode() {
+        return nextSupplierCode++;
+    }
+    
+    public int generateAreaCode() {
+        return nextAreaCode++;
+    }
+    
+    public int generateOrderCode() {
+        return nextOrderCode++;
     }
 
     public boolean searchItem(String item, Object aTechnician) {

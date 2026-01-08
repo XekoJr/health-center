@@ -1,1 +1,3 @@
-Eu:admin:approved
+ADMIN:admin:approved
+Cliente 1:client:approved
+Tecnico:technician:approved

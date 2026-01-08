@@ -11,7 +11,7 @@ public class LogManager {
 
     public LogManager(String filePath) {
         this.filePath = filePath;
-        this.formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        this.formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     }
 
     public boolean log(String username, String action) {

@@ -1,0 +1,9 @@
+log.txt
+src/credenciais_acesso.txt
+src/dados_apl.dat
+src/info_sistema.dat
+src/servicos.csv
+
+bin/
+.vscode/
+checklist.html

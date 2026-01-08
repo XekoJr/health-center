@@ -8,9 +8,15 @@ import java.util.ArrayList;
 
 public class ManageServices {
     private ArrayList<Service> services;
+    private int nextServiceCode;
 
     public ManageServices() {
         this.services = new ArrayList<>();
+        this.nextServiceCode = 1;
+    }
+    
+    public int generateServiceCode() {
+        return nextServiceCode++;
     }
 
     public boolean requestService(Client aClient, Service aService) {

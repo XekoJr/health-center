@@ -44,11 +44,27 @@ public class App {
         }
         
         System.out.println();
-        System.out.print("Pressione ENTER para continuar...");
-        try {
-            System.in.read();
-        } catch (Exception e) {
-            // Ignore
+        
+        // Check if admin user needs to be created
+        if (appManager.getManageUsers().listUsers().isEmpty()) {
+            System.out.println("==========================================");
+            System.out.println("AVISO: Nenhum utilizador encontrado!");
+            System.out.println("E necessario criar um utilizador ADMINISTRADOR.");
+            System.out.println("==========================================");
+            System.out.println();
+            System.out.print("Pressione ENTER para continuar...");
+            try {
+                System.in.read();
+            } catch (Exception e) {
+                // Ignore
+            }
+        } else {
+            System.out.print("Pressione ENTER para continuar...");
+            try {
+                System.in.read();
+            } catch (Exception e) {
+                // Ignore
+            }
         }
         
         // Create menu manager and show main menu

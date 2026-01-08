@@ -1,8 +1,46 @@
-[2026-01-07 19:34:44] User: SYSTEM | Action: Novo registo: Eu (admin)
-[2026-01-07 19:34:59] User: Eu | Action: Login realizado
-[2026-01-07 19:35:05] User: Eu | Action: Logout realizado
-[2026-01-07 19:35:09] User: SYSTEM | Action: Sistema encerrado
-[2026-01-07 19:36:00] User: SYSTEM | Action: Sistema encerrado
-[2026-01-07 19:36:50] User: Eu | Action: Login realizado
-[2026-01-07 19:37:11] User: Eu | Action: Logout realizado
-[2026-01-07 19:37:13] User: SYSTEM | Action: Sistema encerrado
+[2026-01-08 18:24:50] User: SYSTEM | Action: Sistema encerrado
+[2026-01-08 18:28:22] User: SYSTEM | Action: Novo registo: ADMIN (admin)
+[2026-01-08 18:28:33] User: ADMIN | Action: Login realizado
+[2026-01-08 18:30:16] User: ADMIN | Action: Logout realizado
+[2026-01-08 18:30:18] User: SYSTEM | Action: Sistema encerrado
+[2026-01-08 18:31:58] User: SYSTEM | Action: Novo registo: Cliente 1 (client)
+[2026-01-08 18:32:45] User: SYSTEM | Action: Novo registo: Tecnico (technician)
+[2026-01-08 18:32:48] User: SYSTEM | Action: Sistema encerrado
+[2026-01-08 18:33:09] User: ADMIN | Action: Login realizado
+[2026-01-08 18:33:50] User: ADMIN | Action: Aprovou utilizador: Cliente 1
+[2026-01-08 18:33:53] User: ADMIN | Action: Aprovou utilizador: Tecnico
+[2026-01-08 18:33:57] User: ADMIN | Action: Logout realizado
+[2026-01-08 18:34:22] User: Cliente 1 | Action: Login realizado
+[2026-01-08 18:35:02] User: Cliente 1 | Action: Atualizou perfil
+[2026-01-08 18:37:05] User: Cliente 1 | Action: Pediu servico 1
+[2026-01-08 18:37:20] User: Cliente 1 | Action: Logout realizado
+[2026-01-08 18:37:28] User: ADMIN | Action: Login realizado
+[2026-01-08 18:37:59] User: ADMIN | Action: Associou tecnico Tecnico ao servico 1
+[2026-01-08 18:38:04] User: ADMIN | Action: Logout realizado
+[2026-01-08 18:38:09] User: Tecnico | Action: Login realizado
+[2026-01-08 18:38:17] User: Tecnico | Action: Iniciou execucao do servico 1
+[2026-01-08 18:38:42] User: Tecnico | Action: Criou analise 1
+[2026-01-08 18:39:17] User: Tecnico | Action: Adicionou componente quimico 1
+[2026-01-08 18:39:56] User: Tecnico | Action: Criou fornecedor 1
+[2026-01-08 18:40:10] User: Tecnico | Action: Criou area medica 1
+[2026-01-08 18:40:24] User: Tecnico | Action: Criou encomenda 1
+[2026-01-08 18:40:43] User: Tecnico | Action: Finalizou servico 1
+[2026-01-08 18:40:53] User: Tecnico | Action: Iniciou execucao do servico 1
+[2026-01-08 18:41:03] User: Tecnico | Action: Logout realizado
+[2026-01-08 18:42:03] User: Cliente 1 | Action: Login realizado
+[2026-01-08 18:42:17] User: Cliente 1 | Action: Pediu servico 2
+[2026-01-08 18:44:37] User: Cliente 1 | Action: Logout realizado
+[2026-01-08 18:44:41] User: ADMIN | Action: Login realizado
+[2026-01-08 18:49:14] User: ADMIN | Action: Exportou servicos para CSV
+[2026-01-08 18:49:30] User: ADMIN | Action: Logout realizado
+[2026-01-08 18:49:34] User: SYSTEM | Action: Sistema encerrado
+[08-01-2026 19:00:30] User: Cliente 1 | Action: Login realizado
+[08-01-2026 19:00:59] User: Cliente 1 | Action: Pediu servico 3
+[08-01-2026 19:02:25] User: Cliente 1 | Action: Logout realizado
+[08-01-2026 19:02:34] User: Tecnico | Action: Login realizado
+[08-01-2026 19:02:48] User: Tecnico | Action: Aprovou pedido de servico 3
+[08-01-2026 19:02:57] User: Tecnico | Action: Logout realizado
+[08-01-2026 19:03:03] User: ADMIN | Action: Login realizado
+[08-01-2026 19:03:41] User: ADMIN | Action: Associou tecnico Tecnico ao servico 3
+[08-01-2026 19:07:43] User: ADMIN | Action: Logout realizado
+[08-01-2026 19:07:46] User: SYSTEM | Action: Sistema encerrado
