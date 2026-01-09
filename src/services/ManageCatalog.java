@@ -2,6 +2,7 @@ package services;
 
 import users.Technician;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ManageCatalog {
     private ArrayList<LabAnalysis> analyses;
@@ -52,23 +53,10 @@ public class ManageCatalog {
         return nextOrderCode++;
     }
 
-    public boolean searchItem(String item, Object aTechnician) {
-        // Generic search - implementation depends on what "item" represents
-        return false;
-    }
-
-    public ArrayList<Object> searchItemType(String type, String attribute, String value, Object object) {
-        // Generic search by type
-        return new ArrayList<>();
-    }
-
-    public boolean removeItemType(String item, Object aTechnician) {
-        // Generic remove
-        return false;
-    }
-
     public boolean addSupplierToAnalysis(int analysisCode, Supplier aSupplier) {
-        for (LabAnalysis analysis : analyses) {
+        Iterator<LabAnalysis> iterator = analyses.iterator();
+        while (iterator.hasNext()) {
+            LabAnalysis analysis = iterator.next();
             if (analysis.getCode() == analysisCode) {
                 return analysis.addSupplierToLabAnalysis(aSupplier);
             }
@@ -77,7 +65,9 @@ public class ManageCatalog {
     }
 
     public boolean addAreaToAnalysis(int analysisCode, MedicalArea aArea) {
-        for (LabAnalysis analysis : analyses) {
+        Iterator<LabAnalysis> iterator = analyses.iterator();
+        while (iterator.hasNext()) {
+            LabAnalysis analysis = iterator.next();
             if (analysis.getCode() == analysisCode) {
                 return analysis.addAreaToLabAnalysis(aArea);
             }
@@ -86,7 +76,9 @@ public class ManageCatalog {
     }
 
     public boolean addComponentToAnalysis(int analysisCode, ChemicalComponent aChemicalComponent) {
-        for (LabAnalysis analysis : analyses) {
+        Iterator<LabAnalysis> iterator = analyses.iterator();
+        while (iterator.hasNext()) {
+            LabAnalysis analysis = iterator.next();
             if (analysis.getCode() == analysisCode) {
                 return analysis.addRequiredComponent(aChemicalComponent);
             }
@@ -115,7 +107,9 @@ public class ManageCatalog {
     }
 
     public boolean deliverOrder(int orderCode) {
-        for (Order order : orders) {
+        Iterator<Order> iterator = orders.iterator();
+        while (iterator.hasNext()) {
+            Order order = iterator.next();
             if (order.getCode() == orderCode) {
                 order.setStatus("delivered");
                 order.setDeliveryDate(java.time.LocalDate.now().toString());
@@ -148,7 +142,9 @@ public class ManageCatalog {
 
     public ArrayList<LabAnalysis> searchAnalysisByCode(String code) {
         ArrayList<LabAnalysis> results = new ArrayList<>();
-        for (LabAnalysis analysis : analyses) {
+        Iterator<LabAnalysis> iterator = analyses.iterator();
+        while (iterator.hasNext()) {
+            LabAnalysis analysis = iterator.next();
             if (String.valueOf(analysis.getCode()).contains(code)) {
                 results.add(analysis);
             }
@@ -158,8 +154,12 @@ public class ManageCatalog {
 
     public ArrayList<LabAnalysis> searchAnalysisByComponent(String componentCode) {
         ArrayList<LabAnalysis> results = new ArrayList<>();
-        for (LabAnalysis analysis : analyses) {
-            for (ChemicalComponent component : analysis.getRequiredComponents()) {
+        Iterator<LabAnalysis> iterator = analyses.iterator();
+        while (iterator.hasNext()) {
+            LabAnalysis analysis = iterator.next();
+            Iterator<ChemicalComponent> compIterator = analysis.getRequiredComponents().iterator();
+            while (compIterator.hasNext()) {
+                ChemicalComponent component = compIterator.next();
                 if (String.valueOf(component.getCode()).equals(componentCode)) {
                     results.add(analysis);
                     break;
@@ -171,7 +171,9 @@ public class ManageCatalog {
 
     public ArrayList<LabAnalysis> searchAnalysisAdvanced(String keyword) {
         ArrayList<LabAnalysis> results = new ArrayList<>();
-        for (LabAnalysis analysis : analyses) {
+        Iterator<LabAnalysis> iterator = analyses.iterator();
+        while (iterator.hasNext()) {
+            LabAnalysis analysis = iterator.next();
             if (String.valueOf(analysis.getCode()).contains(keyword) ||
                 analysis.getName().toLowerCase().contains(keyword.toLowerCase()) ||
                 analysis.getCertification().toLowerCase().contains(keyword.toLowerCase())) {
@@ -213,7 +215,9 @@ public class ManageCatalog {
 
     public ArrayList<Order> listDeliveredOrders() {
         ArrayList<Order> results = new ArrayList<>();
-        for (Order order : orders) {
+        Iterator<Order> iterator = orders.iterator();
+        while (iterator.hasNext()) {
+            Order order = iterator.next();
             if (order.getStatus().equals("delivered")) {
                 results.add(order);
             }
@@ -333,7 +337,9 @@ public class ManageCatalog {
         
         ArrayList<ChemicalComponent> results = new ArrayList<>();
         String searchTerm = keyword.trim().toLowerCase();
-        for (ChemicalComponent component : components) {
+        Iterator<ChemicalComponent> iterator = components.iterator();
+        while (iterator.hasNext()) {
+            ChemicalComponent component = iterator.next();
             if (String.valueOf(component.getCode()).contains(searchTerm) ||
                 component.getName().toLowerCase().contains(searchTerm)) {
                 results.add(component);
@@ -350,7 +356,9 @@ public class ManageCatalog {
         
         ArrayList<Supplier> results = new ArrayList<>();
         String searchTerm = keyword.trim().toLowerCase();
-        for (Supplier supplier : suppliers) {
+        Iterator<Supplier> iterator = suppliers.iterator();
+        while (iterator.hasNext()) {
+            Supplier supplier = iterator.next();
             if (String.valueOf(supplier.getCode()).contains(searchTerm) ||
                 supplier.getName().toLowerCase().contains(searchTerm) ||
                 supplier.getEmail().toLowerCase().contains(searchTerm)) {
@@ -368,7 +376,9 @@ public class ManageCatalog {
         
         ArrayList<MedicalArea> results = new ArrayList<>();
         String searchTerm = keyword.trim().toLowerCase();
-        for (MedicalArea area : areas) {
+        Iterator<MedicalArea> iterator = areas.iterator();
+        while (iterator.hasNext()) {
+            MedicalArea area = iterator.next();
             if (String.valueOf(area.getCode()).contains(searchTerm) ||
                 area.getDesignation().toLowerCase().contains(searchTerm) ||
                 area.getFamily().toLowerCase().contains(searchTerm)) {
@@ -386,7 +396,9 @@ public class ManageCatalog {
         
         ArrayList<Order> results = new ArrayList<>();
         String searchTerm = keyword.trim().toLowerCase();
-        for (Order order : orders) {
+        Iterator<Order> iterator = orders.iterator();
+        while (iterator.hasNext()) {
+            Order order = iterator.next();
             if (String.valueOf(order.getCode()).contains(searchTerm) ||
                 order.getSupplier().getName().toLowerCase().contains(searchTerm) ||
                 order.getStatus().toLowerCase().contains(searchTerm)) {
@@ -449,9 +461,11 @@ public class ManageCatalog {
 
     // Remove methods
     public boolean removeAnalysis(int code) {
-        for (int i = 0; i < analyses.size(); i++) {
-            if (analyses.get(i).getCode() == code) {
-                analyses.remove(i);
+        Iterator<LabAnalysis> iterator = analyses.iterator();
+        while (iterator.hasNext()) {
+            LabAnalysis analysis = iterator.next();
+            if (analysis.getCode() == code) {
+                iterator.remove();
                 return true;
             }
         }
@@ -459,11 +473,15 @@ public class ManageCatalog {
     }
 
     public boolean removeComponent(int code) {
-        for (int i = 0; i < components.size(); i++) {
-            if (components.get(i).getCode() == code) {
-                components.remove(i);
+        Iterator<ChemicalComponent> iterator = components.iterator();
+        while (iterator.hasNext()) {
+            ChemicalComponent component = iterator.next();
+            if (component.getCode() == code) {
+                iterator.remove();
                 // Also remove from all analyses
-                for (LabAnalysis analysis : analyses) {
+                Iterator<LabAnalysis> analysisIterator = analyses.iterator();
+                while (analysisIterator.hasNext()) {
+                    LabAnalysis analysis = analysisIterator.next();
                     analysis.removeRequiredComponentFromCode(String.valueOf(code));
                 }
                 return true;
@@ -473,9 +491,11 @@ public class ManageCatalog {
     }
 
     public boolean removeSupplier(int code) {
-        for (int i = 0; i < suppliers.size(); i++) {
-            if (suppliers.get(i).getCode() == code) {
-                suppliers.remove(i);
+        Iterator<Supplier> iterator = suppliers.iterator();
+        while (iterator.hasNext()) {
+            Supplier supplier = iterator.next();
+            if (supplier.getCode() == code) {
+                iterator.remove();
                 return true;
             }
         }
@@ -483,9 +503,11 @@ public class ManageCatalog {
     }
 
     public boolean removeArea(int code) {
-        for (int i = 0; i < areas.size(); i++) {
-            if (areas.get(i).getCode() == code) {
-                areas.remove(i);
+        Iterator<MedicalArea> iterator = areas.iterator();
+        while (iterator.hasNext()) {
+            MedicalArea area = iterator.next();
+            if (area.getCode() == code) {
+                iterator.remove();
                 return true;
             }
         }
@@ -493,9 +515,11 @@ public class ManageCatalog {
     }
 
     public boolean removeOrder(int code) {
-        for (int i = 0; i < orders.size(); i++) {
-            if (orders.get(i).getCode() == code) {
-                orders.remove(i);
+        Iterator<Order> iterator = orders.iterator();
+        while (iterator.hasNext()) {
+            Order order = iterator.next();
+            if (order.getCode() == code) {
+                iterator.remove();
                 return true;
             }
         }
@@ -504,7 +528,9 @@ public class ManageCatalog {
 
     // Find methods for editing
     public LabAnalysis findAnalysis(int code) {
-        for (LabAnalysis analysis : analyses) {
+        Iterator<LabAnalysis> iterator = analyses.iterator();
+        while (iterator.hasNext()) {
+            LabAnalysis analysis = iterator.next();
             if (analysis.getCode() == code) {
                 return analysis;
             }
@@ -513,7 +539,9 @@ public class ManageCatalog {
     }
 
     public ChemicalComponent findComponent(int code) {
-        for (ChemicalComponent component : components) {
+        Iterator<ChemicalComponent> iterator = components.iterator();
+        while (iterator.hasNext()) {
+            ChemicalComponent component = iterator.next();
             if (component.getCode() == code) {
                 return component;
             }
@@ -522,7 +550,9 @@ public class ManageCatalog {
     }
 
     public Supplier findSupplier(int code) {
-        for (Supplier supplier : suppliers) {
+        Iterator<Supplier> iterator = suppliers.iterator();
+        while (iterator.hasNext()) {
+            Supplier supplier = iterator.next();
             if (supplier.getCode() == code) {
                 return supplier;
             }
@@ -531,7 +561,9 @@ public class ManageCatalog {
     }
 
     public MedicalArea findArea(int code) {
-        for (MedicalArea area : areas) {
+        Iterator<MedicalArea> iterator = areas.iterator();
+        while (iterator.hasNext()) {
+            MedicalArea area = iterator.next();
             if (area.getCode() == code) {
                 return area;
             }
@@ -540,7 +572,9 @@ public class ManageCatalog {
     }
 
     public Order findOrder(int code) {
-        for (Order order : orders) {
+        Iterator<Order> iterator = orders.iterator();
+        while (iterator.hasNext()) {
+            Order order = iterator.next();
             if (order.getCode() == code) {
                 return order;
             }
@@ -550,7 +584,9 @@ public class ManageCatalog {
 
     public ArrayList<Order> listPendingOrders() {
         ArrayList<Order> results = new ArrayList<>();
-        for (Order order : orders) {
+        Iterator<Order> iterator = orders.iterator();
+        while (iterator.hasNext()) {
+            Order order = iterator.next();
             if (!order.getStatus().equals("delivered")) {
                 results.add(order);
             }

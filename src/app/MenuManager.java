@@ -4,6 +4,7 @@ import users.*;
 import services.*;
 import util.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class MenuManager {
@@ -371,7 +372,9 @@ public class MenuManager {
         System.out.println();
 
         int index = 1;
-        for (User user : pendingUsers) {
+        Iterator<User> iterator = pendingUsers.iterator();
+        while (iterator.hasNext()) {
+            User user = iterator.next();
             System.out
                     .println(index + ". " + user.getUsername() + " - " + user.getName() + " (" + user.getType() + ")");
             System.out.println("   Email: " + user.getEmail());

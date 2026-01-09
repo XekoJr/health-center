@@ -2,6 +2,7 @@ package services;
 
 import users.Technician;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.io.Serializable;
 
 public class ServiceAnalysis implements Serializable {
@@ -43,9 +44,11 @@ public class ServiceAnalysis implements Serializable {
     }
 
     public boolean removeTest(String aTestName) {
-        for (int i = 0; i < tests.size(); i++) {
-            if (tests.get(i).getDesignation().equals(aTestName)) {
-                tests.remove(i);
+        Iterator<Test> iterator = tests.iterator();
+        while (iterator.hasNext()) {
+            Test test = iterator.next();
+            if (test.getDesignation().equals(aTestName)) {
+                iterator.remove();
                 return true;
             }
         }

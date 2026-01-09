@@ -3,6 +3,7 @@ package services;
 import users.Client;
 import users.Technician;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.io.Serializable;
 
 public class Service implements Serializable {
@@ -59,9 +60,11 @@ public class Service implements Serializable {
     }
 
     public boolean removeAnalysis(String aCode) {
-        for (int i = 0; i < analyses.size(); i++) {
-            if (String.valueOf(analyses.get(i).getCode()).equals(aCode)) {
-                analyses.remove(i);
+        Iterator<ServiceAnalysis> iterator = analyses.iterator();
+        while (iterator.hasNext()) {
+            ServiceAnalysis analysis = iterator.next();
+            if (String.valueOf(analysis.getCode()).equals(aCode)) {
+                iterator.remove();
                 return true;
             }
         }

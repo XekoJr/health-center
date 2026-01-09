@@ -1,6 +1,7 @@
 package users;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ManageUsers {
     private ArrayList<User> users;
@@ -9,18 +10,30 @@ public class ManageUsers {
         this.users = new ArrayList<>();
     }
 
-    public User login(String aUsername, String aPassword) {
-        for (User user : users) {
-            if (user.getUsername().equals(aUsername) && user.verifyPassword(aPassword)) {
+    private User findUserByUsername(String username) {
+        Iterator<User> iterator = users.iterator();
+        while (iterator.hasNext()) {
+            User user = iterator.next();
+            if (user.getUsername().equals(username)) {
                 return user;
             }
         }
         return null;
     }
 
+    public User login(String aUsername, String aPassword) {
+        User user = findUserByUsername(aUsername);
+        if (user != null && user.verifyPassword(aPassword)) {
+            return user;
+        }
+        return null;
+    }
+
     public ArrayList<User> searchUser(String attribute, String value) {
         ArrayList<User> results = new ArrayList<>();
-        for (User user : users) {
+        Iterator<User> iterator = users.iterator();
+        while (iterator.hasNext()) {
+            User user = iterator.next();
             switch (attribute.toLowerCase()) {
                 case "username":
                     if (user.getUsername().contains(value)) {
@@ -53,7 +66,9 @@ public class ManageUsers {
     }
 
     public boolean validateUnique(User aUser) {
-        for (User user : users) {
+        Iterator<User> iterator = users.iterator();
+        while (iterator.hasNext()) {
+            User user = iterator.next();
             if (user.getUsername().equals(aUser.getUsername())) {
                 return false;
             }
@@ -96,16 +111,15 @@ public class ManageUsers {
     }
 
     public boolean aproveUser(User aUser, boolean approved) {
-        for (User user : users) {
-            if (user.getUsername().equals(aUser.getUsername())) {
-                user.setReviewed(approved);
-                if (approved) {
-                    user.setStatus("approved");
-                } else {
-                    user.setStatus("rejected");
-                }
-                return true;
+        User user = findUserByUsername(aUser.getUsername());
+        if (user != null) {
+            user.setReviewed(approved);
+            if (approved) {
+                user.setStatus("approved");
+            } else {
+                user.setStatus("rejected");
             }
+            return true;
         }
         return false;
     }
@@ -128,7 +142,9 @@ public class ManageUsers {
 
     public ArrayList<User> listUsersByType(String aType) {
         ArrayList<User> results = new ArrayList<>();
-        for (User user : users) {
+        Iterator<User> iterator = users.iterator();
+        while (iterator.hasNext()) {
+            User user = iterator.next();
             if (user.getType().equals(aType)) {
                 results.add(user);
             }
@@ -155,7 +171,9 @@ public class ManageUsers {
 
     public ArrayList<User> searchUsersByUsername(String aUsername) {
         ArrayList<User> results = new ArrayList<>();
-        for (User user : users) {
+        Iterator<User> iterator = users.iterator();
+        while (iterator.hasNext()) {
+            User user = iterator.next();
             if (user.getUsername().toLowerCase().contains(aUsername.toLowerCase())) {
                 results.add(user);
             }
@@ -165,7 +183,9 @@ public class ManageUsers {
 
     public ArrayList<User> searchUsersByName(String aName) {
         ArrayList<User> results = new ArrayList<>();
-        for (User user : users) {
+        Iterator<User> iterator = users.iterator();
+        while (iterator.hasNext()) {
+            User user = iterator.next();
             if (user.getName().toLowerCase().contains(aName.toLowerCase())) {
                 results.add(user);
             }
@@ -175,7 +195,9 @@ public class ManageUsers {
 
     public ArrayList<User> searchUsersAdvanced(String aName) {
         ArrayList<User> results = new ArrayList<>();
-        for (User user : users) {
+        Iterator<User> iterator = users.iterator();
+        while (iterator.hasNext()) {
+            User user = iterator.next();
             if (user.getName().toLowerCase().contains(aName.toLowerCase()) ||
                     user.getUsername().toLowerCase().contains(aName.toLowerCase()) ||
                     user.getEmail().toLowerCase().contains(aName.toLowerCase())) {

@@ -5,6 +5,7 @@ import services.ManageServices;
 import services.ManageCatalog;
 import data.AppData;
 import data.DataStorage;
+import java.util.Iterator;
 
 public class ApplicationManager {
     private ManageUsers manageUsers;
@@ -55,37 +56,60 @@ public class ApplicationManager {
         }
 
         // Apply users
-        for (users.User user : data.getUsers()) {
-            manageUsers.register(user);
-        }
+        applyUsers(data.getUsers());
 
         // Apply services
         manageServices.loadServices(data.getServices());
         
         // Apply catalog items
-        for (services.LabAnalysis analysis : data.getAnalyses()) {
-            manageCatalog.addAnalysis(analysis);
-        }
-        for (services.Category category : data.getCategories()) {
-            manageCatalog.addCategory(category);
-        }
-        for (services.Test test : data.getTests()) {
-            manageCatalog.addTest(test);
-        }
-        for (services.MedicalArea area : data.getAreas()) {
-            manageCatalog.addArea(area);
-        }
-        for (services.Supplier supplier : data.getSuppliers()) {
-            manageCatalog.addSupplier(supplier);
-        }
-        for (services.ChemicalComponent component : data.getComponents()) {
-            manageCatalog.addComponent(component);
-        }
-        for (services.Order order : data.getOrders()) {
-            manageCatalog.addOrder(order);
-        }
+        applyCatalogItems(data);
 
         return true;
+    }
+
+    private void applyUsers(java.util.ArrayList<users.User> usersList) {
+        Iterator<users.User> iterator = usersList.iterator();
+        while (iterator.hasNext()) {
+            users.User user = iterator.next();
+            manageUsers.register(user);
+        }
+    }
+
+    private void applyCatalogItems(AppData data) {
+        Iterator<services.LabAnalysis> analysisIterator = data.getAnalyses().iterator();
+        while (analysisIterator.hasNext()) {
+            manageCatalog.addAnalysis(analysisIterator.next());
+        }
+        
+        Iterator<services.Category> categoryIterator = data.getCategories().iterator();
+        while (categoryIterator.hasNext()) {
+            manageCatalog.addCategory(categoryIterator.next());
+        }
+        
+        Iterator<services.Test> testIterator = data.getTests().iterator();
+        while (testIterator.hasNext()) {
+            manageCatalog.addTest(testIterator.next());
+        }
+        
+        Iterator<services.MedicalArea> areaIterator = data.getAreas().iterator();
+        while (areaIterator.hasNext()) {
+            manageCatalog.addArea(areaIterator.next());
+        }
+        
+        Iterator<services.Supplier> supplierIterator = data.getSuppliers().iterator();
+        while (supplierIterator.hasNext()) {
+            manageCatalog.addSupplier(supplierIterator.next());
+        }
+        
+        Iterator<services.ChemicalComponent> componentIterator = data.getComponents().iterator();
+        while (componentIterator.hasNext()) {
+            manageCatalog.addComponent(componentIterator.next());
+        }
+        
+        Iterator<services.Order> orderIterator = data.getOrders().iterator();
+        while (orderIterator.hasNext()) {
+            manageCatalog.addOrder(orderIterator.next());
+        }
     }
 
     public ManageUsers getManageUsers() {

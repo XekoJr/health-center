@@ -5,6 +5,7 @@ import users.Client;
 import users.Technician;
 import users.User;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ManageServices {
     private ArrayList<Service> services;
@@ -19,6 +20,28 @@ public class ManageServices {
         return nextServiceCode++;
     }
 
+    // Helper method to find a service by ID
+    private Service findServiceById(int serviceId) {
+        Iterator<Service> iterator = services.iterator();
+        while (iterator.hasNext()) {
+            Service service = iterator.next();
+            if (service.getCode() == serviceId) {
+                return service;
+            }
+        }
+        return null;
+    }
+
+    // Helper method to find a service by ID for a specific technician
+    private Service findServiceByIdAndTechnician(int serviceId, Technician aTechnician) {
+        Service service = findServiceById(serviceId);
+        if (service != null && service.getTechnician() != null 
+                && service.getTechnician().equals(aTechnician)) {
+            return service;
+        }
+        return null;
+    }
+
     public boolean requestService(Client aClient, Service aService) {
         if (aService != null && aClient != null) {
             services.add(aService);
@@ -28,27 +51,24 @@ public class ManageServices {
     }
 
     public boolean assignTechnician(Admin aAdmin, int serviceId, Technician aTechnician) {
-        for (Service service : services) {
-            if (service.getCode() == serviceId) {
-                return service.setTechnician(aTechnician);
-            }
-        }
-        return false;
+        Service service = findServiceById(serviceId);
+        return service != null && service.setTechnician(aTechnician);
     }
 
     public boolean approveService(Technician aTechnician, int serviceId, boolean approved) {
-        for (Service service : services) {
-            if (service.getCode() == serviceId) {
-                service.setStatus(approved ? "approved" : "rejected");
-                return true;
-            }
+        Service service = findServiceById(serviceId);
+        if (service != null) {
+            service.setStatus(approved ? "approved" : "rejected");
+            return true;
         }
         return false;
     }
 
     public ArrayList<Service> searchService(String attribute, String value) {
         ArrayList<Service> results = new ArrayList<>();
-        for (Service service : services) {
+        Iterator<Service> iterator = services.iterator();
+        while (iterator.hasNext()) {
+            Service service = iterator.next();
             switch (attribute.toLowerCase()) {
                 case "code":
                     if (String.valueOf(service.getCode()).contains(value)) {
@@ -82,38 +102,33 @@ public class ManageServices {
     }
 
     public boolean approveService(Admin aAdmin, int serviceId, Technician aTechnician, boolean approved) {
-        for (Service service : services) {
-            if (service.getCode() == serviceId) {
-                if (approved) {
-                    service.setTechnician(aTechnician);
-                    service.setStatus("approved");
-                } else {
-                    service.setStatus("rejected");
-                }
-                return true;
+        Service service = findServiceById(serviceId);
+        if (service != null) {
+            if (approved) {
+                service.setTechnician(aTechnician);
+                service.setStatus("approved");
+            } else {
+                service.setStatus("rejected");
             }
+            return true;
         }
         return false;
     }
 
     public boolean startExecution(Technician aTechnician, int serviceId) {
-        for (Service service : services) {
-            if (service.getCode() == serviceId && service.getTechnician() != null
-                    && service.getTechnician().equals(aTechnician)) {
-                service.setStatus("in_progress");
-                return true;
-            }
+        Service service = findServiceByIdAndTechnician(serviceId, aTechnician);
+        if (service != null) {
+            service.setStatus("in_progress");
+            return true;
         }
         return false;
     }
 
     public boolean finishService(Technician aTechnician, int serviceId) {
-        for (Service service : services) {
-            if (service.getCode() == serviceId && service.getTechnician() != null
-                    && service.getTechnician().equals(aTechnician)) {
-                service.setStatus("completed");
-                return true;
-            }
+        Service service = findServiceByIdAndTechnician(serviceId, aTechnician);
+        if (service != null) {
+            service.setStatus("completed");
+            return true;
         }
         return false;
     }
@@ -160,7 +175,9 @@ public class ManageServices {
 
     public ArrayList<Service> listServicesByClient(Client aClient) {
         ArrayList<Service> results = new ArrayList<>();
-        for (Service service : services) {
+        Iterator<Service> iterator = services.iterator();
+        while (iterator.hasNext()) {
+            Service service = iterator.next();
             if (service.getClient().equals(aClient)) {
                 results.add(service);
             }
@@ -170,7 +187,9 @@ public class ManageServices {
 
     public ArrayList<Service> listServicesByStatus(String aStatus) {
         ArrayList<Service> results = new ArrayList<>();
-        for (Service service : services) {
+        Iterator<Service> iterator = services.iterator();
+        while (iterator.hasNext()) {
+            Service service = iterator.next();
             if (service.getStatus().equalsIgnoreCase(aStatus)) {
                 results.add(service);
             }
@@ -180,8 +199,12 @@ public class ManageServices {
 
     public ArrayList<Service> listServicesWithAnalysis(String aAnalysisCode) {
         ArrayList<Service> results = new ArrayList<>();
-        for (Service service : services) {
-            for (ServiceAnalysis analysis : service.getAnalyses()) {
+        Iterator<Service> iterator = services.iterator();
+        while (iterator.hasNext()) {
+            Service service = iterator.next();
+            Iterator<ServiceAnalysis> analysisIterator = service.getAnalyses().iterator();
+            while (analysisIterator.hasNext()) {
+                ServiceAnalysis analysis = analysisIterator.next();
                 if (String.valueOf(analysis.getCode()).equals(aAnalysisCode)) {
                     results.add(service);
                     break;
@@ -193,11 +216,17 @@ public class ManageServices {
 
     public ArrayList<Service> listServicesWithChemicalComponent(String aComponentCode) {
         ArrayList<Service> results = new ArrayList<>();
-        for (Service service : services) {
+        Iterator<Service> iterator = services.iterator();
+        while (iterator.hasNext()) {
+            Service service = iterator.next();
             boolean found = false;
-            for (ServiceAnalysis serviceAnalysis : service.getAnalyses()) {
+            Iterator<ServiceAnalysis> serviceAnalysisIterator = service.getAnalyses().iterator();
+            while (serviceAnalysisIterator.hasNext()) {
+                ServiceAnalysis serviceAnalysis = serviceAnalysisIterator.next();
                 LabAnalysis analysis = serviceAnalysis.getAnalysis();
-                for (ChemicalComponent component : analysis.getRequiredComponents()) {
+                Iterator<ChemicalComponent> componentIterator = analysis.getRequiredComponents().iterator();
+                while (componentIterator.hasNext()) {
+                    ChemicalComponent component = componentIterator.next();
                     if (String.valueOf(component.getCode()).equals(aComponentCode)) {
                         results.add(service);
                         found = true;
@@ -212,7 +241,9 @@ public class ManageServices {
 
     public ArrayList<Service> searchServicesByCode(String aCode) {
         ArrayList<Service> results = new ArrayList<>();
-        for (Service service : services) {
+        Iterator<Service> iterator = services.iterator();
+        while (iterator.hasNext()) {
+            Service service = iterator.next();
             if (String.valueOf(service.getCode()).contains(aCode)) {
                 results.add(service);
             }
@@ -222,7 +253,9 @@ public class ManageServices {
 
     public ArrayList<Service> searchServicesByDescription(String keyword) {
         ArrayList<Service> results = new ArrayList<>();
-        for (Service service : services) {
+        Iterator<Service> iterator = services.iterator();
+        while (iterator.hasNext()) {
+            Service service = iterator.next();
             if (service.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
                 results.add(service);
             }
@@ -232,7 +265,9 @@ public class ManageServices {
 
     public ArrayList<Service> searchServicesAdvanced(String keyword) {
         ArrayList<Service> results = new ArrayList<>();
-        for (Service service : services) {
+        Iterator<Service> iterator = services.iterator();
+        while (iterator.hasNext()) {
+            Service service = iterator.next();
             if (String.valueOf(service.getCode()).contains(keyword) ||
                     service.getDescription().toLowerCase().contains(keyword.toLowerCase()) ||
                     service.getStatus().toLowerCase().contains(keyword.toLowerCase())) {
@@ -245,7 +280,9 @@ public class ManageServices {
     public ArrayList<Service> searchServicesForUser(User aUser, String keyword) {
         ArrayList<Service> userServices = listServices(aUser);
         ArrayList<Service> results = new ArrayList<>();
-        for (Service service : userServices) {
+        Iterator<Service> iterator = userServices.iterator();
+        while (iterator.hasNext()) {
+            Service service = iterator.next();
             if (String.valueOf(service.getCode()).contains(keyword) ||
                     service.getDescription().toLowerCase().contains(keyword.toLowerCase()) ||
                     service.getStatus().toLowerCase().contains(keyword.toLowerCase())) {
@@ -256,8 +293,12 @@ public class ManageServices {
     }
 
     public ArrayList<Test> listTestsByAnalysis(String aAnalysisCode) {
-        for (Service service : services) {
-            for (ServiceAnalysis analysis : service.getAnalyses()) {
+        Iterator<Service> iterator = services.iterator();
+        while (iterator.hasNext()) {
+            Service service = iterator.next();
+            Iterator<ServiceAnalysis> analysisIterator = service.getAnalyses().iterator();
+            while (analysisIterator.hasNext()) {
+                ServiceAnalysis analysis = analysisIterator.next();
                 if (String.valueOf(analysis.getCode()).equals(aAnalysisCode)) {
                     return analysis.getTests();
                 }
@@ -269,8 +310,9 @@ public class ManageServices {
     public void loadServices(ArrayList<Service> loadedServices) {
         if (loadedServices != null) {
             this.services = new ArrayList<>(loadedServices);
-            // Update nextServiceCode to be higher than any loaded code
-            for (Service service : services) {
+            Iterator<Service> iterator = services.iterator();
+            while (iterator.hasNext()) {
+                Service service = iterator.next();
                 if (service.getCode() >= nextServiceCode) {
                     nextServiceCode = service.getCode() + 1;
                 }
@@ -289,7 +331,9 @@ public class ManageServices {
             
             // Sort services by date (most recent first)
             ArrayList<Service> completedServices = new ArrayList<>();
-            for (Service service : services) {
+            Iterator<Service> iterator = services.iterator();
+            while (iterator.hasNext()) {
+                Service service = iterator.next();
                 if ("completed".equals(service.getStatus())) {
                     completedServices.add(service);
                 }
@@ -309,7 +353,9 @@ public class ManageServices {
             }
             
             // Write data
-            for (Service service : completedServices) {
+            Iterator<Service> writeIterator = completedServices.iterator();
+            while (writeIterator.hasNext()) {
+                Service service = writeIterator.next();
                 String date = service.getFinishDate().isEmpty() ? service.getRequestDate() : service.getFinishDate();
                 String value = String.valueOf(service.getTotalValue());
                 String client = service.getClient().getName();
@@ -317,9 +363,13 @@ public class ManageServices {
                 // Build analyses list
                 StringBuilder analysesStr = new StringBuilder();
                 ArrayList<ServiceAnalysis> analyses = service.getAnalyses();
-                for (int i = 0; i < analyses.size(); i++) {
-                    if (i > 0) analysesStr.append(";");
-                    analysesStr.append(analyses.get(i).getAnalysis().getName());
+                Iterator<ServiceAnalysis> analysisIterator = analyses.iterator();
+                boolean first = true;
+                while (analysisIterator.hasNext()) {
+                    ServiceAnalysis analysis = analysisIterator.next();
+                    if (!first) analysesStr.append(";");
+                    analysesStr.append(analysis.getAnalysis().getName());
+                    first = false;
                 }
                 
                 bufferedWriter.write(date + "," + value + "," + client + "," + analysesStr.toString());

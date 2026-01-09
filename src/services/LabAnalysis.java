@@ -1,6 +1,7 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.io.Serializable;
 
 public class LabAnalysis implements Serializable {
@@ -57,9 +58,11 @@ public class LabAnalysis implements Serializable {
     }
 
     public boolean removeRequiredComponentFromCode(String code) {
-        for (int i = 0; i < requiredComponents.size(); i++) {
-            if (String.valueOf(requiredComponents.get(i).getCode()).equals(code)) {
-                requiredComponents.remove(i);
+        Iterator<ChemicalComponent> iterator = requiredComponents.iterator();
+        while (iterator.hasNext()) {
+            ChemicalComponent component = iterator.next();
+            if (String.valueOf(component.getCode()).equals(code)) {
+                iterator.remove();
                 return true;
             }
         }

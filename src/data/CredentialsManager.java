@@ -3,6 +3,7 @@ package data;
 import users.User;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class CredentialsManager {
     private String filePath;
@@ -16,7 +17,9 @@ public class CredentialsManager {
             FileWriter writer = new FileWriter(filePath);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
             
-            for (User user : users) {
+            Iterator<User> iterator = users.iterator();
+            while (iterator.hasNext()) {
+                User user = iterator.next();
                 String line = user.getUsername() + ":" + user.getType() + ":" + user.getStatus();
                 bufferedWriter.write(line);
                 bufferedWriter.newLine();
