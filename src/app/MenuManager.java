@@ -470,24 +470,7 @@ public class MenuManager {
         Iterator<User> userIterator = users.iterator();
         while (userIterator.hasNext()) {
             User user = userIterator.next();
-            System.out.println("-----------------------------------------");
-            System.out.println("Username: " + user.getUsername());
-            System.out.println("Nome: " + user.getName());
-            System.out.println("Email: " + user.getEmail());
-            System.out.println("Tipo: " + user.getType());
-            System.out.println("Estado: " + user.getStatus());
-
-            if (user instanceof Client) {
-                Client c = (Client) user;
-                System.out.println("NIF: " + c.getNif());
-                System.out.println("Telefone: " + c.getPhone());
-                System.out.println("Morada: " + c.getAddress());
-            } else if (user instanceof Technician) {
-                Technician t = (Technician) user;
-                System.out.println("NIF: " + t.getNif());
-                System.out.println("Telefone: " + t.getPhone());
-                System.out.println("Morada: " + t.getAddress());
-            }
+            System.out.println(user.toString());
         }
 
         System.out.println("-----------------------------------------");
@@ -518,12 +501,7 @@ public class MenuManager {
         Iterator<User> resultIterator = results.iterator();
         while (resultIterator.hasNext()) {
             User user = resultIterator.next();
-            System.out.println("-----------------------------------------");
-            System.out.println("Username: " + user.getUsername());
-            System.out.println("Nome: " + user.getName());
-            System.out.println("Email: " + user.getEmail());
-            System.out.println("Tipo: " + user.getType());
-            System.out.println("Estado: " + user.getStatus());
+            System.out.println(user.toString());
         }
 
         if (!results.isEmpty()) {
@@ -1691,23 +1669,7 @@ public class MenuManager {
     }
 
     private void displayService(Service service) {
-        System.out.println("-----------------------------------------");
-        System.out.println("Codigo: " + service.getCode());
-        System.out.println("Cliente: " + service.getClient().getName());
-        System.out.println("Descricao: " + service.getDescription());
-        System.out.println("Estado: " + service.getStatus());
-        System.out.println("Data pedido: " + service.getRequestDate());
-
-        if (service.getTechnician() != null) {
-            System.out.println("Tecnico: " + service.getTechnician().getName());
-        }
-
-        if (!service.getFinishDate().isEmpty()) {
-            System.out.println("Data conclusao: " + service.getFinishDate());
-        }
-
-        System.out.println("Valor total: " + service.getTotalValue() + " euros");
-        System.out.println("Analises: " + service.getAnalyses().size());
+        System.out.println(service.toString());
     }
 
     // ==================== UTILITY FUNCTIONS ====================

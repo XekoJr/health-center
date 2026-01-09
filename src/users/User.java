@@ -78,4 +78,15 @@ public class User implements Serializable, Comparable<User> {
     public int compareTo(User other) {
         return this.name.compareTo(other.name);
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-----------------------------------------\n");
+        sb.append("Username: ").append(username).append("\n");
+        sb.append("Nome: ").append(name).append("\n");
+        sb.append("Email: ").append(email).append("\n");
+        sb.append("Tipo: ").append(type).append("\n");
+        sb.append("Estado: ").append(status);
+        return sb.toString();
+    }
 }

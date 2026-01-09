@@ -38,4 +38,14 @@ public class Client extends User {
     public String getAddress() {
         return address;
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(super.toString());
+        sb.append("\n");
+        sb.append("NIF: ").append(nif).append("\n");
+        sb.append("Telefone: ").append(phone).append("\n");
+        sb.append("Morada: ").append(address);
+        return sb.toString();
+    }
 }

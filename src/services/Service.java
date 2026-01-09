@@ -111,4 +111,26 @@ public class Service implements Serializable, Comparable<Service> {
     public int compareTo(Service other) {
         return Integer.compare(this.code, other.code);
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-----------------------------------------\n");
+        sb.append("Codigo: ").append(code).append("\n");
+        sb.append("Cliente: ").append(client.getName()).append("\n");
+        sb.append("Descricao: ").append(description).append("\n");
+        sb.append("Estado: ").append(status).append("\n");
+        sb.append("Data pedido: ").append(requestDate).append("\n");
+        
+        if (technician != null) {
+            sb.append("Tecnico: ").append(technician.getName()).append("\n");
+        }
+        
+        if (!finishDate.isEmpty()) {
+            sb.append("Data conclusao: ").append(finishDate).append("\n");
+        }
+        
+        sb.append("Valor total: ").append(totalValue).append(" euros\n");
+        sb.append("Analises: ").append(analyses.size());
+        return sb.toString();
+    }
 }
