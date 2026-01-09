@@ -47,4 +47,15 @@ public class ChemicalComponent implements Serializable {
     public int getStockQty() {
         return stockQty;
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-----------------------------------------\n");
+        sb.append("Codigo: ").append(code).append("\n");
+        sb.append("Nome: ").append(name).append("\n");
+        sb.append("Alfa: ").append(alphaValue).append("\n");
+        sb.append("Beta: ").append(betaValue).append("\n");
+        sb.append("Stock: ").append(stockQty);
+        return sb.toString();
+    }
 }

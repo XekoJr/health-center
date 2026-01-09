@@ -93,4 +93,15 @@ public class LabAnalysis implements Serializable {
     public ArrayList<Supplier> getSuppliers() {
         return new ArrayList<>(suppliers);
     }
+    
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-----------------------------------------\n");
+        sb.append("Codigo: ").append(code).append("\n");
+        sb.append("Nome: ").append(name).append("\n");
+        sb.append("Certificacao: ").append(certification).append("\n");
+        sb.append("Metodos: ").append(methods).append("\n");
+        sb.append("Componentes necessarios: ").append(requiredComponents.size());
+        return sb.toString();
+    }
 }

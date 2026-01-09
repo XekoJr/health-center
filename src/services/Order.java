@@ -74,4 +74,16 @@ public class Order implements Serializable {
     public void removeItem(ChemicalComponent item) {
         items.remove(item);
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-----------------------------------------\n");
+        sb.append("Codigo: ").append(code).append("\n");
+        sb.append("Fornecedor: ").append(supplier.getName()).append("\n");
+        sb.append("Tecnico: ").append(technician.getName()).append("\n");
+        sb.append("Data pedido: ").append(requestDate).append("\n");
+        sb.append("Data entrega: ").append(deliveryDate.isEmpty() ? "Pendente" : deliveryDate).append("\n");
+        sb.append("Estado: ").append(status);
+        return sb.toString();
+    }
 }

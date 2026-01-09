@@ -303,4 +303,242 @@ public class ManageCatalog {
         }
         return allComponents;
     }
+
+    // Search/list methods with unified approach (empty term = list all)
+    public ArrayList<LabAnalysis> searchAnalyses(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            sortAnalysisByCode(true);
+            return listAnalysis();
+        }
+        return searchAnalysisAdvanced(keyword.trim());
+    }
+
+    public ArrayList<ChemicalComponent> searchComponents(String keyword) {
+        ArrayList<ChemicalComponent> allComponents = listChemicalComponents();
+        if (keyword == null || keyword.trim().isEmpty()) {
+            sortComponentsByCode(allComponents, true);
+            return allComponents;
+        }
+        
+        ArrayList<ChemicalComponent> results = new ArrayList<>();
+        String searchTerm = keyword.trim().toLowerCase();
+        for (ChemicalComponent component : allComponents) {
+            if (String.valueOf(component.getCode()).contains(searchTerm) ||
+                component.getName().toLowerCase().contains(searchTerm)) {
+                results.add(component);
+            }
+        }
+        return results;
+    }
+
+    public ArrayList<Supplier> searchSuppliers(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            sortSuppliersByCode(true);
+            return new ArrayList<>(suppliers);
+        }
+        
+        ArrayList<Supplier> results = new ArrayList<>();
+        String searchTerm = keyword.trim().toLowerCase();
+        for (Supplier supplier : suppliers) {
+            if (String.valueOf(supplier.getCode()).contains(searchTerm) ||
+                supplier.getName().toLowerCase().contains(searchTerm) ||
+                supplier.getEmail().toLowerCase().contains(searchTerm)) {
+                results.add(supplier);
+            }
+        }
+        return results;
+    }
+
+    public ArrayList<MedicalArea> searchAreas(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            sortAreasByCode(true);
+            return new ArrayList<>(areas);
+        }
+        
+        ArrayList<MedicalArea> results = new ArrayList<>();
+        String searchTerm = keyword.trim().toLowerCase();
+        for (MedicalArea area : areas) {
+            if (String.valueOf(area.getCode()).contains(searchTerm) ||
+                area.getDesignation().toLowerCase().contains(searchTerm) ||
+                area.getFamily().toLowerCase().contains(searchTerm)) {
+                results.add(area);
+            }
+        }
+        return results;
+    }
+
+    public ArrayList<Order> searchOrders(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            sortOrdersByCode(true);
+            return listOrders();
+        }
+        
+        ArrayList<Order> results = new ArrayList<>();
+        String searchTerm = keyword.trim().toLowerCase();
+        for (Order order : orders) {
+            if (String.valueOf(order.getCode()).contains(searchTerm) ||
+                order.getSupplier().getName().toLowerCase().contains(searchTerm) ||
+                order.getStatus().toLowerCase().contains(searchTerm)) {
+                results.add(order);
+            }
+        }
+        return results;
+    }
+
+    // Sorting methods for new entities
+    private void sortComponentsByCode(ArrayList<ChemicalComponent> components, boolean ascending) {
+        for (int i = 0; i < components.size() - 1; i++) {
+            for (int j = 0; j < components.size() - i - 1; j++) {
+                int code1 = components.get(j).getCode();
+                int code2 = components.get(j + 1).getCode();
+                boolean shouldSwap = ascending ? code1 > code2 : code1 < code2;
+                
+                if (shouldSwap) {
+                    ChemicalComponent temp = components.get(j);
+                    components.set(j, components.get(j + 1));
+                    components.set(j + 1, temp);
+                }
+            }
+        }
+    }
+
+    public boolean sortSuppliersByCode(boolean ascending) {
+        for (int i = 0; i < suppliers.size() - 1; i++) {
+            for (int j = 0; j < suppliers.size() - i - 1; j++) {
+                int code1 = suppliers.get(j).getCode();
+                int code2 = suppliers.get(j + 1).getCode();
+                boolean shouldSwap = ascending ? code1 > code2 : code1 < code2;
+                
+                if (shouldSwap) {
+                    Supplier temp = suppliers.get(j);
+                    suppliers.set(j, suppliers.get(j + 1));
+                    suppliers.set(j + 1, temp);
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean sortAreasByCode(boolean ascending) {
+        for (int i = 0; i < areas.size() - 1; i++) {
+            for (int j = 0; j < areas.size() - i - 1; j++) {
+                int code1 = areas.get(j).getCode();
+                int code2 = areas.get(j + 1).getCode();
+                boolean shouldSwap = ascending ? code1 > code2 : code1 < code2;
+                
+                if (shouldSwap) {
+                    MedicalArea temp = areas.get(j);
+                    areas.set(j, areas.get(j + 1));
+                    areas.set(j + 1, temp);
+                }
+            }
+        }
+        return true;
+    }
+
+    // Remove methods
+    public boolean removeAnalysis(int code) {
+        for (int i = 0; i < analyses.size(); i++) {
+            if (analyses.get(i).getCode() == code) {
+                analyses.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean removeComponent(int code) {
+        // Remove from all analyses first
+        for (LabAnalysis analysis : analyses) {
+            analysis.removeRequiredComponentFromCode(String.valueOf(code));
+        }
+        return true;
+    }
+
+    public boolean removeSupplier(int code) {
+        for (int i = 0; i < suppliers.size(); i++) {
+            if (suppliers.get(i).getCode() == code) {
+                suppliers.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean removeArea(int code) {
+        for (int i = 0; i < areas.size(); i++) {
+            if (areas.get(i).getCode() == code) {
+                areas.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean removeOrder(int code) {
+        for (int i = 0; i < orders.size(); i++) {
+            if (orders.get(i).getCode() == code) {
+                orders.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Find methods for editing
+    public LabAnalysis findAnalysis(int code) {
+        for (LabAnalysis analysis : analyses) {
+            if (analysis.getCode() == code) {
+                return analysis;
+            }
+        }
+        return null;
+    }
+
+    public ChemicalComponent findComponent(int code) {
+        ArrayList<ChemicalComponent> components = listChemicalComponents();
+        for (ChemicalComponent component : components) {
+            if (component.getCode() == code) {
+                return component;
+            }
+        }
+        return null;
+    }
+
+    public Supplier findSupplier(int code) {
+        for (Supplier supplier : suppliers) {
+            if (supplier.getCode() == code) {
+                return supplier;
+            }
+        }
+        return null;
+    }
+
+    public MedicalArea findArea(int code) {
+        for (MedicalArea area : areas) {
+            if (area.getCode() == code) {
+                return area;
+            }
+        }
+        return null;
+    }
+
+    public Order findOrder(int code) {
+        for (Order order : orders) {
+            if (order.getCode() == code) {
+                return order;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Order> listPendingOrders() {
+        ArrayList<Order> results = new ArrayList<>();
+        for (Order order : orders) {
+            if (!order.getStatus().equals("delivered")) {
+                results.add(order);
+            }
+        }
+        return results;
+    }
 }

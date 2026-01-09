@@ -35,4 +35,13 @@ public class MedicalArea implements Serializable {
     public String getFamily() {
         return family;
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-----------------------------------------\n");
+        sb.append("Codigo: ").append(code).append("\n");
+        sb.append("Designacao: ").append(designation).append("\n");
+        sb.append("Familia: ").append(family);
+        return sb.toString();
+    }
 }

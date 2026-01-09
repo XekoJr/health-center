@@ -41,4 +41,14 @@ public class Supplier implements Serializable {
     public String getPhone() {
         return phone;
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-----------------------------------------\n");
+        sb.append("Codigo: ").append(code).append("\n");
+        sb.append("Nome: ").append(name).append("\n");
+        sb.append("Email: ").append(email).append("\n");
+        sb.append("Telefone: ").append(phone);
+        return sb.toString();
+    }
 }

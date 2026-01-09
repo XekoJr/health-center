@@ -10,10 +10,12 @@ public class MenuManager {
     private ApplicationManager appManager;
     private Scanner scanner;
     private LogManager logManager;
+    private SystemInfo systemInfo;
 
-    public MenuManager(ApplicationManager appManager, LogManager logManager) {
+    public MenuManager(ApplicationManager appManager, LogManager logManager, SystemInfo systemInfo) {
         this.appManager = appManager;
         this.logManager = logManager;
+        this.systemInfo = systemInfo;
         this.scanner = new Scanner(System.in);
     }
 
@@ -22,9 +24,9 @@ public class MenuManager {
     public void showMainMenu() {
         while (true) {
             clearScreen();
-            System.out.println("+========================================+");
-            System.out.println("|     SISTEMA DE GESTAO LABORATORIAL     |");
-            System.out.println("+========================================+");
+            System.out.println("==========================================");
+            System.out.println("     SISTEMA DE GESTAO LABORATORIAL      ");
+            System.out.println("==========================================");
             System.out.println();
 
             // Check if no users exist - force admin creation
@@ -80,9 +82,9 @@ public class MenuManager {
 
     private void handleLogin() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|              LOGIN                     |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("                  LOGIN                   ");
+        System.out.println("==========================================");
         System.out.println();
 
         System.out.print("Username: ");
@@ -113,12 +115,13 @@ public class MenuManager {
 
         // Login successful
         appManager.getSession().setCurrentUser(user);
+        systemInfo.setLastUsername(username);
         logManager.log(username, "Login realizado");
 
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|          BEM-VINDO                     |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("                BEM-VINDO                 ");
+        System.out.println("==========================================");
         System.out.println();
         System.out.println("Bem-vindo " + user.getName() + "!");
         System.out.println();
@@ -145,9 +148,9 @@ public class MenuManager {
 
     private void handleRegister() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|          REGISTO DE UTILIZADOR         |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("          REGISTO DE UTILIZADOR           ");
+        System.out.println("==========================================");
         System.out.println();
 
         // Check if this is the first user (must be admin)
@@ -258,20 +261,20 @@ public class MenuManager {
             clearScreen();
             User currentUser = appManager.getSession().getCurrentUser();
 
-            System.out.println("+========================================+");
-            System.out.println("|         MENU ADMINISTRADOR             |");
-            System.out.println("+========================================+");
+            System.out.println("==========================================");
+            System.out.println("           MENU ADMINISTRADOR             ");
+            System.out.println("==========================================");
             System.out.println("Utilizador: " + currentUser.getName());
             System.out.println();
-            System.out.println("1. Aprovar utilizadores pendentes");
-            System.out.println("2. Listar todos os utilizadores");
-            System.out.println("3. Pesquisar utilizadores");
-            System.out.println("4. Gerir servicos");
-            System.out.println("5. Listar analises");
-            System.out.println("6. Listar encomendas");
-            System.out.println("7. Exportar servicos para CSV");
+            System.out.println("1. Gerir Utilizadores");
+            System.out.println("2. Gerir Servicos");
+            System.out.println("3. Gerir Analises");
+            System.out.println("4. Gerir Componentes Quimicos");
+            System.out.println("5. Gerir Fornecedores");
+            System.out.println("6. Gerir Areas Medicas");
+            System.out.println("7. Gerir Encomendas");
             System.out.println("8. Consultar log do sistema");
-            System.out.println("9. Editar meu perfil");
+            System.out.println("9. Editar perfil");
             System.out.println("0. Logout");
             System.out.println();
             System.out.print("Escolha uma opcao: ");
@@ -280,25 +283,25 @@ public class MenuManager {
 
             switch (choice) {
                 case 1:
-                    approveUsers();
+                    manageUsers();
                     break;
                 case 2:
-                    listAllUsers();
-                    break;
-                case 3:
-                    searchUsers();
-                    break;
-                case 4:
                     manageServices();
                     break;
+                case 3:
+                    manageAnalyses();
+                    break;
+                case 4:
+                    manageComponents();
+                    break;
                 case 5:
-                    listAnalyses();
+                    manageSuppliers();
                     break;
                 case 6:
-                    listOrders();
+                    manageAreas();
                     break;
                 case 7:
-                    exportServicesToCSV();
+                    manageOrders();
                     break;
                 case 8:
                     viewSystemLog();
@@ -315,11 +318,45 @@ public class MenuManager {
         }
     }
 
+    private void manageUsers() {
+        while (true) {
+            clearScreen();
+            System.out.println("==========================================");
+            System.out.println("            GERIR UTILIZADORES            ");
+            System.out.println("==========================================");
+            System.out.println();
+            System.out.println("1. Aprovar utilizadores pendentes");
+            System.out.println("2. Listar utilizadores");
+            System.out.println("3. Pesquisar utilizadores");
+            System.out.println("0. Voltar");
+            System.out.print("Escolha: ");
+
+            int choice = readInt();
+
+            switch (choice) {
+                case 1:
+                    approveUsers();
+                    break;
+                case 2:
+                    listAllUsers();
+                    break;
+                case 3:
+                    searchUsers();
+                    break;
+                case 0:
+                    return;
+                default:
+                    showError("Opcao invalida!");
+                    pause();
+            }
+        }
+    }
+
     private void approveUsers() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|      APROVAR UTILIZADORES PENDENTES    |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("       APROVAR UTILIZADORES PENDENTES     ");
+        System.out.println("==========================================");
         System.out.println();
 
         ArrayList<User> pendingUsers = appManager.getManageUsers().searchUser("status", "pending");
@@ -388,9 +425,9 @@ public class MenuManager {
 
     private void listAllUsers() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|        LISTAR UTILIZADORES             |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("            LISTAR UTILIZADORES           ");
+        System.out.println("==========================================");
         System.out.println();
 
         System.out.println("1. Todos os utilizadores");
@@ -454,9 +491,9 @@ public class MenuManager {
 
     private void searchUsers() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|        PESQUISAR UTILIZADORES          |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("          PESQUISAR UTILIZADORES          ");
+        System.out.println("==========================================");
         System.out.println();
 
         System.out.print("Termo de pesquisa (username ou nome, vazio para listar todos): ");
@@ -492,16 +529,16 @@ public class MenuManager {
     private void manageServices() {
         while (true) {
             clearScreen();
-            System.out.println("+========================================+");
-            System.out.println("|          GERIR SERVICOS                |");
-            System.out.println("+========================================+");
+            System.out.println("==========================================");
+            System.out.println("              GERIR SERVICOS              ");
+            System.out.println("==========================================");
             System.out.println();
 
             System.out.println("1. Aprovar pedidos de servico");
             System.out.println("2. Associar tecnico a servico");
-            System.out.println("3. Listar todos os servicos");
+            System.out.println("3. Pesquisar/Listar servicos");
             System.out.println("4. Listar servicos por estado");
-            System.out.println("5. Pesquisar servicos");
+            System.out.println("5. Exportar servicos para CSV");
             System.out.println("0. Voltar");
             System.out.print("Escolha: ");
 
@@ -515,13 +552,13 @@ public class MenuManager {
                     associateTechnicianToServices();
                     break;
                 case 3:
-                    listAllServices();
+                    searchServices();
                     break;
                 case 4:
                     listServicesByStatus();
                     break;
                 case 5:
-                    searchServices();
+                    exportServicesToCSV();
                     break;
                 case 0:
                     return;
@@ -532,80 +569,11 @@ public class MenuManager {
         }
     }
 
-    private void listAllServices() {
-        clearScreen();
-        ArrayList<Service> services = appManager.getManageServices().listAllServices();
-
-        System.out.println("Total de servicos: " + services.size());
-        System.out.println();
-
-        appManager.getManageServices().sortServicesByCode(true);
-
-        for (Service service : services) {
-            displayService(service);
-        }
-
-        pause();
-    }
-
-    private void listServicesByStatus() {
-        clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|      LISTAR SERVICOS POR ESTADO        |");
-        System.out.println("+========================================+");
-        System.out.println();
-
-        System.out.println("Estados disponiveis:");
-        System.out.println("1. pending (Pendente)");
-        System.out.println("2. approved (Aprovado)");
-        System.out.println("3. rejected (Rejeitado)");
-        System.out.println("4. in_progress (Em execucao)");
-        System.out.println("5. completed (Terminado)");
-        System.out.print("Escolha: ");
-
-        int choice = readInt();
-        String status = "";
-
-        switch (choice) {
-            case 1:
-                status = "pending";
-                break;
-            case 2:
-                status = "approved";
-                break;
-            case 3:
-                status = "rejected";
-                break;
-            case 4:
-                status = "in_progress";
-                break;
-            case 5:
-                status = "completed";
-                break;
-            default:
-                showError("Opcao invalida!");
-                pause();
-                return;
-        }
-
-        ArrayList<Service> services = appManager.getManageServices().listServicesByStatus(status);
-
-        clearScreen();
-        System.out.println("Servicos com estado '" + status + "': " + services.size());
-        System.out.println();
-
-        for (Service service : services) {
-            displayService(service);
-        }
-
-        pause();
-    }
-
     private void searchServices() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|        PESQUISAR SERVICOS              |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("         PESQUISAR/LISTAR SERVICOS        ");
+        System.out.println("==========================================");
         System.out.println();
 
         System.out.print("Termo de pesquisa (codigo ou descricao, vazio para listar todos): ");
@@ -613,6 +581,7 @@ public class MenuManager {
 
         ArrayList<Service> results;
         if (term.isEmpty()) {
+            appManager.getManageServices().sortServicesByCode(true);
             results = appManager.getManageServices().listAllServices();
         } else {
             results = appManager.getManageServices().searchServicesAdvanced(term);
@@ -629,11 +598,68 @@ public class MenuManager {
         pause();
     }
 
+    private void listServicesByStatus() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("        LISTAR SERVICOS POR ESTADO        ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        System.out.println("Escolha o estado:");
+        System.out.println("1. Pendente (pending)");
+        System.out.println("2. Aprovado por tecnico (technician_approved)");
+        System.out.println("3. Aprovado (approved)");
+        System.out.println("4. Em execucao (in_progress)");
+        System.out.println("5. Concluido (finished)");
+        System.out.println("6. Rejeitado (rejected)");
+        System.out.print("Escolha: ");
+
+        int choice = readInt();
+        String status;
+
+        switch (choice) {
+            case 1:
+                status = "pending";
+                break;
+            case 2:
+                status = "technician_approved";
+                break;
+            case 3:
+                status = "approved";
+                break;
+            case 4:
+                status = "in_progress";
+                break;
+            case 5:
+                status = "finished";
+                break;
+            case 6:
+                status = "rejected";
+                break;
+            default:
+                showError("Opcao invalida!");
+                pause();
+                return;
+        }
+
+        ArrayList<Service> results = appManager.getManageServices().listServicesByStatus(status);
+
+        clearScreen();
+        System.out.println("Servicos com estado '" + status + "': " + results.size());
+        System.out.println();
+
+        for (Service service : results) {
+            displayService(service);
+        }
+
+        pause();
+    }
+
     private void adminApproveRejectServices() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|   APROVAR/REJEITAR PEDIDOS SERVICO     |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("      APROVAR/REJEITAR PEDIDOS SERVICO    ");
+        System.out.println("==========================================");
         System.out.println();
 
         ArrayList<Service> pendingServices = appManager.getManageServices().listServicesByStatus("pending");
@@ -691,9 +717,9 @@ public class MenuManager {
 
     private void associateTechnicianToServices() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|    ASSOCIAR TECNICO A SERVICO          |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("         ASSOCIAR TECNICO A SERVICO       ");
+        System.out.println("==========================================");
         System.out.println();
 
         ArrayList<Service> pendingServices = appManager.getManageServices().listServicesByStatus("technician_approved");
@@ -784,24 +810,21 @@ public class MenuManager {
             clearScreen();
             User currentUser = appManager.getSession().getCurrentUser();
 
-            System.out.println("+========================================+");
-            System.out.println("|           MENU TECNICO                 |");
-            System.out.println("+========================================+");
+            System.out.println("==========================================");
+            System.out.println("              MENU TECNICO                ");
+            System.out.println("==========================================");
             System.out.println("Utilizador: " + currentUser.getName());
             System.out.println();
             System.out.println("1.  Aprovar/Rejeitar pedidos de servico");
             System.out.println("2.  Listar meus servicos");
             System.out.println("3.  Iniciar execucao de servico");
             System.out.println("4.  Finalizar servico");
-            System.out.println("5.  Criar analise");
-            System.out.println("6.  Listar analises");
-            System.out.println("7.  Adicionar componente quimico");
-            System.out.println("8.  Listar componentes quimicos");
-            System.out.println("9.  Criar fornecedor");
-            System.out.println("10. Criar area medica");
-            System.out.println("11. Criar encomenda");
-            System.out.println("12. Listar encomendas");
-            System.out.println("13. Editar meu perfil");
+            System.out.println("5.  Gestao de Analises");
+            System.out.println("6.  Gestao de Componentes Quimicos");
+            System.out.println("7.  Gestao de Fornecedores");
+            System.out.println("8.  Gestao de Areas Medicas");
+            System.out.println("9.  Gestao de Encomendas");
+            System.out.println("10. Editar perfil");
             System.out.println("0.  Logout");
             System.out.println();
             System.out.print("Escolha uma opcao: ");
@@ -822,30 +845,21 @@ public class MenuManager {
                     finishService();
                     break;
                 case 5:
-                    createAnalysis();
+                    manageAnalyses();
                     break;
                 case 6:
-                    listAnalyses();
+                    manageComponents();
                     break;
                 case 7:
-                    addChemicalComponent();
+                    manageSuppliers();
                     break;
                 case 8:
-                    listChemicalComponents();
+                    manageAreas();
                     break;
                 case 9:
-                    createSupplier();
+                    manageOrders();
                     break;
                 case 10:
-                    createMedicalArea();
-                    break;
-                case 11:
-                    createOrder();
-                    break;
-                case 12:
-                    listOrders();
-                    break;
-                case 13:
                     editMyProfile();
                     break;
                 case 0:
@@ -859,9 +873,9 @@ public class MenuManager {
 
     private void technicianApproveRejectServices() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|   APROVAR/REJEITAR PEDIDOS SERVICO     |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("      APROVAR/REJEITAR PEDIDOS SERVICO    ");
+        System.out.println("==========================================");
         System.out.println();
 
         ArrayList<Service> pendingServices = appManager.getManageServices().listServicesByStatus("pending");
@@ -926,10 +940,13 @@ public class MenuManager {
 
     private void listMyServices() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|         MEUS SERVICOS                  |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("       PESQUISAR/LISTAR MEUS SERVICOS     ");
+        System.out.println("==========================================");
         System.out.println();
+
+        System.out.print("Termo de pesquisa (vazio para listar todos): ");
+        String term = scanner.nextLine().trim();
 
         Technician currentTech = (Technician) appManager.getSession().getCurrentUser();
         ArrayList<Service> allServices = appManager.getManageServices().listAllServices();
@@ -942,10 +959,25 @@ public class MenuManager {
             }
         }
 
-        System.out.println("Total: " + myServices.size() + " servicos");
+        ArrayList<Service> results = new ArrayList<>();
+
+        if (term.isEmpty()) {
+            appManager.getManageServices().sortServicesByCode(true);
+            results = myServices;
+        } else {
+            for (Service service : myServices) {
+                if (String.valueOf(service.getCode()).contains(term) ||
+                        service.getDescription().toLowerCase().contains(term.toLowerCase())) {
+                    results.add(service);
+                }
+            }
+        }
+
+        clearScreen();
+        System.out.println("Total: " + results.size() + " servicos");
         System.out.println();
 
-        for (Service service : myServices) {
+        for (Service service : results) {
             displayService(service);
         }
 
@@ -954,9 +986,9 @@ public class MenuManager {
 
     private void startServiceExecution() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|    INICIAR EXECUCAO DE SERVICO         |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("         INICIAR EXECUCAO DE SERVICO      ");
+        System.out.println("==========================================");
         System.out.println();
 
         System.out.print("Codigo do servico: ");
@@ -977,9 +1009,9 @@ public class MenuManager {
 
     private void finishService() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|        FINALIZAR SERVICO               |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("             FINALIZAR SERVICO            ");
+        System.out.println("==========================================");
         System.out.println();
 
         System.out.print("Codigo do servico: ");
@@ -1000,9 +1032,9 @@ public class MenuManager {
 
     private void createAnalysis() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|          CRIAR ANALISE                 |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("               CRIAR ANALISE              ");
+        System.out.println("==========================================");
         System.out.println();
 
         int code = appManager.getManageCatalog().generateAnalysisCode();
@@ -1031,33 +1063,157 @@ public class MenuManager {
         pause();
     }
 
-    private void listAnalyses() {
+    private void manageAnalyses() {
+        while (true) {
+            clearScreen();
+            System.out.println("==========================================");
+            System.out.println("            GESTAO DE ANALISES            ");
+            System.out.println("==========================================");
+            System.out.println();
+            System.out.println("1. Criar analise");
+            System.out.println("2. Pesquisar/Listar analises");
+            System.out.println("3. Editar analise");
+            System.out.println("4. Remover analise");
+            System.out.println("0. Voltar");
+            System.out.println();
+            System.out.print("Escolha uma opcao: ");
+
+            int choice = readInt();
+
+            switch (choice) {
+                case 1:
+                    createAnalysis();
+                    break;
+                case 2:
+                    searchAndDisplayAnalyses();
+                    break;
+                case 3:
+                    editAnalysis();
+                    break;
+                case 4:
+                    removeAnalysis();
+                    break;
+                case 0:
+                    return;
+                default:
+                    showError("Opcao invalida!");
+                    pause();
+            }
+        }
+    }
+
+    private void searchAndDisplayAnalyses() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|          LISTAR ANALISES               |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("         PESQUISAR/LISTAR ANALISES        ");
+        System.out.println("==========================================");
         System.out.println();
 
-        ArrayList<LabAnalysis> analyses = appManager.getManageCatalog().listAnalysis();
+        System.out.print("Termo de pesquisa (vazio para listar todas): ");
+        String term = scanner.nextLine().trim();
 
-        System.out.println("Total de analises: " + analyses.size());
+        ArrayList<LabAnalysis> results = appManager.getManageCatalog().searchAnalyses(term);
+
+        clearScreen();
+        System.out.println("Total de analises: " + results.size());
         System.out.println();
 
-        appManager.getManageCatalog().sortAnalysisByCode(true);
-
-        for (LabAnalysis analysis : analyses) {
-            System.out.println("-----------------------------------------");
-            System.out.println("Codigo: " + analysis.getCode());
-            System.out.println("Nome: " + analysis.getName());
-            System.out.println("Certificacao: " + analysis.getCertification());
-            System.out.println("Metodos: " + analysis.getMethods());
-            System.out.println("Fornecedores: " + analysis.getSuppliers().size());
-            System.out.println("Areas medicas: " + analysis.getAreas().size());
-            System.out.println("Componentes: " + analysis.getRequiredComponents().size());
+        for (LabAnalysis analysis : results) {
+            System.out.println(analysis.toString());
         }
 
-        if (!analyses.isEmpty()) {
+        if (!results.isEmpty()) {
             System.out.println("-----------------------------------------");
+        }
+
+        pause();
+    }
+
+    private void editAnalysis() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("              EDITAR ANALISE              ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        System.out.print("Codigo da analise: ");
+        int code = readInt();
+
+        LabAnalysis analysis = appManager.getManageCatalog().findAnalysis(code);
+
+        if (analysis == null) {
+            showError("Analise nao encontrada!");
+            pause();
+            return;
+        }
+
+        System.out.println();
+        System.out.println("Dados atuais:");
+        System.out.println(analysis.toString());
+        System.out.println();
+
+        showError("Edicao de analises nao implementada ainda.");
+        pause();
+    }
+
+    private void removeAnalysis() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("              REMOVER ANALISE             ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        System.out.print("Termo de pesquisa (vazio para listar todas): ");
+        String term = scanner.nextLine().trim();
+
+        ArrayList<LabAnalysis> results = appManager.getManageCatalog().searchAnalyses(term);
+
+        if (results.isEmpty()) {
+            showError("Nenhuma analise encontrada!");
+            pause();
+            return;
+        }
+
+        clearScreen();
+        System.out.println("Analises encontradas:");
+        System.out.println();
+
+        int index = 1;
+        for (LabAnalysis analysis : results) {
+            System.out.println(index + ".");
+            System.out.println(analysis.toString());
+            index++;
+        }
+
+        if (!results.isEmpty()) {
+            System.out.println("-----------------------------------------");
+        }
+
+        System.out.print("\\nEscolha o numero da analise (0 para cancelar): ");
+        int choice = readInt();
+
+        if (choice < 1 || choice > results.size()) {
+            return;
+        }
+
+        LabAnalysis selectedAnalysis = results.get(choice - 1);
+
+        System.out.println();
+        System.out.print("Tem certeza que deseja remover a analise " + selectedAnalysis.getCode() + "? (S/N): ");
+        String confirmation = scanner.nextLine().trim().toUpperCase();
+
+        if (!confirmation.equals("S")) {
+            System.out.println("Operacao cancelada.");
+            pause();
+            return;
+        }
+
+        if (appManager.getManageCatalog().removeAnalysis(selectedAnalysis.getCode())) {
+            showSuccess("Analise removida com sucesso!");
+            logManager.log(appManager.getSession().getCurrentUser().getUsername(),
+                    "Removeu analise " + selectedAnalysis.getCode());
+        } else {
+            showError("Erro ao remover analise.");
         }
 
         pause();
@@ -1065,9 +1221,9 @@ public class MenuManager {
 
     private void addChemicalComponent() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|      ADICIONAR COMPONENTE QUIMICO      |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("        ADICIONAR COMPONENTE QUIMICO      ");
+        System.out.println("==========================================");
         System.out.println();
 
         int code = appManager.getManageCatalog().generateComponentCode();
@@ -1099,39 +1255,11 @@ public class MenuManager {
         pause();
     }
 
-    private void listChemicalComponents() {
-        clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|      COMPONENTES QUIMICOS              |");
-        System.out.println("+========================================+");
-        System.out.println();
-
-        ArrayList<ChemicalComponent> components = appManager.getManageCatalog().listChemicalComponents();
-
-        System.out.println("Total de componentes: " + components.size());
-        System.out.println();
-
-        for (ChemicalComponent comp : components) {
-            System.out.println("-----------------------------------------");
-            System.out.println("Codigo: " + comp.getCode());
-            System.out.println("Nome: " + comp.getName());
-            System.out.println("Alfa: " + comp.getAlphaValue());
-            System.out.println("Beta: " + comp.getBetaValue());
-            System.out.println("Stock: " + comp.getStockQty());
-        }
-
-        if (!components.isEmpty()) {
-            System.out.println("-----------------------------------------");
-        }
-
-        pause();
-    }
-
     private void createSupplier() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|         CRIAR FORNECEDOR               |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("              CRIAR FORNECEDOR            ");
+        System.out.println("==========================================");
         System.out.println();
 
         int code = appManager.getManageCatalog().generateSupplierCode();
@@ -1162,9 +1290,9 @@ public class MenuManager {
 
     private void createMedicalArea() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|        CRIAR AREA MEDICA               |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("             CRIAR AREA MEDICA            ");
+        System.out.println("==========================================");
         System.out.println();
 
         int code = appManager.getManageCatalog().generateAreaCode();
@@ -1192,9 +1320,9 @@ public class MenuManager {
 
     private void createOrder() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|         CRIAR ENCOMENDA                |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("              CRIAR ENCOMENDA             ");
+        System.out.println("==========================================");
         System.out.println();
 
         int code = appManager.getManageCatalog().generateOrderCode();
@@ -1228,8 +1356,7 @@ public class MenuManager {
 
         Supplier selectedSupplier = suppliers.get(supplierChoice - 1);
 
-        System.out.print("Data do pedido (DD-MM-YYYY): ");
-        String requestDate = scanner.nextLine().trim();
+        String requestDate = java.time.LocalDate.now().toString();
 
         Technician currentTech = (Technician) appManager.getSession().getCurrentUser();
         Order order = new Order(code, selectedSupplier, currentTech, requestDate);
@@ -1244,38 +1371,6 @@ public class MenuManager {
         pause();
     }
 
-    private void listOrders() {
-        clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|         LISTAR ENCOMENDAS              |");
-        System.out.println("+========================================+");
-        System.out.println();
-
-        ArrayList<Order> orders = appManager.getManageCatalog().listOrders();
-
-        System.out.println("Total de encomendas: " + orders.size());
-        System.out.println();
-
-        appManager.getManageCatalog().sortOrdersByCode(true);
-
-        for (Order order : orders) {
-            System.out.println("-----------------------------------------");
-            System.out.println("Codigo: " + order.getCode());
-            System.out.println("Fornecedor: " + order.getSupplier().getName());
-            System.out.println("Tecnico: " + order.getTechnician().getName());
-            System.out.println("Data pedido: " + order.getRequestDate());
-            System.out.println(
-                    "Data entrega: " + (order.getDeliveryDate().isEmpty() ? "Pendente" : order.getDeliveryDate()));
-            System.out.println("Estado: " + order.getStatus());
-        }
-
-        if (!orders.isEmpty()) {
-            System.out.println("-----------------------------------------");
-        }
-
-        pause();
-    }
-
     // ==================== CLIENT MENU ====================
 
     private void showClientMenu() {
@@ -1283,15 +1378,14 @@ public class MenuManager {
             clearScreen();
             User currentUser = appManager.getSession().getCurrentUser();
 
-            System.out.println("+========================================+");
-            System.out.println("|           MENU CLIENTE                 |");
-            System.out.println("+========================================+");
+            System.out.println("==========================================");
+            System.out.println("               MENU CLIENTE               ");
+            System.out.println("==========================================");
             System.out.println("Utilizador: " + currentUser.getName());
             System.out.println();
             System.out.println("1. Pedir novo servico");
-            System.out.println("2. Listar meus servicos");
-            System.out.println("3. Pesquisar meus servicos");
-            System.out.println("4. Editar meu perfil");
+            System.out.println("2. Pesquisar/Listar meus servicos");
+            System.out.println("3. Editar meu perfil");
             System.out.println("0. Logout");
             System.out.println();
             System.out.print("Escolha uma opcao: ");
@@ -1303,12 +1397,9 @@ public class MenuManager {
                     requestNewService();
                     break;
                 case 2:
-                    listMyServicesAsClient();
-                    break;
-                case 3:
                     searchMyServicesAsClient();
                     break;
-                case 4:
+                case 3:
                     editMyProfile();
                     break;
                 case 0:
@@ -1322,9 +1413,9 @@ public class MenuManager {
 
     private void requestNewService() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|        PEDIR NOVO SERVICO              |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("             PEDIR NOVO SERVICO           ");
+        System.out.println("==========================================");
         System.out.println();
 
         int code = appManager.getManageServices().generateServiceCode();
@@ -1340,8 +1431,7 @@ public class MenuManager {
             return;
         }
 
-        System.out.print("Data do pedido (DD-MM-YYYY): ");
-        String requestDate = scanner.nextLine().trim();
+        String requestDate = java.time.LocalDate.now().toString();
 
         Client currentClient = (Client) appManager.getSession().getCurrentUser();
         Service service = new Service(code, currentClient, description, requestDate);
@@ -1358,31 +1448,11 @@ public class MenuManager {
         pause();
     }
 
-    private void listMyServicesAsClient() {
-        clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|         MEUS SERVICOS                  |");
-        System.out.println("+========================================+");
-        System.out.println();
-
-        Client currentClient = (Client) appManager.getSession().getCurrentUser();
-        ArrayList<Service> myServices = appManager.getManageServices().listServicesByClient(currentClient);
-
-        System.out.println("Total: " + myServices.size() + " servicos");
-        System.out.println();
-
-        for (Service service : myServices) {
-            displayService(service);
-        }
-
-        pause();
-    }
-
     private void searchMyServicesAsClient() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|      PESQUISAR MEUS SERVICOS           |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("       PESQUISAR/LISTAR MEUS SERVICOS     ");
+        System.out.println("==========================================");
         System.out.println();
 
         System.out.print("Termo de pesquisa (vazio para listar todos): ");
@@ -1393,6 +1463,7 @@ public class MenuManager {
         ArrayList<Service> results = new ArrayList<>();
 
         if (term.isEmpty()) {
+            appManager.getManageServices().sortServicesByCode(true);
             results = allMyServices;
         } else {
             for (Service service : allMyServices) {
@@ -1418,9 +1489,9 @@ public class MenuManager {
 
     private void editMyProfile() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|         EDITAR MEU PERFIL              |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("              EDITAR MEU PERFIL           ");
+        System.out.println("==========================================");
         System.out.println();
 
         User currentUser = appManager.getSession().getCurrentUser();
@@ -1529,9 +1600,9 @@ public class MenuManager {
 
     private void viewSystemLog() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|         LOG DO SISTEMA                 |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("              LOG DO SISTEMA              ");
+        System.out.println("==========================================");
         System.out.println();
 
         ArrayList<String> logs = logManager.readLog();
@@ -1555,9 +1626,9 @@ public class MenuManager {
 
     private void exportServicesToCSV() {
         clearScreen();
-        System.out.println("+========================================+");
-        System.out.println("|      EXPORTAR SERVICOS PARA CSV        |");
-        System.out.println("+========================================+");
+        System.out.println("==========================================");
+        System.out.println("         EXPORTAR SERVICOS PARA CSV       ");
+        System.out.println("==========================================");
         System.out.println();
 
         System.out.print("Nome do ficheiro (ex: servicos.csv): ");
@@ -1639,5 +1710,709 @@ public class MenuManager {
                 System.out.print("Por favor, insira um numero valido: ");
             }
         }
+    }
+
+    private void manageComponents() {
+        while (true) {
+            clearScreen();
+            System.out.println("==========================================");
+            System.out.println("       GESTAO DE COMPONENTES QUIMICOS     ");
+            System.out.println("==========================================");
+            System.out.println();
+            System.out.println("1. Adicionar componente");
+            System.out.println("2. Pesquisar/Listar componentes");
+            System.out.println("3. Editar componente");
+            System.out.println("4. Remover componente");
+            System.out.println("0. Voltar");
+            System.out.println();
+            System.out.print("Escolha uma opcao: ");
+
+            int choice = readInt();
+
+            switch (choice) {
+                case 1:
+                    addChemicalComponent();
+                    break;
+                case 2:
+                    searchAndDisplayComponents();
+                    break;
+                case 3:
+                    editComponent();
+                    break;
+                case 4:
+                    removeComponent();
+                    break;
+                case 0:
+                    return;
+                default:
+                    showError("Opcao invalida!");
+                    pause();
+            }
+        }
+    }
+
+    private void searchAndDisplayComponents() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("        PESQUISAR/LISTAR COMPONENTES      ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        System.out.print("Termo de pesquisa (vazio para listar todos): ");
+        String term = scanner.nextLine().trim();
+
+        ArrayList<ChemicalComponent> results = appManager.getManageCatalog().searchComponents(term);
+
+        clearScreen();
+        System.out.println("Total de componentes: " + results.size());
+        System.out.println();
+
+        for (ChemicalComponent component : results) {
+            System.out.println(component.toString());
+        }
+
+        if (!results.isEmpty()) {
+            System.out.println("-----------------------------------------");
+        }
+
+        pause();
+    }
+
+    private void editComponent() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("             EDITAR COMPONENTE            ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        System.out.print("Codigo do componente: ");
+        int code = readInt();
+
+        ChemicalComponent component = appManager.getManageCatalog().findComponent(code);
+
+        if (component == null) {
+            showError("Componente nao encontrado!");
+            pause();
+            return;
+        }
+
+        System.out.println();
+        System.out.println("Dados atuais:");
+        System.out.println(component.toString());
+        System.out.println();
+
+        System.out.println("O que deseja alterar?");
+        System.out.println("1. Quantidade em stock");
+        System.out.println("0. Cancelar");
+        System.out.print("Escolha: ");
+
+        int choice = readInt();
+
+        if (choice == 1) {
+            System.out.print("Nova quantidade: ");
+            int newQty = readInt();
+            component.setStockQty(newQty);
+            showSuccess("Quantidade atualizada!");
+            logManager.log(appManager.getSession().getCurrentUser().getUsername(),
+                    "Editou componente " + code);
+        }
+
+        pause();
+    }
+
+    private void removeComponent() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("             REMOVER COMPONENTE           ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        System.out.print("Termo de pesquisa (vazio para listar todos): ");
+        String term = scanner.nextLine().trim();
+
+        ArrayList<ChemicalComponent> results = appManager.getManageCatalog().searchComponents(term);
+
+        if (results.isEmpty()) {
+            showError("Nenhum componente encontrado!");
+            pause();
+            return;
+        }
+
+        clearScreen();
+        System.out.println("Componentes encontrados:");
+        System.out.println();
+
+        int index = 1;
+        for (ChemicalComponent component : results) {
+            System.out.println(index + ".");
+            System.out.println(component.toString());
+            index++;
+        }
+
+        if (!results.isEmpty()) {
+            System.out.println("-----------------------------------------");
+        }
+
+        System.out.print("\\nEscolha o numero do componente (0 para cancelar): ");
+        int choice = readInt();
+
+        if (choice < 1 || choice > results.size()) {
+            return;
+        }
+
+        ChemicalComponent selected = results.get(choice - 1);
+
+        System.out.println();
+        System.out.print("Tem certeza que deseja remover o componente " + selected.getCode() + "? (S/N): ");
+        String confirmation = scanner.nextLine().trim().toUpperCase();
+
+        if (!confirmation.equals("S")) {
+            System.out.println("Operacao cancelada.");
+            pause();
+            return;
+        }
+
+        if (appManager.getManageCatalog().removeComponent(selected.getCode())) {
+            showSuccess("Componente removido com sucesso!");
+            logManager.log(appManager.getSession().getCurrentUser().getUsername(),
+                    "Removeu componente " + selected.getCode());
+        } else {
+            showError("Erro ao remover componente.");
+        }
+
+        pause();
+    }
+
+    // ==================== SUPPLIER MANAGEMENT ====================
+
+    private void manageSuppliers() {
+        while (true) {
+            clearScreen();
+            System.out.println("==========================================");
+            System.out.println("           GESTAO DE FORNECEDORES         ");
+            System.out.println("==========================================");
+            System.out.println();
+            System.out.println("1. Criar fornecedor");
+            System.out.println("2. Pesquisar/Listar fornecedores");
+            System.out.println("3. Editar fornecedor");
+            System.out.println("4. Remover fornecedor");
+            System.out.println("0. Voltar");
+            System.out.println();
+            System.out.print("Escolha uma opcao: ");
+
+            int choice = readInt();
+
+            switch (choice) {
+                case 1:
+                    createSupplier();
+                    break;
+                case 2:
+                    searchAndDisplaySuppliers();
+                    break;
+                case 3:
+                    editSupplier();
+                    break;
+                case 4:
+                    removeSupplier();
+                    break;
+                case 0:
+                    return;
+                default:
+                    showError("Opcao invalida!");
+                    pause();
+            }
+        }
+    }
+
+    private void searchAndDisplaySuppliers() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("        PESQUISAR/LISTAR FORNECEDORES     ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        System.out.print("Termo de pesquisa (vazio para listar todos): ");
+        String term = scanner.nextLine().trim();
+
+        ArrayList<Supplier> results = appManager.getManageCatalog().searchSuppliers(term);
+
+        clearScreen();
+        System.out.println("Total de fornecedores: " + results.size());
+        System.out.println();
+
+        for (Supplier supplier : results) {
+            System.out.println(supplier.toString());
+        }
+
+        if (!results.isEmpty()) {
+            System.out.println("-----------------------------------------");
+        }
+
+        pause();
+    }
+
+    private void editSupplier() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("             EDITAR FORNECEDOR            ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        System.out.print("Codigo do fornecedor: ");
+        int code = readInt();
+
+        Supplier supplier = appManager.getManageCatalog().findSupplier(code);
+
+        if (supplier == null) {
+            showError("Fornecedor nao encontrado!");
+            pause();
+            return;
+        }
+
+        System.out.println();
+        System.out.println("Dados atuais:");
+        System.out.println(supplier.toString());
+        System.out.println();
+
+        System.out.println("O que deseja alterar?");
+        System.out.println("1. Telefone");
+        System.out.println("0. Cancelar");
+        System.out.print("Escolha: ");
+
+        int choice = readInt();
+
+        if (choice == 1) {
+            System.out.print("Novo telefone: ");
+            String newPhone = scanner.nextLine().trim();
+            supplier.setPhone(newPhone);
+            showSuccess("Telefone atualizado!");
+            logManager.log(appManager.getSession().getCurrentUser().getUsername(),
+                    "Editou fornecedor " + code);
+        }
+
+        pause();
+    }
+
+    private void removeSupplier() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("             REMOVER FORNECEDOR           ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        System.out.print("Termo de pesquisa (vazio para listar todos): ");
+        String term = scanner.nextLine().trim();
+
+        ArrayList<Supplier> results = appManager.getManageCatalog().searchSuppliers(term);
+
+        if (results.isEmpty()) {
+            showError("Nenhum fornecedor encontrado!");
+            pause();
+            return;
+        }
+
+        clearScreen();
+        System.out.println("Fornecedores encontrados:");
+        System.out.println();
+
+        int index = 1;
+        for (Supplier supplier : results) {
+            System.out.println(index + ".");
+            System.out.println(supplier.toString());
+            index++;
+        }
+
+        if (!results.isEmpty()) {
+            System.out.println("-----------------------------------------");
+        }
+
+        System.out.print("\\nEscolha o numero do fornecedor (0 para cancelar): ");
+        int choice = readInt();
+
+        if (choice < 1 || choice > results.size()) {
+            return;
+        }
+
+        Supplier selected = results.get(choice - 1);
+
+        System.out.println();
+        System.out.print("Tem certeza que deseja remover o fornecedor " + selected.getCode() + "? (S/N): ");
+        String confirmation = scanner.nextLine().trim().toUpperCase();
+
+        if (!confirmation.equals("S")) {
+            System.out.println("Operacao cancelada.");
+            pause();
+            return;
+        }
+
+        if (appManager.getManageCatalog().removeSupplier(selected.getCode())) {
+            showSuccess("Fornecedor removido com sucesso!");
+            logManager.log(appManager.getSession().getCurrentUser().getUsername(),
+                    "Removeu fornecedor " + selected.getCode());
+        } else {
+            showError("Erro ao remover fornecedor.");
+        }
+
+        pause();
+    }
+
+    // ==================== MEDICAL AREA MANAGEMENT ====================
+
+    private void manageAreas() {
+        while (true) {
+            clearScreen();
+            System.out.println("==========================================");
+            System.out.println("          GESTAO DE AREAS MEDICAS         ");
+            System.out.println("==========================================");
+            System.out.println();
+            System.out.println("1. Criar area medica");
+            System.out.println("2. Pesquisar/Listar areas medicas");
+            System.out.println("3. Editar area medica");
+            System.out.println("4. Remover area medica");
+            System.out.println("0. Voltar");
+            System.out.println();
+            System.out.print("Escolha uma opcao: ");
+
+            int choice = readInt();
+
+            switch (choice) {
+                case 1:
+                    createMedicalArea();
+                    break;
+                case 2:
+                    searchAndDisplayAreas();
+                    break;
+                case 3:
+                    editArea();
+                    break;
+                case 4:
+                    removeArea();
+                    break;
+                case 0:
+                    return;
+                default:
+                    showError("Opcao invalida!");
+                    pause();
+            }
+        }
+    }
+
+    private void searchAndDisplayAreas() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("        PESQUISAR/LISTAR AREAS MEDICAS    ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        System.out.print("Termo de pesquisa (vazio para listar todas): ");
+        String term = scanner.nextLine().trim();
+
+        ArrayList<MedicalArea> results = appManager.getManageCatalog().searchAreas(term);
+
+        clearScreen();
+        System.out.println("Total de areas medicas: " + results.size());
+        System.out.println();
+
+        for (MedicalArea area : results) {
+            System.out.println(area.toString());
+        }
+
+        if (!results.isEmpty()) {
+            System.out.println("-----------------------------------------");
+        }
+
+        pause();
+    }
+
+    private void editArea() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("             EDITAR AREA MEDICA           ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        System.out.print("Codigo da area: ");
+        int code = readInt();
+
+        MedicalArea area = appManager.getManageCatalog().findArea(code);
+
+        if (area == null) {
+            showError("Area medica nao encontrada!");
+            pause();
+            return;
+        }
+
+        System.out.println();
+        System.out.println("Dados atuais:");
+        System.out.println(area.toString());
+        System.out.println();
+
+        System.out.println("O que deseja alterar?");
+        System.out.println("1. Designacao");
+        System.out.println("2. Familia");
+        System.out.println("0. Cancelar");
+        System.out.print("Escolha: ");
+
+        int choice = readInt();
+
+        if (choice == 1) {
+            System.out.print("Nova designacao: ");
+            String newDesignation = scanner.nextLine().trim();
+            area.setDesignation(newDesignation);
+            showSuccess("Designacao atualizada!");
+            logManager.log(appManager.getSession().getCurrentUser().getUsername(),
+                    "Editou area medica " + code);
+        } else if (choice == 2) {
+            System.out.print("Nova familia: ");
+            String newFamily = scanner.nextLine().trim();
+            area.setFamily(newFamily);
+            showSuccess("Familia atualizada!");
+            logManager.log(appManager.getSession().getCurrentUser().getUsername(),
+                    "Editou area medica " + code);
+        }
+
+        pause();
+    }
+
+    private void removeArea() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("             REMOVER AREA MEDICA          ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        System.out.print("Termo de pesquisa (vazio para listar todas): ");
+        String term = scanner.nextLine().trim();
+
+        ArrayList<MedicalArea> results = appManager.getManageCatalog().searchAreas(term);
+
+        if (results.isEmpty()) {
+            showError("Nenhuma area medica encontrada!");
+            pause();
+            return;
+        }
+
+        clearScreen();
+        System.out.println("Areas medicas encontradas:");
+        System.out.println();
+
+        int index = 1;
+        for (MedicalArea area : results) {
+            System.out.println(index + ".");
+            System.out.println(area.toString());
+            index++;
+        }
+
+        if (!results.isEmpty()) {
+            System.out.println("-----------------------------------------");
+        }
+
+        System.out.print("\\nEscolha o numero da area (0 para cancelar): ");
+        int choice = readInt();
+
+        if (choice < 1 || choice > results.size()) {
+            return;
+        }
+
+        MedicalArea selected = results.get(choice - 1);
+
+        System.out.println();
+        System.out.print("Tem certeza que deseja remover a area " + selected.getCode() + "? (S/N): ");
+        String confirmation = scanner.nextLine().trim().toUpperCase();
+
+        if (!confirmation.equals("S")) {
+            System.out.println("Operacao cancelada.");
+            pause();
+            return;
+        }
+
+        if (appManager.getManageCatalog().removeArea(selected.getCode())) {
+            showSuccess("Area medica removida com sucesso!");
+            logManager.log(appManager.getSession().getCurrentUser().getUsername(),
+                    "Removeu area medica " + selected.getCode());
+        } else {
+            showError("Erro ao remover area medica.");
+        }
+
+        pause();
+    }
+
+    // ==================== ORDER MANAGEMENT ====================
+
+    private void manageOrders() {
+        while (true) {
+            clearScreen();
+            System.out.println("==========================================");
+            System.out.println("            GESTAO DE ENCOMENDAS          ");
+            System.out.println("==========================================");
+            System.out.println();
+            System.out.println("1. Criar encomenda");
+            System.out.println("2. Pesquisar/Listar encomendas");
+            System.out.println("3. Marcar como entregue");
+            System.out.println("4. Listar encomendas pendentes");
+            System.out.println("5. Remover encomenda");
+            System.out.println("0. Voltar");
+            System.out.println();
+            System.out.print("Escolha uma opcao: ");
+
+            int choice = readInt();
+
+            switch (choice) {
+                case 1:
+                    createOrder();
+                    break;
+                case 2:
+                    searchAndDisplayOrders();
+                    break;
+                case 3:
+                    deliverOrder();
+                    break;
+                case 4:
+                    listPendingOrders();
+                    break;
+                case 5:
+                    removeOrder();
+                    break;
+                case 0:
+                    return;
+                default:
+                    showError("Opcao invalida!");
+                    pause();
+            }
+        }
+    }
+
+    private void searchAndDisplayOrders() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("         PESQUISAR/LISTAR ENCOMENDAS      ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        System.out.print("Termo de pesquisa (vazio para listar todas): ");
+        String term = scanner.nextLine().trim();
+
+        ArrayList<Order> results = appManager.getManageCatalog().searchOrders(term);
+
+        clearScreen();
+        System.out.println("Total de encomendas: " + results.size());
+        System.out.println();
+
+        for (Order order : results) {
+            System.out.println(order.toString());
+        }
+
+        if (!results.isEmpty()) {
+            System.out.println("-----------------------------------------");
+        }
+
+        pause();
+    }
+
+    private void deliverOrder() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("          MARCAR ENCOMENDA ENTREGUE       ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        System.out.print("Codigo da encomenda: ");
+        int code = readInt();
+
+        if (appManager.getManageCatalog().deliverOrder(code)) {
+            showSuccess("Encomenda marcada como entregue!");
+            logManager.log(appManager.getSession().getCurrentUser().getUsername(),
+                    "Marcou encomenda " + code + " como entregue");
+        } else {
+            showError("Erro ao marcar encomenda. Verifique o codigo.");
+        }
+
+        pause();
+    }
+
+    private void listPendingOrders() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("            ENCOMENDAS PENDENTES          ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        ArrayList<Order> pendingOrders = appManager.getManageCatalog().listPendingOrders();
+
+        System.out.println("Total de encomendas pendentes: " + pendingOrders.size());
+        System.out.println();
+
+        for (Order order : pendingOrders) {
+            System.out.println(order.toString());
+        }
+
+        if (!pendingOrders.isEmpty()) {
+            System.out.println("-----------------------------------------");
+        }
+
+        pause();
+    }
+
+    private void removeOrder() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("             REMOVER ENCOMENDA            ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        System.out.print("Termo de pesquisa (vazio para listar todas): ");
+        String term = scanner.nextLine().trim();
+
+        ArrayList<Order> results = appManager.getManageCatalog().searchOrders(term);
+
+        if (results.isEmpty()) {
+            showError("Nenhuma encomenda encontrada!");
+            pause();
+            return;
+        }
+
+        clearScreen();
+        System.out.println("Encomendas encontradas:");
+        System.out.println();
+
+        int index = 1;
+        for (Order order : results) {
+            System.out.println(index + ".");
+            System.out.println(order.toString());
+            index++;
+        }
+
+        if (!results.isEmpty()) {
+            System.out.println("-----------------------------------------");
+        }
+
+        System.out.print("\\nEscolha o numero da encomenda (0 para cancelar): ");
+        int choice = readInt();
+
+        if (choice < 1 || choice > results.size()) {
+            return;
+        }
+
+        Order selected = results.get(choice - 1);
+
+        System.out.println();
+        System.out.print("Tem certeza que deseja remover a encomenda " + selected.getCode() + "? (S/N): ");
+        String confirmation = scanner.nextLine().trim().toUpperCase();
+
+        if (!confirmation.equals("S")) {
+            System.out.println("Operacao cancelada.");
+            pause();
+            return;
+        }
+
+        if (appManager.getManageCatalog().removeOrder(selected.getCode())) {
+            showSuccess("Encomenda removida com sucesso!");
+            logManager.log(appManager.getSession().getCurrentUser().getUsername(),
+                    "Removeu encomenda " + selected.getCode());
+        } else {
+            showError("Erro ao remover encomenda.");
+        }
+
+        pause();
     }
 }

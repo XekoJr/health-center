@@ -68,7 +68,7 @@ public class App {
         }
         
         // Create menu manager and show main menu
-        MenuManager menuManager = new MenuManager(appManager, logManager);
+        MenuManager menuManager = new MenuManager(appManager, logManager, systemInfo);
         menuManager.showMainMenu();
         
         // Save data before exit
@@ -83,11 +83,6 @@ public class App {
         
         // Save credentials
         credentialsManager.saveCredentials(appManager.getManageUsers().listUsers());
-        
-        // Update system info with last user
-        if (appManager.getSession().getCurrentUser() != null) {
-            systemInfo.setLastUsername(appManager.getSession().getCurrentUser().getUsername());
-        }
         
         System.out.println();
         System.out.println("Sistema encerrado.");

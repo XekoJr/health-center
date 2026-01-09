@@ -44,3 +44,30 @@
 [08-01-2026 19:03:41] User: ADMIN | Action: Associou tecnico Tecnico ao servico 3
 [08-01-2026 19:07:43] User: ADMIN | Action: Logout realizado
 [08-01-2026 19:07:46] User: SYSTEM | Action: Sistema encerrado
+[09-01-2026 15:16:29] User: ADMIN | Action: Login realizado
+[09-01-2026 15:20:17] User: ADMIN | Action: Logout realizado
+[09-01-2026 15:20:34] User: Cliente 1 | Action: Login realizado
+[09-01-2026 15:21:09] User: Cliente 1 | Action: Pediu servico 1
+[09-01-2026 15:21:56] User: Cliente 1 | Action: Pediu servico 2
+[09-01-2026 15:21:58] User: Cliente 1 | Action: Logout realizado
+[09-01-2026 15:22:03] User: ADMIN | Action: Login realizado
+[09-01-2026 15:30:01] User: ADMIN | Action: Logout realizado
+[09-01-2026 15:30:07] User: Tecnico | Action: Login realizado
+[09-01-2026 15:32:49] User: Tecnico | Action: Logout realizado
+[09-01-2026 15:32:53] User: ADMIN | Action: Login realizado
+[09-01-2026 15:35:09] User: ADMIN | Action: Logout realizado
+[09-01-2026 15:35:19] User: Cliente 1 | Action: Login realizado
+[09-01-2026 15:38:45] User: Cliente 1 | Action: Logout realizado
+[09-01-2026 15:38:52] User: ADMIN | Action: Login realizado
+[09-01-2026 15:44:44] User: ADMIN | Action: Logout realizado
+[09-01-2026 15:44:46] User: SYSTEM | Action: Sistema encerrado
+[09-01-2026 15:56:39] User: ADMIN | Action: Login realizado
+[09-01-2026 16:03:21] User: ADMIN | Action: Logout realizado
+[09-01-2026 16:03:22] User: SYSTEM | Action: Sistema encerrado
+[09-01-2026 16:04:21] User: Tecnico | Action: Login realizado
+[09-01-2026 16:09:00] User: Tecnico | Action: Logout realizado
+[09-01-2026 16:09:06] User: ADMIN | Action: Login realizado
+[09-01-2026 16:09:09] User: ADMIN | Action: Logout realizado
+[09-01-2026 16:09:11] User: SYSTEM | Action: Sistema encerrado
+[09-01-2026 16:09:20] User: SYSTEM | Action: Sistema encerrado
+[09-01-2026 16:09:25] User: SYSTEM | Action: Sistema encerrado
