@@ -45,7 +45,7 @@ public class ApplicationManager {
         data.setTests(manageCatalog.getTests());
         data.setAreas(manageCatalog.getAreas());
         data.setSuppliers(manageCatalog.getSuppliers());
-        // Components would need to be collected from catalog
+        data.setComponents(manageCatalog.getComponents());
         return data;
     }
 
@@ -59,7 +59,9 @@ public class ApplicationManager {
             manageUsers.register(user);
         }
 
-        // Apply services (would need access to internal list)
+        // Apply services
+        manageServices.loadServices(data.getServices());
+        
         // Apply catalog items
         for (services.LabAnalysis analysis : data.getAnalyses()) {
             manageCatalog.addAnalysis(analysis);
@@ -75,6 +77,12 @@ public class ApplicationManager {
         }
         for (services.Supplier supplier : data.getSuppliers()) {
             manageCatalog.addSupplier(supplier);
+        }
+        for (services.ChemicalComponent component : data.getComponents()) {
+            manageCatalog.addComponent(component);
+        }
+        for (services.Order order : data.getOrders()) {
+            manageCatalog.addOrder(order);
         }
 
         return true;

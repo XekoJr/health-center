@@ -266,6 +266,18 @@ public class ManageServices {
         return new ArrayList<>();
     }
 
+    public void loadServices(ArrayList<Service> loadedServices) {
+        if (loadedServices != null) {
+            this.services = new ArrayList<>(loadedServices);
+            // Update nextServiceCode to be higher than any loaded code
+            for (Service service : services) {
+                if (service.getCode() >= nextServiceCode) {
+                    nextServiceCode = service.getCode() + 1;
+                }
+            }
+        }
+    }
+
     public boolean exportServicesToCSV(String filename) {
         try {
             java.io.FileWriter writer = new java.io.FileWriter(filename);

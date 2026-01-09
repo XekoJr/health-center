@@ -10,6 +10,7 @@ public class ManageCatalog {
     private ArrayList<MedicalArea> areas;
     private ArrayList<Supplier> suppliers;
     private ArrayList<Order> orders;
+    private ArrayList<ChemicalComponent> components;
     private int nextAnalysisCode;
     private int nextComponentCode;
     private int nextSupplierCode;
@@ -23,6 +24,7 @@ public class ManageCatalog {
         this.areas = new ArrayList<>();
         this.suppliers = new ArrayList<>();
         this.orders = new ArrayList<>();
+        this.components = new ArrayList<>();
         this.nextAnalysisCode = 1;
         this.nextComponentCode = 1;
         this.nextSupplierCode = 1;
@@ -95,6 +97,18 @@ public class ManageCatalog {
     public boolean createOrder(Technician aTechnician, Supplier aSupplier, Order aOrder) {
         if (aOrder != null) {
             orders.add(aOrder);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addOrder(Order order) {
+        if (order != null) {
+            orders.add(order);
+            // Update nextOrderCode if needed
+            if (order.getCode() >= nextOrderCode) {
+                nextOrderCode = order.getCode() + 1;
+            }
             return true;
         }
         return false;
@@ -190,12 +204,10 @@ public class ManageCatalog {
     }
 
     public ArrayList<ChemicalComponent> listChemicalComponent() {
-        // Would need a separate collection for all components
         return new ArrayList<>();
     }
 
     public ArrayList<ChemicalComponent> searchChemicalComponentByName(String name) {
-        // Would need a separate collection for all components
         return new ArrayList<>();
     }
 
@@ -209,7 +221,7 @@ public class ManageCatalog {
         return results;
     }
 
-    // Getters for collections
+    // Getters
     public ArrayList<LabAnalysis> getAnalyses() {
         return new ArrayList<>(analyses);
     }
@@ -234,10 +246,16 @@ public class ManageCatalog {
         return new ArrayList<>(orders);
     }
 
-    // Add methods for other collections
+    public ArrayList<ChemicalComponent> getComponents() {
+        return new ArrayList<>(components);
+    }
+
     public boolean addAnalysis(LabAnalysis analysis) {
         if (analysis != null) {
             analyses.add(analysis);
+            if (analysis.getCode() >= nextAnalysisCode) {
+                nextAnalysisCode = analysis.getCode() + 1;
+            }
             return true;
         }
         return false;
@@ -262,6 +280,9 @@ public class ManageCatalog {
     public boolean addArea(MedicalArea area) {
         if (area != null) {
             areas.add(area);
+            if (area.getCode() >= nextAreaCode) {
+                nextAreaCode = area.getCode() + 1;
+            }
             return true;
         }
         return false;
@@ -270,6 +291,9 @@ public class ManageCatalog {
     public boolean addSupplier(Supplier supplier) {
         if (supplier != null) {
             suppliers.add(supplier);
+            if (supplier.getCode() >= nextSupplierCode) {
+                nextSupplierCode = supplier.getCode() + 1;
+            }
             return true;
         }
         return false;
@@ -277,31 +301,18 @@ public class ManageCatalog {
 
     public boolean addComponent(ChemicalComponent component) {
         if (component != null) {
-            // Components would need to be stored in a separate collection
-            // For now, return true as placeholder
+            components.add(component);
+            // Update nextComponentCode if needed
+            if (component.getCode() >= nextComponentCode) {
+                nextComponentCode = component.getCode() + 1;
+            }
             return true;
         }
         return false;
     }
 
     public ArrayList<ChemicalComponent> listChemicalComponents() {
-        ArrayList<ChemicalComponent> allComponents = new ArrayList<>();
-        // Collect all components from all analyses
-        for (LabAnalysis analysis : analyses) {
-            for (ChemicalComponent component : analysis.getRequiredComponents()) {
-                boolean exists = false;
-                for (ChemicalComponent existing : allComponents) {
-                    if (existing.getCode() == component.getCode()) {
-                        exists = true;
-                        break;
-                    }
-                }
-                if (!exists) {
-                    allComponents.add(component);
-                }
-            }
-        }
-        return allComponents;
+        return new ArrayList<>(components);
     }
 
     // Search/list methods with unified approach (empty term = list all)
@@ -314,15 +325,15 @@ public class ManageCatalog {
     }
 
     public ArrayList<ChemicalComponent> searchComponents(String keyword) {
-        ArrayList<ChemicalComponent> allComponents = listChemicalComponents();
         if (keyword == null || keyword.trim().isEmpty()) {
+            ArrayList<ChemicalComponent> allComponents = new ArrayList<>(components);
             sortComponentsByCode(allComponents, true);
             return allComponents;
         }
         
         ArrayList<ChemicalComponent> results = new ArrayList<>();
         String searchTerm = keyword.trim().toLowerCase();
-        for (ChemicalComponent component : allComponents) {
+        for (ChemicalComponent component : components) {
             if (String.valueOf(component.getCode()).contains(searchTerm) ||
                 component.getName().toLowerCase().contains(searchTerm)) {
                 results.add(component);
@@ -448,11 +459,17 @@ public class ManageCatalog {
     }
 
     public boolean removeComponent(int code) {
-        // Remove from all analyses first
-        for (LabAnalysis analysis : analyses) {
-            analysis.removeRequiredComponentFromCode(String.valueOf(code));
+        for (int i = 0; i < components.size(); i++) {
+            if (components.get(i).getCode() == code) {
+                components.remove(i);
+                // Also remove from all analyses
+                for (LabAnalysis analysis : analyses) {
+                    analysis.removeRequiredComponentFromCode(String.valueOf(code));
+                }
+                return true;
+            }
         }
-        return true;
+        return false;
     }
 
     public boolean removeSupplier(int code) {
@@ -496,7 +513,6 @@ public class ManageCatalog {
     }
 
     public ChemicalComponent findComponent(int code) {
-        ArrayList<ChemicalComponent> components = listChemicalComponents();
         for (ChemicalComponent component : components) {
             if (component.getCode() == code) {
                 return component;
