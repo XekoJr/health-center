@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.io.Serializable;
 
-public class LabAnalysis implements Serializable {
+public class LabAnalysis implements Serializable, Comparable<LabAnalysis> {
     private static final long serialVersionUID = 1L;
     private int code;
     private String name;
@@ -95,6 +95,10 @@ public class LabAnalysis implements Serializable {
 
     public ArrayList<Supplier> getSuppliers() {
         return new ArrayList<>(suppliers);
+    }
+    
+    public int compareTo(LabAnalysis other) {
+        return Integer.compare(this.code, other.code);
     }
     
     public String toString() {

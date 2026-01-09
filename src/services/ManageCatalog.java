@@ -3,6 +3,7 @@ package services;
 import users.Technician;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Collections;
 
 public class ManageCatalog {
     private ArrayList<LabAnalysis> analyses;
@@ -120,18 +121,9 @@ public class ManageCatalog {
     }
 
     public boolean sortAnalysisByCode(boolean ascending) {
-        for (int i = 0; i < analyses.size() - 1; i++) {
-            for (int j = 0; j < analyses.size() - i - 1; j++) {
-                int code1 = analyses.get(j).getCode();
-                int code2 = analyses.get(j + 1).getCode();
-                boolean shouldSwap = ascending ? code1 > code2 : code1 < code2;
-                
-                if (shouldSwap) {
-                    LabAnalysis temp = analyses.get(j);
-                    analyses.set(j, analyses.get(j + 1));
-                    analyses.set(j + 1, temp);
-                }
-            }
+        Collections.sort(analyses);
+        if (!ascending) {
+            Collections.reverse(analyses);
         }
         return true;
     }
@@ -184,19 +176,9 @@ public class ManageCatalog {
     }
 
     public boolean sortOrdersByCode(boolean ascending) {
-        // Bubble sort - no lambdas as per requirements
-        for (int i = 0; i < orders.size() - 1; i++) {
-            for (int j = 0; j < orders.size() - i - 1; j++) {
-                int code1 = orders.get(j).getCode();
-                int code2 = orders.get(j + 1).getCode();
-                boolean shouldSwap = ascending ? code1 > code2 : code1 < code2;
-                
-                if (shouldSwap) {
-                    Order temp = orders.get(j);
-                    orders.set(j, orders.get(j + 1));
-                    orders.set(j + 1, temp);
-                }
-            }
+        Collections.sort(orders);
+        if (!ascending) {
+            Collections.reverse(orders);
         }
         return true;
     }
@@ -410,51 +392,24 @@ public class ManageCatalog {
 
     // Sorting methods for new entities
     private void sortComponentsByCode(ArrayList<ChemicalComponent> components, boolean ascending) {
-        for (int i = 0; i < components.size() - 1; i++) {
-            for (int j = 0; j < components.size() - i - 1; j++) {
-                int code1 = components.get(j).getCode();
-                int code2 = components.get(j + 1).getCode();
-                boolean shouldSwap = ascending ? code1 > code2 : code1 < code2;
-                
-                if (shouldSwap) {
-                    ChemicalComponent temp = components.get(j);
-                    components.set(j, components.get(j + 1));
-                    components.set(j + 1, temp);
-                }
-            }
+        Collections.sort(components);
+        if (!ascending) {
+            Collections.reverse(components);
         }
     }
 
     public boolean sortSuppliersByCode(boolean ascending) {
-        for (int i = 0; i < suppliers.size() - 1; i++) {
-            for (int j = 0; j < suppliers.size() - i - 1; j++) {
-                int code1 = suppliers.get(j).getCode();
-                int code2 = suppliers.get(j + 1).getCode();
-                boolean shouldSwap = ascending ? code1 > code2 : code1 < code2;
-                
-                if (shouldSwap) {
-                    Supplier temp = suppliers.get(j);
-                    suppliers.set(j, suppliers.get(j + 1));
-                    suppliers.set(j + 1, temp);
-                }
-            }
+        Collections.sort(suppliers);
+        if (!ascending) {
+            Collections.reverse(suppliers);
         }
         return true;
     }
 
     public boolean sortAreasByCode(boolean ascending) {
-        for (int i = 0; i < areas.size() - 1; i++) {
-            for (int j = 0; j < areas.size() - i - 1; j++) {
-                int code1 = areas.get(j).getCode();
-                int code2 = areas.get(j + 1).getCode();
-                boolean shouldSwap = ascending ? code1 > code2 : code1 < code2;
-                
-                if (shouldSwap) {
-                    MedicalArea temp = areas.get(j);
-                    areas.set(j, areas.get(j + 1));
-                    areas.set(j + 1, temp);
-                }
-            }
+        Collections.sort(areas);
+        if (!ascending) {
+            Collections.reverse(areas);
         }
         return true;
     }

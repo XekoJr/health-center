@@ -2,6 +2,7 @@ package users;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Collections;
 
 public class ManageUsers {
     private ArrayList<User> users;
@@ -153,18 +154,9 @@ public class ManageUsers {
     }
 
     public boolean sortUsersByName(boolean ascending) {
-        for (int i = 0; i < users.size() - 1; i++) {
-            for (int j = 0; j < users.size() - i - 1; j++) {
-                String name1 = users.get(j).getName();
-                String name2 = users.get(j + 1).getName();
-                boolean shouldSwap = ascending ? name1.compareTo(name2) > 0 : name1.compareTo(name2) < 0;
-                
-                if (shouldSwap) {
-                    User temp = users.get(j);
-                    users.set(j, users.get(j + 1));
-                    users.set(j + 1, temp);
-                }
-            }
+        Collections.sort(users);
+        if (!ascending) {
+            Collections.reverse(users);
         }
         return true;
     }

@@ -467,7 +467,9 @@ public class MenuManager {
 
         appManager.getManageUsers().sortUsersByName(true);
 
-        for (User user : users) {
+        Iterator<User> userIterator = users.iterator();
+        while (userIterator.hasNext()) {
+            User user = userIterator.next();
             System.out.println("-----------------------------------------");
             System.out.println("Username: " + user.getUsername());
             System.out.println("Nome: " + user.getName());
@@ -513,7 +515,9 @@ public class MenuManager {
         System.out.println("Resultados encontrados: " + results.size());
         System.out.println();
 
-        for (User user : results) {
+        Iterator<User> resultIterator = results.iterator();
+        while (resultIterator.hasNext()) {
+            User user = resultIterator.next();
             System.out.println("-----------------------------------------");
             System.out.println("Username: " + user.getUsername());
             System.out.println("Nome: " + user.getName());
@@ -594,7 +598,9 @@ public class MenuManager {
         System.out.println("Resultados encontrados: " + results.size());
         System.out.println();
 
-        for (Service service : results) {
+        Iterator<Service> serviceIterator = results.iterator();
+        while (serviceIterator.hasNext()) {
+            Service service = serviceIterator.next();
             displayService(service);
         }
 
@@ -651,7 +657,9 @@ public class MenuManager {
         System.out.println("Servicos com estado '" + status + "': " + results.size());
         System.out.println();
 
-        for (Service service : results) {
+        Iterator<Service> serviceIterator = results.iterator();
+        while (serviceIterator.hasNext()) {
+            Service service = serviceIterator.next();
             displayService(service);
         }
 
@@ -677,7 +685,9 @@ public class MenuManager {
         System.out.println();
 
         int index = 1;
-        for (Service service : pendingServices) {
+        Iterator<Service> serviceIterator = pendingServices.iterator();
+        while (serviceIterator.hasNext()) {
+            Service service = serviceIterator.next();
             System.out.println(index + ". Codigo: " + service.getCode());
             System.out.println("   Cliente: " + service.getClient().getName());
             System.out.println("   Descricao: " + service.getDescription());
@@ -737,7 +747,9 @@ public class MenuManager {
         System.out.println();
 
         int index = 1;
-        for (Service service : pendingServices) {
+        Iterator<Service> associateIterator = pendingServices.iterator();
+        while (associateIterator.hasNext()) {
+            Service service = associateIterator.next();
             System.out.println(index + ". Codigo: " + service.getCode());
             System.out.println("   Cliente: " + service.getClient().getName());
             System.out.println("   Descricao: " + service.getDescription());
@@ -777,7 +789,9 @@ public class MenuManager {
         System.out.println("Escolha o tecnico responsavel:");
 
         int techIndex = 1;
-        for (User tech : technicians) {
+        Iterator<User> techIterator = technicians.iterator();
+        while (techIterator.hasNext()) {
+            User tech = techIterator.next();
             System.out.println(techIndex + ". " + tech.getName());
             techIndex++;
         }
@@ -893,7 +907,9 @@ public class MenuManager {
         System.out.println();
 
         int index = 1;
-        for (Service service : pendingServices) {
+        Iterator<Service> serviceIterator = pendingServices.iterator();
+        while (serviceIterator.hasNext()) {
+            Service service = serviceIterator.next();
             System.out.println(index + ". Codigo: " + service.getCode());
             System.out.println("   Cliente: " + service.getClient().getName());
             System.out.println("   Descricao: " + service.getDescription());
@@ -955,7 +971,9 @@ public class MenuManager {
         ArrayList<Service> allServices = appManager.getManageServices().listAllServices();
         ArrayList<Service> myServices = new ArrayList<>();
 
-        for (Service service : allServices) {
+        Iterator<Service> allIterator = allServices.iterator();
+        while (allIterator.hasNext()) {
+            Service service = allIterator.next();
             if (service.getTechnician() != null &&
                     service.getTechnician().getUsername().equals(currentTech.getUsername())) {
                 myServices.add(service);
@@ -968,7 +986,9 @@ public class MenuManager {
             appManager.getManageServices().sortServicesByCode(true);
             results = myServices;
         } else {
-            for (Service service : myServices) {
+            Iterator<Service> myIterator = myServices.iterator();
+            while (myIterator.hasNext()) {
+                Service service = myIterator.next();
                 if (String.valueOf(service.getCode()).contains(term) ||
                         service.getDescription().toLowerCase().contains(term.toLowerCase())) {
                     results.add(service);
@@ -980,7 +1000,9 @@ public class MenuManager {
         System.out.println("Total: " + results.size() + " servicos");
         System.out.println();
 
-        for (Service service : results) {
+        Iterator<Service> displayIterator = results.iterator();
+        while (displayIterator.hasNext()) {
+            Service service = displayIterator.next();
             displayService(service);
         }
 
@@ -1121,7 +1143,9 @@ public class MenuManager {
         System.out.println("Total de analises: " + results.size());
         System.out.println();
 
-        for (LabAnalysis analysis : results) {
+        Iterator<LabAnalysis> analysisIterator = results.iterator();
+        while (analysisIterator.hasNext()) {
+            LabAnalysis analysis = analysisIterator.next();
             System.out.println(analysis.toString());
         }
 
@@ -1182,7 +1206,9 @@ public class MenuManager {
         System.out.println();
 
         int index = 1;
-        for (LabAnalysis analysis : results) {
+        Iterator<LabAnalysis> analysisIterator2 = results.iterator();
+        while (analysisIterator2.hasNext()) {
+            LabAnalysis analysis = analysisIterator2.next();
             System.out.println(index + ".");
             System.out.println(analysis.toString());
             index++;
@@ -1343,7 +1369,9 @@ public class MenuManager {
         System.out.println();
         System.out.println("Fornecedores disponiveis:");
         int index = 1;
-        for (Supplier supplier : suppliers) {
+        Iterator<Supplier> supplierIterator = suppliers.iterator();
+        while (supplierIterator.hasNext()) {
+            Supplier supplier = supplierIterator.next();
             System.out.println(index + ". " + supplier.getName());
             index++;
         }
@@ -1469,7 +1497,9 @@ public class MenuManager {
             appManager.getManageServices().sortServicesByCode(true);
             results = allMyServices;
         } else {
-            for (Service service : allMyServices) {
+            Iterator<Service> myServicesIterator = allMyServices.iterator();
+            while (myServicesIterator.hasNext()) {
+                Service service = myServicesIterator.next();
                 if (String.valueOf(service.getCode()).contains(term) ||
                         service.getDescription().toLowerCase().contains(term.toLowerCase())) {
                     results.add(service);
@@ -1481,7 +1511,9 @@ public class MenuManager {
         System.out.println("Resultados encontrados: " + results.size());
         System.out.println();
 
-        for (Service service : results) {
+        Iterator<Service> clientSearchIterator = results.iterator();
+        while (clientSearchIterator.hasNext()) {
+            Service service = clientSearchIterator.next();
             displayService(service);
         }
 
@@ -1770,7 +1802,9 @@ public class MenuManager {
         System.out.println("Total de componentes: " + results.size());
         System.out.println();
 
-        for (ChemicalComponent component : results) {
+        Iterator<ChemicalComponent> componentIterator = results.iterator();
+        while (componentIterator.hasNext()) {
+            ChemicalComponent component = componentIterator.next();
             System.out.println(component.toString());
         }
 
@@ -1846,7 +1880,9 @@ public class MenuManager {
         System.out.println();
 
         int index = 1;
-        for (ChemicalComponent component : results) {
+        Iterator<ChemicalComponent> componentIterator2 = results.iterator();
+        while (componentIterator2.hasNext()) {
+            ChemicalComponent component = componentIterator2.next();
             System.out.println(index + ".");
             System.out.println(component.toString());
             index++;
@@ -1943,7 +1979,9 @@ public class MenuManager {
         System.out.println("Total de fornecedores: " + results.size());
         System.out.println();
 
-        for (Supplier supplier : results) {
+        Iterator<Supplier> supplierIterator2 = results.iterator();
+        while (supplierIterator2.hasNext()) {
+            Supplier supplier = supplierIterator2.next();
             System.out.println(supplier.toString());
         }
 
@@ -2019,7 +2057,9 @@ public class MenuManager {
         System.out.println();
 
         int index = 1;
-        for (Supplier supplier : results) {
+        Iterator<Supplier> supplierIterator3 = results.iterator();
+        while (supplierIterator3.hasNext()) {
+            Supplier supplier = supplierIterator3.next();
             System.out.println(index + ".");
             System.out.println(supplier.toString());
             index++;
@@ -2116,7 +2156,9 @@ public class MenuManager {
         System.out.println("Total de areas medicas: " + results.size());
         System.out.println();
 
-        for (MedicalArea area : results) {
+        Iterator<MedicalArea> areaIterator = results.iterator();
+        while (areaIterator.hasNext()) {
+            MedicalArea area = areaIterator.next();
             System.out.println(area.toString());
         }
 
@@ -2200,7 +2242,9 @@ public class MenuManager {
         System.out.println();
 
         int index = 1;
-        for (MedicalArea area : results) {
+        Iterator<MedicalArea> areaIterator2 = results.iterator();
+        while (areaIterator2.hasNext()) {
+            MedicalArea area = areaIterator2.next();
             System.out.println(index + ".");
             System.out.println(area.toString());
             index++;
@@ -2301,7 +2345,9 @@ public class MenuManager {
         System.out.println("Total de encomendas: " + results.size());
         System.out.println();
 
-        for (Order order : results) {
+        Iterator<Order> orderIterator = results.iterator();
+        while (orderIterator.hasNext()) {
+            Order order = orderIterator.next();
             System.out.println(order.toString());
         }
 
@@ -2345,7 +2391,9 @@ public class MenuManager {
         System.out.println("Total de encomendas pendentes: " + pendingOrders.size());
         System.out.println();
 
-        for (Order order : pendingOrders) {
+        Iterator<Order> pendingOrderIterator = pendingOrders.iterator();
+        while (pendingOrderIterator.hasNext()) {
+            Order order = pendingOrderIterator.next();
             System.out.println(order.toString());
         }
 
@@ -2379,7 +2427,9 @@ public class MenuManager {
         System.out.println();
 
         int index = 1;
-        for (Order order : results) {
+        Iterator<Order> orderIterator2 = results.iterator();
+        while (orderIterator2.hasNext()) {
+            Order order = orderIterator2.next();
             System.out.println(index + ".");
             System.out.println(order.toString());
             index++;

@@ -2,7 +2,7 @@ package services;
 
 import java.io.Serializable;
 
-public class MedicalArea implements Serializable {
+public class MedicalArea implements Serializable, Comparable<MedicalArea> {
     private static final long serialVersionUID = 1L;
     private int code;
     private String designation;
@@ -34,6 +34,10 @@ public class MedicalArea implements Serializable {
 
     public String getFamily() {
         return family;
+    }
+
+    public int compareTo(MedicalArea other) {
+        return Integer.compare(this.code, other.code);
     }
 
     public String toString() {

@@ -4,7 +4,7 @@ import users.Technician;
 import java.util.ArrayList;
 import java.io.Serializable;
 
-public class Order implements Serializable {
+public class Order implements Serializable, Comparable<Order> {
     private static final long serialVersionUID = 1L;
     private int code;
     private Supplier supplier;
@@ -73,6 +73,10 @@ public class Order implements Serializable {
 
     public void removeItem(ChemicalComponent item) {
         items.remove(item);
+    }
+
+    public int compareTo(Order other) {
+        return Integer.compare(this.code, other.code);
     }
 
     public String toString() {

@@ -6,6 +6,8 @@ import users.Technician;
 import users.User;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ManageServices {
     private ArrayList<Service> services;
@@ -133,40 +135,33 @@ public class ManageServices {
         return false;
     }
 
-    public boolean sortServicesByCode(boolean ascending) {
-        // Bubble sort - no lambdas as per requirements
-        for (int i = 0; i < services.size() - 1; i++) {
-            for (int j = 0; j < services.size() - i - 1; j++) {
-                int code1 = services.get(j).getCode();
-                int code2 = services.get(j + 1).getCode();
-                boolean shouldSwap = ascending ? code1 > code2 : code1 < code2;
-                
-                if (shouldSwap) {
-                    Service temp = services.get(j);
-                    services.set(j, services.get(j + 1));
-                    services.set(j + 1, temp);
-                }
+    public boolean sortServices(String criterion, boolean ascending) {
+        if (criterion.equalsIgnoreCase("code")) {
+            Collections.sort(services);
+            if (!ascending) {
+                Collections.reverse(services);
             }
+        } else if (criterion.equalsIgnoreCase("value") || criterion.equalsIgnoreCase("totalvalue")) {
+            Collections.sort(services, new Comparator<Service>() {
+                public int compare(Service s1, Service s2) {
+                    return Float.compare(s1.getTotalValue(), s2.getTotalValue());
+                }
+            });
+            if (!ascending) {
+                Collections.reverse(services);
+            }
+        } else {
+            return false;
         }
         return true;
     }
 
+    public boolean sortServicesByCode(boolean ascending) {
+        return sortServices("code", ascending);
+    }
+
     public boolean sortServicesByTotalValue(boolean ascending) {
-        // Bubble sort - no lambdas as per requirements
-        for (int i = 0; i < services.size() - 1; i++) {
-            for (int j = 0; j < services.size() - i - 1; j++) {
-                float value1 = services.get(j).getTotalValue();
-                float value2 = services.get(j + 1).getTotalValue();
-                boolean shouldSwap = ascending ? value1 > value2 : value1 < value2;
-                
-                if (shouldSwap) {
-                    Service temp = services.get(j);
-                    services.set(j, services.get(j + 1));
-                    services.set(j + 1, temp);
-                }
-            }
-        }
-        return true;
+        return sortServices("value", ascending);
     }
 
     public ArrayList<Service> listAllServices() {
@@ -340,17 +335,11 @@ public class ManageServices {
             }
             
             // Sort by finish date (most recent first)
-            for (int i = 0; i < completedServices.size() - 1; i++) {
-                for (int j = i + 1; j < completedServices.size(); j++) {
-                    String date1 = completedServices.get(i).getFinishDate();
-                    String date2 = completedServices.get(j).getFinishDate();
-                    if (date1.compareTo(date2) < 0) {
-                        Service temp = completedServices.get(i);
-                        completedServices.set(i, completedServices.get(j));
-                        completedServices.set(j, temp);
-                    }
+            Collections.sort(completedServices, new Comparator<Service>() {
+                public int compare(Service s1, Service s2) {
+                    return s2.getFinishDate().compareTo(s1.getFinishDate());
                 }
-            }
+            });
             
             // Write data
             Iterator<Service> writeIterator = completedServices.iterator();

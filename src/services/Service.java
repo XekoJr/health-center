@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.io.Serializable;
 
-public class Service implements Serializable {
+public class Service implements Serializable, Comparable<Service> {
     private static final long serialVersionUID = 1L;
     private int code;
     private Client client;
@@ -106,5 +106,9 @@ public class Service implements Serializable {
 
     public void setFinishDate(String finishDate) {
         this.finishDate = finishDate;
+    }
+
+    public int compareTo(Service other) {
+        return Integer.compare(this.code, other.code);
     }
 }

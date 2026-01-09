@@ -2,7 +2,7 @@ package services;
 
 import java.io.Serializable;
 
-public class ChemicalComponent implements Serializable {
+public class ChemicalComponent implements Serializable, Comparable<ChemicalComponent> {
     private static final long serialVersionUID = 1L;
     private int code;
     private String name;
@@ -46,6 +46,10 @@ public class ChemicalComponent implements Serializable {
 
     public int getStockQty() {
         return stockQty;
+    }
+
+    public int compareTo(ChemicalComponent other) {
+        return Integer.compare(this.code, other.code);
     }
 
     public String toString() {

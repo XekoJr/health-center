@@ -2,7 +2,7 @@ package users;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class User implements Serializable, Comparable<User> {
     private static final long serialVersionUID = 1L;
     private String username;
     private String email;
@@ -73,5 +73,9 @@ public class User implements Serializable {
 
     public String getStatus() {
         return status;
+    }
+
+    public int compareTo(User other) {
+        return this.name.compareTo(other.name);
     }
 }

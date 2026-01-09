@@ -2,7 +2,7 @@ package services;
 
 import java.io.Serializable;
 
-public class Supplier implements Serializable {
+public class Supplier implements Serializable, Comparable<Supplier> {
     private static final long serialVersionUID = 1L;
     private int code;
     private String name;
@@ -16,8 +16,13 @@ public class Supplier implements Serializable {
         this.phone = phone;
     }
 
-    public boolean setAddress(String aPhone) {
-        // Note: Method name seems mismatched - this should likely set an address field
+    public boolean setName(String aName) {
+        this.name = aName;
+        return true;
+    }
+
+    public boolean setEmail(String anEmail) {
+        this.email = anEmail;
         return true;
     }
 
@@ -40,6 +45,10 @@ public class Supplier implements Serializable {
 
     public String getPhone() {
         return phone;
+    }
+
+    public int compareTo(Supplier other) {
+        return Integer.compare(this.code, other.code);
     }
 
     public String toString() {
