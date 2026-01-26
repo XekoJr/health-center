@@ -54,6 +54,7 @@ public class Service implements Serializable, Comparable<Service> {
     public boolean addAnalysis(ServiceAnalysis aAnalysis) {
         if (aAnalysis != null) {
             analyses.add(aAnalysis);
+            calculateTotalValue();
             return true;
         }
         return false;
@@ -65,6 +66,7 @@ public class Service implements Serializable, Comparable<Service> {
             ServiceAnalysis analysis = iterator.next();
             if (String.valueOf(analysis.getCode()).equals(aCode)) {
                 iterator.remove();
+                calculateTotalValue();
                 return true;
             }
         }
@@ -72,7 +74,13 @@ public class Service implements Serializable, Comparable<Service> {
     }
 
     public float calculateTotalValue() {
-        // Calculate total value from analyses
+        float sum = 0.0f;
+        Iterator<ServiceAnalysis> iterator = analyses.iterator();
+        while (iterator.hasNext()) {
+            ServiceAnalysis serviceAnalysis = iterator.next();
+            sum += serviceAnalysis.getAnalysis().getValue();
+        }
+        this.totalValue = sum;
         return totalValue;
     }
 

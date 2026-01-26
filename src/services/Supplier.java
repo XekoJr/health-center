@@ -6,13 +6,13 @@ public class Supplier implements Serializable, Comparable<Supplier> {
     private static final long serialVersionUID = 1L;
     private int code;
     private String name;
-    private String email;
+    private String address;
     private String phone;
 
-    public Supplier(int code, String name, String email, String phone) {
+    public Supplier(int code, String name, String address, String phone) {
         this.code = code;
         this.name = name;
-        this.email = email;
+        this.address = address;
         this.phone = phone;
     }
 
@@ -21,8 +21,8 @@ public class Supplier implements Serializable, Comparable<Supplier> {
         return true;
     }
 
-    public boolean setEmail(String anEmail) {
-        this.email = anEmail;
+    public boolean setAddress(String anAddress) {
+        this.address = anAddress;
         return true;
     }
 
@@ -39,8 +39,8 @@ public class Supplier implements Serializable, Comparable<Supplier> {
         return name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getAddress() {
+        return address;
     }
 
     public String getPhone() {
@@ -56,7 +56,7 @@ public class Supplier implements Serializable, Comparable<Supplier> {
         sb.append("-----------------------------------------\n");
         sb.append("Codigo: ").append(code).append("\n");
         sb.append("Nome: ").append(name).append("\n");
-        sb.append("Email: ").append(email).append("\n");
+        sb.append("Morada: ").append(address).append("\n");
         sb.append("Telefone: ").append(phone);
         return sb.toString();
     }

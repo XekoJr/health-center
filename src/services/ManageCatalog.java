@@ -18,6 +18,7 @@ public class ManageCatalog {
     private int nextSupplierCode;
     private int nextAreaCode;
     private int nextOrderCode;
+    private int nextCategoryCode;
 
     public ManageCatalog() {
         this.analyses = new ArrayList<>();
@@ -32,6 +33,7 @@ public class ManageCatalog {
         this.nextSupplierCode = 1;
         this.nextAreaCode = 1;
         this.nextOrderCode = 1;
+        this.nextCategoryCode = 1;
     }
     
     public int generateAnalysisCode() {
@@ -52,6 +54,10 @@ public class ManageCatalog {
     
     public int generateOrderCode() {
         return nextOrderCode++;
+    }
+    
+    public int generateCategoryCode() {
+        return nextCategoryCode++;
     }
 
     public boolean addSupplierToAnalysis(int analysisCode, Supplier aSupplier) {
@@ -114,6 +120,16 @@ public class ManageCatalog {
             if (order.getCode() == orderCode) {
                 order.setStatus("delivered");
                 order.setDeliveryDate(java.time.LocalDate.now().toString());
+                
+                Iterator<ChemicalComponent> itemIterator = order.getItems().iterator();
+                while (itemIterator.hasNext()) {
+                    ChemicalComponent orderItem = itemIterator.next();
+                    ChemicalComponent catalogComponent = findComponent(orderItem.getCode());
+                    if (catalogComponent != null) {
+                        catalogComponent.changeStockQty(orderItem.getStockQty());
+                    }
+                }
+                
                 return true;
             }
         }
@@ -168,7 +184,7 @@ public class ManageCatalog {
             LabAnalysis analysis = iterator.next();
             if (String.valueOf(analysis.getCode()).contains(keyword) ||
                 analysis.getName().toLowerCase().contains(keyword.toLowerCase()) ||
-                analysis.getCertification().toLowerCase().contains(keyword.toLowerCase())) {
+                analysis.getCertification().toString().toLowerCase().contains(keyword.toLowerCase())) {
                 results.add(analysis);
             }
         }
@@ -250,6 +266,9 @@ public class ManageCatalog {
     public boolean addCategory(Category category) {
         if (category != null) {
             categories.add(category);
+            if (category.getCode() >= nextCategoryCode) {
+                nextCategoryCode = category.getCode() + 1;
+            }
             return true;
         }
         return false;
@@ -342,8 +361,7 @@ public class ManageCatalog {
         while (iterator.hasNext()) {
             Supplier supplier = iterator.next();
             if (String.valueOf(supplier.getCode()).contains(searchTerm) ||
-                supplier.getName().toLowerCase().contains(searchTerm) ||
-                supplier.getEmail().toLowerCase().contains(searchTerm)) {
+                supplier.getName().toLowerCase().contains(searchTerm)) {
                 results.add(supplier);
             }
         }
@@ -547,5 +565,47 @@ public class ManageCatalog {
             }
         }
         return results;
+    }
+    
+    // Category management methods
+    public ArrayList<Category> searchCategories(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return new ArrayList<>(categories);
+        }
+        
+        ArrayList<Category> results = new ArrayList<>();
+        String searchTerm = keyword.trim().toLowerCase();
+        Iterator<Category> iterator = categories.iterator();
+        while (iterator.hasNext()) {
+            Category category = iterator.next();
+            if (String.valueOf(category.getCode()).contains(searchTerm) ||
+                category.getName().toLowerCase().contains(searchTerm)) {
+                results.add(category);
+            }
+        }
+        return results;
+    }
+    
+    public Category findCategory(int code) {
+        Iterator<Category> iterator = categories.iterator();
+        while (iterator.hasNext()) {
+            Category category = iterator.next();
+            if (category.getCode() == code) {
+                return category;
+            }
+        }
+        return null;
+    }
+    
+    public boolean removeCategory(int code) {
+        Iterator<Category> iterator = categories.iterator();
+        while (iterator.hasNext()) {
+            Category category = iterator.next();
+            if (category.getCode() == code) {
+                iterator.remove();
+                return true;
+            }
+        }
+        return false;
     }
 }

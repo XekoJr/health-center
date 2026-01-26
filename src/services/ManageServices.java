@@ -57,6 +57,22 @@ public class ManageServices {
         return service != null && service.setTechnician(aTechnician);
     }
 
+    public boolean assignTechnicianToAnalysis(Technician responsibleTechnician, int serviceId, int analysisCode, Technician assignedTechnician) {
+        Service service = findServiceByIdAndTechnician(serviceId, responsibleTechnician);
+        if (service == null || assignedTechnician == null) {
+            return false;
+        }
+        
+        Iterator<ServiceAnalysis> analysisIterator = service.getAnalyses().iterator();
+        while (analysisIterator.hasNext()) {
+            ServiceAnalysis analysis = analysisIterator.next();
+            if (analysis.getCode() == analysisCode) {
+                return analysis.setTechnician(assignedTechnician);
+            }
+        }
+        return false;
+    }
+
     public boolean approveService(Technician aTechnician, int serviceId, boolean approved) {
         Service service = findServiceById(serviceId);
         if (service != null) {

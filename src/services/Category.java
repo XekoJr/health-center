@@ -24,4 +24,12 @@ public class Category implements Serializable {
     public String getName() {
         return name;
     }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Codigo: ").append(code);
+        sb.append(" | Nome: ").append(name);
+        return sb.toString();
+    }
 }

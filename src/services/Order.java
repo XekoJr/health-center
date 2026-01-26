@@ -2,6 +2,7 @@ package services;
 
 import users.Technician;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.io.Serializable;
 
 public class Order implements Serializable, Comparable<Order> {
@@ -87,7 +88,22 @@ public class Order implements Serializable, Comparable<Order> {
         sb.append("Tecnico: ").append(technician.getName()).append("\n");
         sb.append("Data pedido: ").append(requestDate).append("\n");
         sb.append("Data entrega: ").append(deliveryDate.isEmpty() ? "Pendente" : deliveryDate).append("\n");
-        sb.append("Estado: ").append(status);
+        sb.append("Estado: ").append(status).append("\n");
+        sb.append("Componentes encomendados: ").append(items.size()).append("\n");
+        
+        if (!items.isEmpty()) {
+            int index = 1;
+            Iterator<ChemicalComponent> itemIterator = items.iterator();
+            while (itemIterator.hasNext()) {
+                ChemicalComponent item = itemIterator.next();
+                sb.append("  ").append(index).append(". ")
+                  .append(item.getName())
+                  .append(" - Qtd: ").append(item.getStockQty())
+                  .append("\n");
+                index++;
+            }
+        }
+        
         return sb.toString();
     }
 }
