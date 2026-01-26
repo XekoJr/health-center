@@ -22,7 +22,7 @@ public class MenuManager {
 
     // ==================== MAIN MENU ====================
 
-    public void showMainMenu() {
+    public void showMainMenu() { //TODO - Cololcar algo de novo investigação, algo a piscar ou assim ou cores no olá e adeus
         while (true) {
             clearScreen();
             System.out.println("==========================================");
