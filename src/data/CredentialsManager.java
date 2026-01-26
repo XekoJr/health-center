@@ -20,7 +20,8 @@ public class CredentialsManager {
             Iterator<User> iterator = users.iterator();
             while (iterator.hasNext()) {
                 User user = iterator.next();
-                String line = user.getUsername() + ":" + user.getType() + ":" + user.getStatus();
+                String line = user.getUsername() + ":" + user.getPassword() + ":" + 
+                             user.getType() + ":" + user.getStatus();
                 bufferedWriter.write(line);
                 bufferedWriter.newLine();
             }

@@ -146,6 +146,8 @@ public class ManageServices {
         Service service = findServiceByIdAndTechnician(serviceId, aTechnician);
         if (service != null) {
             service.setStatus("completed");
+            String finishDate = java.time.LocalDate.now().toString();
+            service.setFinishDate(finishDate);
             return true;
         }
         return false;
@@ -190,6 +192,19 @@ public class ManageServices {
         while (iterator.hasNext()) {
             Service service = iterator.next();
             if (service.getClient().equals(aClient)) {
+                results.add(service);
+            }
+        }
+        return results;
+    }
+
+    public ArrayList<Service> listServicesByTechnician(Technician aTechnician) {
+        ArrayList<Service> results = new ArrayList<>();
+        Iterator<Service> iterator = services.iterator();
+        while (iterator.hasNext()) {
+            Service service = iterator.next();
+            if (service.getTechnician() != null &&
+                    service.getTechnician().getUsername().equals(aTechnician.getUsername())) {
                 results.add(service);
             }
         }

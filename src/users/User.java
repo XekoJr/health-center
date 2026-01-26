@@ -75,6 +75,10 @@ public class User implements Serializable, Comparable<User> {
         return status;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public int compareTo(User other) {
         return this.name.compareTo(other.name);
     }

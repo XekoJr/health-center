@@ -516,7 +516,8 @@ public class MenuManager {
             System.out.println("2. Associar tecnico a servico");
             System.out.println("3. Pesquisar/Listar servicos");
             System.out.println("4. Listar servicos por estado");
-            System.out.println("5. Exportar servicos para CSV");
+            System.out.println("5. Listar servicos com analise especifica");
+            System.out.println("6. Exportar servicos para CSV");
             System.out.println("0. Voltar");
             System.out.print("Escolha: ");
 
@@ -536,6 +537,9 @@ public class MenuManager {
                     listServicesByStatus();
                     break;
                 case 5:
+                    listServicesWithSpecificAnalysis();
+                    break;
+                case 6:
                     exportServicesToCSV();
                     break;
                 case 0:
@@ -1532,17 +1536,7 @@ public class MenuManager {
         String term = scanner.nextLine().trim();
 
         Technician currentTech = (Technician) appManager.getSession().getCurrentUser();
-        ArrayList<Service> allServices = appManager.getManageServices().listAllServices();
-        ArrayList<Service> myServices = new ArrayList<>();
-
-        Iterator<Service> allIterator = allServices.iterator();
-        while (allIterator.hasNext()) {
-            Service service = allIterator.next();
-            if (service.getTechnician() != null &&
-                    service.getTechnician().getUsername().equals(currentTech.getUsername())) {
-                myServices.add(service);
-            }
-        }
+        ArrayList<Service> myServices = appManager.getManageServices().listServicesByTechnician(currentTech);
 
         ArrayList<Service> results = new ArrayList<>();
 
@@ -1677,6 +1671,8 @@ public class MenuManager {
             System.out.println("2. Pesquisar/Listar analises");
             System.out.println("3. Editar analise");
             System.out.println("4. Remover analise");
+            System.out.println("5. Listar testes por analise");
+            System.out.println("6. Pesquisar analises por componente");
             System.out.println("0. Voltar");
             System.out.println();
             System.out.print("Escolha uma opcao: ");
@@ -1695,6 +1691,12 @@ public class MenuManager {
                     break;
                 case 4:
                     removeAnalysis();
+                    break;
+                case 5:
+                    listTestsBySpecificAnalysis();
+                    break;
+                case 6:
+                    searchAnalysesByComponent();
                     break;
                 case 0:
                     return;
@@ -1715,7 +1717,12 @@ public class MenuManager {
         System.out.print("Termo de pesquisa (vazio para listar todas): ");
         String term = scanner.nextLine().trim();
 
-        ArrayList<LabAnalysis> results = appManager.getManageCatalog().searchAnalyses(term);
+        ArrayList<LabAnalysis> results;
+        if (term.isEmpty()) {
+            results = appManager.getManageCatalog().listAnalysis();
+        } else {
+            results = appManager.getManageCatalog().searchAnalyses(term);
+        }
 
         clearScreen();
         System.out.println("Total de analises: " + results.size());
@@ -2376,6 +2383,116 @@ public class MenuManager {
         pause();
     }
 
+    private void listServicesWithSpecificAnalysis() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("  LISTAR SERVICOS COM ANALISE ESPECIFICA ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        System.out.print("Codigo da analise: ");
+        String analysisCode = scanner.nextLine().trim();
+
+        if (analysisCode.isEmpty()) {
+            showError("Codigo da analise nao pode estar vazio!");
+            pause();
+            return;
+        }
+
+        ArrayList<Service> results = appManager.getManageServices().listServicesWithAnalysis(analysisCode);
+
+        clearScreen();
+        System.out.println("Servicos com analise " + analysisCode + ": " + results.size());
+        System.out.println();
+
+        Iterator<Service> serviceIterator = results.iterator();
+        while (serviceIterator.hasNext()) {
+            Service service = serviceIterator.next();
+            displayService(service);
+        }
+
+        pause();
+    }
+
+    private void listTestsBySpecificAnalysis() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("     LISTAR TESTES POR ANALISE            ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        System.out.print("Codigo da analise: ");
+        String analysisCode = scanner.nextLine().trim();
+
+        if (analysisCode.isEmpty()) {
+            showError("Codigo da analise nao pode estar vazio!");
+            pause();
+            return;
+        }
+
+        LabAnalysis analysis = appManager.getManageCatalog().findAnalysis(Integer.parseInt(analysisCode));
+        
+        if (analysis == null) {
+            showError("Analise nao encontrada!");
+            pause();
+            return;
+        }
+
+        ArrayList<Test> tests = analysis.getTests();
+
+        clearScreen();
+        System.out.println("Testes da analise " + analysis.getName() + ":");
+        System.out.println("Total: " + tests.size());
+        System.out.println();
+
+        Iterator<Test> testIterator = tests.iterator();
+        while (testIterator.hasNext()) {
+            Test test = testIterator.next();
+            System.out.println(test.toString());
+        }
+
+        if (!tests.isEmpty()) {
+            System.out.println("-----------------------------------------");
+        }
+
+        pause();
+    }
+
+    private void searchAnalysesByComponent() {
+        clearScreen();
+        System.out.println("==========================================");
+        System.out.println("  PESQUISAR ANALISES POR COMPONENTE      ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        System.out.print("Codigo do componente quimico: ");
+        String componentCode = scanner.nextLine().trim();
+
+        if (componentCode.isEmpty()) {
+            showError("Codigo do componente nao pode estar vazio!");
+            pause();
+            return;
+        }
+
+        ArrayList<LabAnalysis> results = appManager.getManageCatalog().searchAnalysisByComponent(componentCode);
+
+        clearScreen();
+        System.out.println("Analises que usam componente " + componentCode + ": " + results.size());
+        System.out.println();
+
+        Iterator<LabAnalysis> analysisIterator = results.iterator();
+        while (analysisIterator.hasNext()) {
+            LabAnalysis analysis = analysisIterator.next();
+            System.out.println(analysis.toString());
+        }
+
+        if (!results.isEmpty()) {
+            System.out.println("-----------------------------------------");
+        }
+
+        pause();
+    }
+
     private void displayService(Service service) {
         System.out.println(service.toString());
     }
@@ -2466,7 +2583,12 @@ public class MenuManager {
         System.out.print("Termo de pesquisa (vazio para listar todos): ");
         String term = scanner.nextLine().trim();
 
-        ArrayList<ChemicalComponent> results = appManager.getManageCatalog().searchComponents(term);
+        ArrayList<ChemicalComponent> results;
+        if (term.isEmpty()) {
+            results = appManager.getManageCatalog().listChemicalComponent();
+        } else {
+            results = appManager.getManageCatalog().searchComponents(term);
+        }
 
         clearScreen();
         System.out.println("Total de componentes: " + results.size());
@@ -3025,7 +3147,12 @@ public class MenuManager {
         System.out.print("Termo de pesquisa (vazio para listar todas): ");
         String term = scanner.nextLine().trim();
 
-        ArrayList<Order> results = appManager.getManageCatalog().searchOrders(term);
+        ArrayList<Order> results;
+        if (term.isEmpty()) {
+            results = appManager.getManageCatalog().listOrders();
+        } else {
+            results = appManager.getManageCatalog().searchOrders(term);
+        }
 
         clearScreen();
         System.out.println("Total de encomendas: " + results.size());

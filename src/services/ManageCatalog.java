@@ -204,23 +204,11 @@ public class ManageCatalog {
     }
 
     public ArrayList<ChemicalComponent> listChemicalComponent() {
-        return new ArrayList<>();
+        return new ArrayList<>(components);
     }
 
     public ArrayList<ChemicalComponent> searchChemicalComponentByName(String name) {
         return new ArrayList<>();
-    }
-
-    public ArrayList<Order> listDeliveredOrders() {
-        ArrayList<Order> results = new ArrayList<>();
-        Iterator<Order> iterator = orders.iterator();
-        while (iterator.hasNext()) {
-            Order order = iterator.next();
-            if (order.getStatus().equals("delivered")) {
-                results.add(order);
-            }
-        }
-        return results;
     }
 
     // Getters
