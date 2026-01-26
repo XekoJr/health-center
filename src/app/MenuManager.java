@@ -23,7 +23,7 @@ public class MenuManager {
     // ==================== MAIN MENU ====================
 
     public void showMainMenu() { //TODO - Cololcar algo de novo investigação, algo a piscar ou assim ou cores no olá e adeus
-        while (true) {
+        while (true) {           //TODO - comentários
             clearScreen();
             System.out.println("==========================================");
             System.out.println("     SISTEMA DE GESTAO LABORATORIAL      ");

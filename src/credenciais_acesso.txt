@@ -1,3 +1,0 @@
-ADMIN:admin123:admin:approved
-Cliente 1:cliente123:client:approved
-Tecnico:tecnico123:technician:approved
