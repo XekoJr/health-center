@@ -596,4 +596,176 @@ public class ManageCatalog {
         }
         return false;
     }
+    
+    // Métodos auxiliares genéricos para exibição de listas
+    private <T> void displayList(ArrayList<T> list, String emptyMessage) {
+        if (list.isEmpty()) {
+            System.out.println(emptyMessage);
+            return;
+        }
+        for (T item : list) {
+            System.out.println(item);
+        }
+    }
+    
+    private <T> void displayListIndexed(ArrayList<T> list, String emptyMessage) {
+        if (list.isEmpty()) {
+            System.out.println(emptyMessage);
+            return;
+        }
+        int index = 1;
+        for (T item : list) {
+            System.out.println(index + ". " + item);
+            index++;
+        }
+    }
+    
+    public void displayTestList(ArrayList<Test> tests) {
+        displayList(tests, "Nenhum teste encontrado.");
+    }
+
+    public void displayTestListIndexed(ArrayList<Test> tests) {
+        if (tests.isEmpty()) {
+            System.out.println("Nenhum teste definido.");
+            return;
+        }
+        
+        int index = 1;
+        Iterator<Test> iterator = tests.iterator();
+        while (iterator.hasNext()) {
+            Test test = iterator.next();
+            System.out.println(index + ". " + test.getDesignation() +
+                    " (Ref: " + test.getReferenceValue() +
+                    " " + test.getUnit() + ")");
+            index++;
+        }
+    }
+
+    public void displayAnalysisList(ArrayList<LabAnalysis> analyses) {
+        displayList(analyses, "Nenhuma analise encontrada.");
+    }
+
+    public void displayAnalysisListIndexed(ArrayList<LabAnalysis> analyses) {
+        displayListIndexed(analyses, "Nenhuma analise encontrada.");
+    }
+
+    public void displayComponentList(ArrayList<ChemicalComponent> components) {
+        displayList(components, "Nenhum componente encontrado.");
+    }
+
+    public void displayComponentListIndexed(ArrayList<ChemicalComponent> components) {
+        displayListIndexed(components, "Nenhum componente encontrado.");
+    }
+
+    public void displaySupplierList(ArrayList<Supplier> suppliers) {
+        displayList(suppliers, "Nenhum fornecedor encontrado.");
+    }
+
+    public void displaySupplierListIndexed(ArrayList<Supplier> suppliers) {
+        if (suppliers.isEmpty()) {
+            System.out.println("Nenhum fornecedor disponivel.");
+            return;
+        }
+        
+        int index = 1;
+        Iterator<Supplier> iterator = suppliers.iterator();
+        while (iterator.hasNext()) {
+            Supplier supplier = iterator.next();
+            System.out.println(index + ". " + supplier.getName());
+            index++;
+        }
+    }
+
+    public void displayAreaList(ArrayList<MedicalArea> areas) {
+        displayList(areas, "Nenhuma area encontrada.");
+    }
+
+    public void displayAreaListIndexed(ArrayList<MedicalArea> areas) {
+        displayListIndexed(areas, "Nenhuma area encontrada.");
+    }
+
+    public void displayOrderList(ArrayList<Order> orders) {
+        displayList(orders, "Nenhuma encomenda encontrada.");
+    }
+
+    public void displayOrderListIndexed(ArrayList<Order> orders) {
+        displayListIndexed(orders, "Nenhuma encomenda encontrada.");
+    }
+
+    public void displayCategoryList(ArrayList<Category> categories) {
+        displayList(categories, "Nenhuma categoria encontrada.");
+    }
+
+    public void displayCategoryListIndexed(ArrayList<Category> categories) {
+        displayListIndexed(categories, "Nenhuma categoria encontrada.");
+    }
+
+    public void displayServiceAnalysisListIndexed(ArrayList<ServiceAnalysis> analysisList) {
+        if (analysisList.isEmpty()) {
+            System.out.println("Nenhuma analise encontrada.");
+            return;
+        }
+        
+        int index = 1;
+        Iterator<ServiceAnalysis> iterator = analysisList.iterator();
+        while (iterator.hasNext()) {
+            ServiceAnalysis analysis = iterator.next();
+            String techName = analysis.getTechnician() != null ? analysis.getTechnician().getName() : "[Nenhum]";
+            System.out.println(index + ". Codigo: " + analysis.getCode() + " | " +
+                    "Analise: " + analysis.getAnalysis().getName() + " | " +
+                    "Tecnico atual: " + techName);
+            index++;
+        }
+    }
+
+
+    public void displayServiceAnalysisListCompact(ArrayList<ServiceAnalysis> analysisList) {
+        if (analysisList.isEmpty()) {
+            System.out.println("Nenhuma analise encontrada.");
+            return;
+        }
+        
+        int index = 1;
+        Iterator<ServiceAnalysis> iterator = analysisList.iterator();
+        while (iterator.hasNext()) {
+            ServiceAnalysis analysis = iterator.next();
+            System.out.println(index + ". " + analysis.getAnalysis().getName() +
+                    " - Testes: " + analysis.getTests().size());
+            index++;
+        }
+    }
+
+    public void displayServiceAnalysisListWithStatus(ArrayList<ServiceAnalysis> analysisList) {
+        if (analysisList.isEmpty()) {
+            System.out.println("Nenhuma analise encontrada.");
+            return;
+        }
+        
+        int index = 1;
+        Iterator<ServiceAnalysis> iterator = analysisList.iterator();
+        while (iterator.hasNext()) {
+            ServiceAnalysis analysis = iterator.next();
+            System.out.println(index + ". " + analysis.getAnalysis().getName() +
+                    " - Estado: " + analysis.getStatus() +
+                    " - Testes: " + analysis.getTests().size());
+            index++;
+        }
+    }
+
+    public void displayServiceAnalysisListWithResult(ArrayList<ServiceAnalysis> analysisList) {
+        if (analysisList.isEmpty()) {
+            System.out.println("Nenhuma analise encontrada.");
+            return;
+        }
+        
+        int index = 1;
+        Iterator<ServiceAnalysis> iterator = analysisList.iterator();
+        while (iterator.hasNext()) {
+            ServiceAnalysis analysis = iterator.next();
+            String result = analysis.getFinalResult().isEmpty() ? "[Pendente]" : analysis.getFinalResult();
+            System.out.println(index + ". " + analysis.getAnalysis().getName() +
+                    " - Resultado: " + result);
+            index++;
+        }
+    }
 }

@@ -108,6 +108,19 @@ public class ManageServices {
         return results;
     }
 
+    public ArrayList<Service> searchServicesByCodeOrDescription(ArrayList<Service> serviceList, String term) {
+        ArrayList<Service> results = new ArrayList<>();
+        Iterator<Service> iterator = serviceList.iterator();
+        while (iterator.hasNext()) {
+            Service service = iterator.next();
+            if (String.valueOf(service.getCode()).contains(term) ||
+                    service.getDescription().toLowerCase().contains(term.toLowerCase())) {
+                results.add(service);
+            }
+        }
+        return results;
+    }
+
     public boolean existsService(String attribute, String value) {
         return !searchService(attribute, value).isEmpty();
     }
@@ -343,6 +356,101 @@ public class ManageServices {
                     nextServiceCode = service.getCode() + 1;
                 }
             }
+        }
+    }
+
+    public void displayServiceList(ArrayList<Service> services) {
+        if (services.isEmpty()) {
+            System.out.println("Nenhum servico encontrado.");
+            return;
+        }
+        
+        Iterator<Service> iterator = services.iterator();
+        while (iterator.hasNext()) {
+            Service service = iterator.next();
+            System.out.println(service.toString());
+        }
+    }
+
+    public void displayServiceListIndexed(ArrayList<Service> serviceList) {
+        if (serviceList.isEmpty()) {
+            System.out.println("Nenhum servico encontrado.");
+            return;
+        }
+        int index = 1;
+        for (Service service : serviceList) {
+            System.out.println(index + ". " + service.getCode() + " | " + service.getClient().getName() 
+                + " | " + service.getDescription() + " | " + service.getRequestDate());
+            index++;
+        }
+    }
+
+    public void displayServiceListCompact(ArrayList<Service> serviceList) {
+        if (serviceList.isEmpty()) {
+            System.out.println("Nenhum servico encontrado.");
+            return;
+        }
+        int index = 1;
+        for (Service service : serviceList) {
+            System.out.println(index + ". " + service.getCode() + " | " + service.getClient().getName() 
+                + " | " + service.getStatus() + " | Analises: " + service.getAnalyses().size());
+            index++;
+        }
+    }
+
+    public ArrayList<ServiceAnalysis> listAnalysesByTechnician(Technician technician) {
+        ArrayList<ServiceAnalysis> result = new ArrayList<>();
+        Iterator<Service> serviceIterator = services.iterator();
+        while (serviceIterator.hasNext()) {
+            Service service = serviceIterator.next();
+            Iterator<ServiceAnalysis> analysisIterator = service.getAnalyses().iterator();
+            while (analysisIterator.hasNext()) {
+                ServiceAnalysis analysis = analysisIterator.next();
+                if (analysis.getTechnician() != null &&
+                        analysis.getTechnician().getUsername().equals(technician.getUsername())) {
+                    result.add(analysis);
+                }
+            }
+        }
+        return result;
+    }
+
+    public void displayServiceAnalysisListIndexed(ArrayList<ServiceAnalysis> analysisList) {
+        if (analysisList.isEmpty()) {
+            System.out.println("Nenhuma analise encontrada.");
+            return;
+        }
+        
+        int index = 1;
+        Iterator<ServiceAnalysis> iterator = analysisList.iterator();
+        while (iterator.hasNext()) {
+            ServiceAnalysis analysis = iterator.next();
+            System.out.println(index + ". " + analysis.getAnalysis().getName() +
+                " (Codigo: " + analysis.getCode() + ") - Testes: " + analysis.getTests().size());
+            index++;
+        }
+    }
+
+    public void displayServiceAnalysisListDetailed(ArrayList<ServiceAnalysis> analysisList) {
+        if (analysisList.isEmpty()) {
+            System.out.println("Nenhuma analise encontrada.");
+            return;
+        }
+        
+        int index = 1;
+        Iterator<ServiceAnalysis> iterator = analysisList.iterator();
+        while (iterator.hasNext()) {
+            ServiceAnalysis analysis = iterator.next();
+            String supervisor = analysis.getSupervisor() != null ? analysis.getSupervisor().getName() : "[Nenhum]";
+            System.out.println(index + ". Codigo: " + analysis.getCode());
+            System.out.println("   Analise: " + analysis.getAnalysis().getName());
+            System.out.println("   Estado: " + analysis.getStatus());
+            System.out.println("   Supervisor: " + supervisor);
+            System.out.println("   Testes: " + analysis.getTests().size());
+            System.out.println("   Resultado: "
+                    + (analysis.getFinalResult().isEmpty() ? "[Pendente]" : analysis.getFinalResult()));
+            System.out.println();
+            index++;
         }
     }
 

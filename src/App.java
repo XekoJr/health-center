@@ -56,14 +56,14 @@ public class App {
             try {
                 System.in.read();
             } catch (Exception e) {
-                // Ignore
+                logManager.log("SYSTEM", "Erro ao aguardar input: " + e.getMessage());
             }
         } else {
             System.out.print("Pressione ENTER para continuar...");
             try {
                 System.in.read();
             } catch (Exception e) {
-                // Ignore //TODO look into this
+                logManager.log("SYSTEM", "Erro ao aguardar input: " + e.getMessage());
             }
         }
         

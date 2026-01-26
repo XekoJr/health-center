@@ -74,6 +74,20 @@ public class LogManager {
         return logs;
     }
 
+    public void displayRecentLogs(int limit) {
+        ArrayList<String> logs = readLog();
+        
+        if (logs.isEmpty()) {
+            System.out.println("Nao existem registos no log.");
+            return;
+        }
+        
+        int entriesToShow = Math.min(limit, logs.size());
+        for (int i = 0; i < entriesToShow; i++) {
+            System.out.println(logs.get(i));
+        }
+    }
+
     public String getFilePath() {
         return filePath;
     }

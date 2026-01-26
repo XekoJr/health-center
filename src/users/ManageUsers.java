@@ -202,4 +202,59 @@ public class ManageUsers {
         }
         return results;
     }
+
+    public void displayUserList(ArrayList<User> userList) {
+        if (userList.isEmpty()) {
+            System.out.println("Nenhum utilizador encontrado.");
+            return;
+        }
+        
+        Iterator<User> iterator = userList.iterator();
+        while (iterator.hasNext()) {
+            User user = iterator.next();
+            System.out.println(user.toString());
+        }
+    }
+
+    public void displayUserListIndexed(ArrayList<User> userList) {
+        if (userList.isEmpty()) {
+            System.out.println("Nenhum utilizador encontrado.");
+            return;
+        }
+
+        int index = 1;
+        Iterator<User> iterator = userList.iterator();
+        while (iterator.hasNext()) {
+            User user = iterator.next();
+            System.out.println(index + ". " + user.getName());
+            index++;
+        }
+    }
+
+    public void displayUserListDetailed(ArrayList<User> userList) {
+        if (userList.isEmpty()) {
+            System.out.println("Nenhum utilizador encontrado.");
+            return;
+        }
+        
+        int index = 1;
+        Iterator<User> iterator = userList.iterator();
+        while (iterator.hasNext()) {
+            User user = iterator.next();
+            System.out.println(index + ". " + user.getName() + " (" + user.getUsername() + ")");
+            index++;
+        }
+    }
+
+    public ArrayList<Technician> listApprovedTechnicians() {
+        ArrayList<Technician> approvedTechs = new ArrayList<>();
+        Iterator<User> iterator = users.iterator();
+        while (iterator.hasNext()) {
+            User user = iterator.next();
+            if (user instanceof Technician && "approved".equals(user.getStatus())) {
+                approvedTechs.add((Technician) user);
+            }
+        }
+        return approvedTechs;
+    }
 }

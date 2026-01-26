@@ -4,7 +4,6 @@ import users.*;
 import services.*;
 import util.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Scanner;
 
 public class MenuManager {
@@ -20,13 +19,14 @@ public class MenuManager {
         this.scanner = new Scanner(System.in);
     }
 
-    // ==================== MAIN MENU ====================
+    // --- Main Menu ---
 
-    public void showMainMenu() { 
+    // Show main application menu (login or register)
+    public void showMainMenu() {
         while (true) {
             clearScreen();
             System.out.println("==========================================");
-            System.out.println("     SISTEMA DE GESTAO LABORATORIAL      ");
+            System.out.println(Colors.BOLD_CYAN + "     SISTEMA DE GESTAO LABORATORIAL      " + Colors.RESET);
             System.out.println("==========================================");
             System.out.println();
 
@@ -38,7 +38,7 @@ public class MenuManager {
                 System.out.println();
                 pause();
                 handleRegister();
-                
+
                 // Check if user was created successfully
                 if (appManager.getManageUsers().listUsers().isEmpty()) {
                     return;
@@ -71,8 +71,9 @@ public class MenuManager {
         }
     }
 
-    // ==================== LOGIN & REGISTER ====================
+    // --- Login & Register ---
 
+    // Handle user login and redirect to appropriate menu
     private void handleLogin() {
         clearScreen();
         System.out.println("==========================================");
@@ -139,6 +140,7 @@ public class MenuManager {
         pause();
     }
 
+    // Register new user with validation
     private void handleRegister() {
         clearScreen();
         System.out.println("==========================================");
@@ -277,8 +279,9 @@ public class MenuManager {
         pause();
     }
 
-    // ==================== ADMIN MENU ====================
+    // --- Admin Menu ---
 
+    // Display admin menu with all management options
     private void showAdminMenu() {
         while (appManager.getSession().isLoggedIn()) {
             clearScreen();
@@ -343,6 +346,7 @@ public class MenuManager {
 
     // --- User Management (Admin) ---
 
+    // User management menu for admin
     private void manageUsers() {
         while (true) {
             clearScreen();
@@ -377,6 +381,7 @@ public class MenuManager {
         }
     }
 
+    // Approve or reject pending user registrations
     private void approveUsers() {
         clearScreen();
         System.out.println("==========================================");
@@ -395,24 +400,9 @@ public class MenuManager {
         System.out.println("Utilizadores pendentes de aprovacao:");
         System.out.println();
 
-        int index = 1;
-        Iterator<User> iterator = pendingUsers.iterator();
-        while (iterator.hasNext()) {
-            User user = iterator.next();
-            System.out
-                    .println(index + ". " + user.getUsername() + " - " + user.getName() + " (" + user.getType() + ")");
-            System.out.println("   Email: " + user.getEmail());
-            if (user instanceof Client) {
-                Client c = (Client) user;
-                System.out.println("   NIF: " + c.getNif() + " | Tel: " + c.getPhone());
-            } else if (user instanceof Technician) {
-                Technician t = (Technician) user;
-                System.out.println("   NIF: " + t.getNif() + " | Tel: " + t.getPhone());
-            }
-            System.out.println();
-            index++;
-        }
+        appManager.getManageUsers().displayUserList(pendingUsers);
 
+        System.out.println();
         System.out.print("Escolha o numero do utilizador (0 para cancelar): ");
         int choice = readInt();
 
@@ -450,6 +440,7 @@ public class MenuManager {
         pause();
     }
 
+    // List all users or filter by type
     private void listAllUsers() {
         clearScreen();
         System.out.println("==========================================");
@@ -491,16 +482,13 @@ public class MenuManager {
 
         appManager.getManageUsers().sortUsersByName(true);
 
-        Iterator<User> userIterator = users.iterator();
-        while (userIterator.hasNext()) {
-            User user = userIterator.next();
-            System.out.println(user.toString());
-        }
+        appManager.getManageUsers().displayUserList(users);
 
         System.out.println("-----------------------------------------");
         pause();
     }
 
+    // Search users by username or name
     private void searchUsers() {
         clearScreen();
         System.out.println("==========================================");
@@ -522,11 +510,7 @@ public class MenuManager {
         System.out.println("Resultados encontrados: " + results.size());
         System.out.println();
 
-        Iterator<User> resultIterator = results.iterator();
-        while (resultIterator.hasNext()) {
-            User user = resultIterator.next();
-            System.out.println(user.toString());
-        }
+        appManager.getManageUsers().displayUserList(results);
 
         if (!results.isEmpty()) {
             System.out.println("-----------------------------------------");
@@ -537,6 +521,7 @@ public class MenuManager {
 
     // --- Service Management (Admin) ---
 
+    // Service management menu for admin
     private void manageServices() {
         while (true) {
             clearScreen();
@@ -584,6 +569,7 @@ public class MenuManager {
         }
     }
 
+    // Search or list all services
     private void searchServices() {
         clearScreen();
         System.out.println("==========================================");
@@ -601,7 +587,7 @@ public class MenuManager {
             System.out.println("2 - Valor Total");
             System.out.print("Opcao: ");
             String sortOption = scanner.nextLine().trim();
-            
+
             if (sortOption.equals("2")) {
                 appManager.getManageServices().sortServicesByTotalValue(true);
             } else {
@@ -616,15 +602,12 @@ public class MenuManager {
         System.out.println("Resultados encontrados: " + results.size());
         System.out.println();
 
-        Iterator<Service> serviceIterator = results.iterator();
-        while (serviceIterator.hasNext()) {
-            Service service = serviceIterator.next();
-            displayService(service);
-        }
+        appManager.getManageServices().displayServiceList(results);
 
         pause();
     }
 
+    // Filter and list services by status
     private void listServicesByStatus() {
         clearScreen();
         System.out.println("==========================================");
@@ -675,15 +658,12 @@ public class MenuManager {
         System.out.println("Servicos com estado '" + status + "': " + results.size());
         System.out.println();
 
-        Iterator<Service> serviceIterator = results.iterator();
-        while (serviceIterator.hasNext()) {
-            Service service = serviceIterator.next();
-            displayService(service);
-        }
+        appManager.getManageServices().displayServiceList(results);
 
         pause();
     }
 
+    // Admin approves or rejects service requests
     private void adminApproveRejectServices() {
         clearScreen();
         System.out.println("==========================================");
@@ -702,17 +682,7 @@ public class MenuManager {
         System.out.println("Pedidos de servico pendentes:");
         System.out.println();
 
-        int index = 1;
-        Iterator<Service> serviceIterator = pendingServices.iterator();
-        while (serviceIterator.hasNext()) {
-            Service service = serviceIterator.next();
-            System.out.println(index + ". Codigo: " + service.getCode());
-            System.out.println("   Cliente: " + service.getClient().getName());
-            System.out.println("   Descricao: " + service.getDescription());
-            System.out.println("   Data pedido: " + service.getRequestDate());
-            System.out.println();
-            index++;
-        }
+        appManager.getManageServices().displayServiceList(pendingServices);
 
         System.out.print("Escolha o servico (0 para cancelar): ");
         int choice = readInt();
@@ -746,6 +716,7 @@ public class MenuManager {
         pause();
     }
 
+    // Assign technician to approved service
     private void associateTechnicianToServices() {
         clearScreen();
         System.out.println("==========================================");
@@ -764,18 +735,9 @@ public class MenuManager {
         System.out.println("Servicos aprovados por tecnicos:");
         System.out.println();
 
-        int index = 1;
-        Iterator<Service> associateIterator = pendingServices.iterator();
-        while (associateIterator.hasNext()) {
-            Service service = associateIterator.next();
-            System.out.println(index + ". Codigo: " + service.getCode());
-            System.out.println("   Cliente: " + service.getClient().getName());
-            System.out.println("   Descricao: " + service.getDescription());
-            System.out.println("   Data pedido: " + service.getRequestDate());
-            System.out.println();
-            index++;
-        }
+        appManager.getManageServices().displayServiceList(pendingServices);
 
+        System.out.println();
         System.out.print("Escolha o servico (0 para cancelar): ");
         int choice = readInt();
 
@@ -806,13 +768,7 @@ public class MenuManager {
         System.out.println();
         System.out.println("Escolha o tecnico responsavel:");
 
-        int techIndex = 1;
-        Iterator<User> techIterator = technicians.iterator();
-        while (techIterator.hasNext()) {
-            User tech = techIterator.next();
-            System.out.println(techIndex + ". " + tech.getName());
-            techIndex++;
-        }
+        appManager.getManageUsers().displayUserListIndexed(technicians);
 
         System.out.print("Escolha: ");
         int techChoice = readInt();
@@ -840,6 +796,7 @@ public class MenuManager {
 
     // ==================== TECHNICIAN MENU ====================
 
+    // Display technician menu with all available options
     private void showTechnicianMenu() {
         while (appManager.getSession().isLoggedIn()) {
             clearScreen();
@@ -918,6 +875,7 @@ public class MenuManager {
         }
     }
 
+    // Technician approves or rejects service requests
     private void technicianApproveRejectServices() {
         clearScreen();
         System.out.println("==========================================");
@@ -936,18 +894,9 @@ public class MenuManager {
         System.out.println("Pedidos de servico pendentes:");
         System.out.println();
 
-        int index = 1;
-        Iterator<Service> serviceIterator = pendingServices.iterator();
-        while (serviceIterator.hasNext()) {
-            Service service = serviceIterator.next();
-            System.out.println(index + ". Codigo: " + service.getCode());
-            System.out.println("   Cliente: " + service.getClient().getName());
-            System.out.println("   Descricao: " + service.getDescription());
-            System.out.println("   Data pedido: " + service.getRequestDate());
-            System.out.println();
-            index++;
-        }
+        appManager.getManageServices().displayServiceList(pendingServices);
 
+        System.out.println();
         System.out.print("Escolha o servico (0 para cancelar): ");
         int choice = readInt();
 
@@ -989,6 +938,7 @@ public class MenuManager {
 
     // --- Analysis Management (Technician) ---
 
+    // Assign technicians to service analyses
     private void assignTechniciansToAnalyses() {
         clearScreen();
         System.out.println("==========================================");
@@ -997,18 +947,7 @@ public class MenuManager {
         System.out.println();
 
         Technician currentTech = (Technician) appManager.getSession().getCurrentUser();
-        ArrayList<Service> allServices = appManager.getManageServices().listAllServices();
-        ArrayList<Service> myServices = new ArrayList<>();
-
-        // Filtrar apenas serviços onde o técnico atual é o responsável
-        Iterator<Service> allIterator = allServices.iterator();
-        while (allIterator.hasNext()) {
-            Service service = allIterator.next();
-            if (service.getTechnician() != null &&
-                    service.getTechnician().getUsername().equals(currentTech.getUsername())) {
-                myServices.add(service);
-            }
-        }
+        ArrayList<Service> myServices = appManager.getManageServices().listServicesByTechnician(currentTech);
 
         if (myServices.isEmpty()) {
             showError("Nao possui servicos atribuidos.");
@@ -1019,16 +958,7 @@ public class MenuManager {
         // Listar serviços do técnico
         System.out.println("Seus servicos:");
         System.out.println();
-        int index = 1;
-        Iterator<Service> myIterator = myServices.iterator();
-        while (myIterator.hasNext()) {
-            Service service = myIterator.next();
-            System.out.println(index + ". Codigo: " + service.getCode() + " | " +
-                    "Cliente: " + service.getClient().getName() + " | " +
-                    "Estado: " + service.getStatus() + " | " +
-                    "Analises: " + service.getAnalyses().size());
-            index++;
-        }
+        appManager.getManageServices().displayServiceList(myServices);
 
         System.out.println();
         System.out.print("Escolha o servico (0 para cancelar): ");
@@ -1051,17 +981,7 @@ public class MenuManager {
         clearScreen();
         System.out.println("Analises do servico " + selectedService.getCode() + ":");
         System.out.println();
-        index = 1;
-        Iterator<ServiceAnalysis> analysisIterator = analyses.iterator();
-        while (analysisIterator.hasNext()) {
-            ServiceAnalysis analysis = analysisIterator.next();
-            String techName = analysis.getTechnician() != null ? 
-                    analysis.getTechnician().getName() : "[Nenhum]";
-            System.out.println(index + ". Codigo: " + analysis.getCode() + " | " +
-                    "Analise: " + analysis.getAnalysis().getName() + " | " +
-                    "Tecnico atual: " + techName);
-            index++;
-        }
+        appManager.getManageCatalog().displayServiceAnalysisListIndexed(analyses);
 
         System.out.println();
         System.out.print("Escolha a analise (0 para cancelar): ");
@@ -1073,16 +993,8 @@ public class MenuManager {
 
         ServiceAnalysis selectedAnalysis = analyses.get(analysisChoice - 1);
 
-        // Listar todos os técnicos disponíveis
-        ArrayList<User> allUsers = appManager.getManageUsers().listUsers();
-        ArrayList<Technician> technicians = new ArrayList<>();
-        Iterator<User> userIterator = allUsers.iterator();
-        while (userIterator.hasNext()) {
-            User user = userIterator.next();
-            if (user instanceof Technician && "approved".equals(user.getStatus())) {
-                technicians.add((Technician) user);
-            }
-        }
+        // List all available approved technicians
+        ArrayList<Technician> technicians = appManager.getManageUsers().listApprovedTechnicians();
 
         if (technicians.isEmpty()) {
             showError("Nenhum tecnico disponivel no sistema.");
@@ -1093,13 +1005,8 @@ public class MenuManager {
         clearScreen();
         System.out.println("Tecnicos disponiveis:");
         System.out.println();
-        index = 1;
-        Iterator<Technician> techIterator = technicians.iterator();
-        while (techIterator.hasNext()) {
-            Technician tech = techIterator.next();
-            System.out.println(index + ". " + tech.getName() + " (" + tech.getUsername() + ")");
-            index++;
-        }
+        ArrayList<User> techList = new ArrayList<>(technicians);
+        appManager.getManageUsers().displayUserListDetailed(techList);
 
         System.out.println();
         System.out.print("Escolha o tecnico (0 para cancelar): ");
@@ -1114,11 +1021,11 @@ public class MenuManager {
         // Atribuir técnico à análise
         if (appManager.getManageServices().assignTechnicianToAnalysis(
                 currentTech, selectedService.getCode(), selectedAnalysis.getCode(), selectedTechnician)) {
-            showSuccess("Tecnico " + selectedTechnician.getName() + 
+            showSuccess("Tecnico " + selectedTechnician.getName() +
                     " atribuido a analise " + selectedAnalysis.getAnalysis().getName() + " com sucesso!");
-            logManager.log(currentTech.getUsername(), 
-                    "Atribuiu tecnico " + selectedTechnician.getName() + 
-                    " a analise " + selectedAnalysis.getCode() + " do servico " + selectedService.getCode());
+            logManager.log(currentTech.getUsername(),
+                    "Atribuiu tecnico " + selectedTechnician.getName() +
+                            " a analise " + selectedAnalysis.getCode() + " do servico " + selectedService.getCode());
         } else {
             showError("Erro ao atribuir tecnico a analise.");
         }
@@ -1126,6 +1033,7 @@ public class MenuManager {
         pause();
     }
 
+    // Menu for executing assigned analyses
     private void executeMyAnalyses() {
         while (true) {
             clearScreen();
@@ -1169,6 +1077,7 @@ public class MenuManager {
         }
     }
 
+    // View all analyses assigned to current technician
     private void viewMyAnalyses() {
         clearScreen();
         System.out.println("==========================================");
@@ -1177,22 +1086,7 @@ public class MenuManager {
         System.out.println();
 
         Technician currentTech = (Technician) appManager.getSession().getCurrentUser();
-        ArrayList<Service> allServices = appManager.getManageServices().listAllServices();
-        ArrayList<ServiceAnalysis> myAnalyses = new ArrayList<>();
-
-        // Buscar todas as análises atribuídas ao técnico atual
-        Iterator<Service> serviceIterator = allServices.iterator();
-        while (serviceIterator.hasNext()) {
-            Service service = serviceIterator.next();
-            Iterator<ServiceAnalysis> analysisIterator = service.getAnalyses().iterator();
-            while (analysisIterator.hasNext()) {
-                ServiceAnalysis analysis = analysisIterator.next();
-                if (analysis.getTechnician() != null &&
-                        analysis.getTechnician().getUsername().equals(currentTech.getUsername())) {
-                    myAnalyses.add(analysis);
-                }
-            }
-        }
+        ArrayList<ServiceAnalysis> myAnalyses = appManager.getManageServices().listAnalysesByTechnician(currentTech);
 
         if (myAnalyses.isEmpty()) {
             showError("Nenhuma analise atribuida a voce.");
@@ -1203,26 +1097,12 @@ public class MenuManager {
         System.out.println("Total: " + myAnalyses.size() + " analises");
         System.out.println();
 
-        int index = 1;
-        Iterator<ServiceAnalysis> myIterator = myAnalyses.iterator();
-        while (myIterator.hasNext()) {
-            ServiceAnalysis analysis = myIterator.next();
-            String supervisor = analysis.getSupervisor() != null ?
-                    analysis.getSupervisor().getName() : "[Nenhum]";
-            System.out.println(index + ". Codigo: " + analysis.getCode());
-            System.out.println("   Analise: " + analysis.getAnalysis().getName());
-            System.out.println("   Estado: " + analysis.getStatus());
-            System.out.println("   Supervisor: " + supervisor);
-            System.out.println("   Testes: " + analysis.getTests().size());
-            System.out.println("   Resultado: " + (analysis.getFinalResult().isEmpty() ?
-                    "[Pendente]" : analysis.getFinalResult()));
-            System.out.println();
-            index++;
-        }
+        appManager.getManageServices().displayServiceAnalysisListDetailed(myAnalyses);
 
         pause();
     }
 
+    // Add tests to a specific analysis
     private void addTestsToAnalysis() {
         clearScreen();
         System.out.println("==========================================");
@@ -1231,22 +1111,7 @@ public class MenuManager {
         System.out.println();
 
         Technician currentTech = (Technician) appManager.getSession().getCurrentUser();
-        ArrayList<Service> allServices = appManager.getManageServices().listAllServices();
-        ArrayList<ServiceAnalysis> myAnalyses = new ArrayList<>();
-
-        // Buscar análises do técnico
-        Iterator<Service> serviceIterator = allServices.iterator();
-        while (serviceIterator.hasNext()) {
-            Service service = serviceIterator.next();
-            Iterator<ServiceAnalysis> analysisIterator = service.getAnalyses().iterator();
-            while (analysisIterator.hasNext()) {
-                ServiceAnalysis analysis = analysisIterator.next();
-                if (analysis.getTechnician() != null &&
-                        analysis.getTechnician().getUsername().equals(currentTech.getUsername())) {
-                    myAnalyses.add(analysis);
-                }
-            }
-        }
+        ArrayList<ServiceAnalysis> myAnalyses = appManager.getManageServices().listAnalysesByTechnician(currentTech);
 
         if (myAnalyses.isEmpty()) {
             showError("Nenhuma analise atribuida a voce.");
@@ -1257,14 +1122,7 @@ public class MenuManager {
         // Listar análises
         System.out.println("Suas analises:");
         System.out.println();
-        int index = 1;
-        Iterator<ServiceAnalysis> myIterator = myAnalyses.iterator();
-        while (myIterator.hasNext()) {
-            ServiceAnalysis analysis = myIterator.next();
-            System.out.println(index + ". " + analysis.getAnalysis().getName() +
-                    " (Codigo: " + analysis.getCode() + ") - Testes: " + analysis.getTests().size());
-            index++;
-        }
+        appManager.getManageServices().displayServiceAnalysisListIndexed(myAnalyses);
 
         System.out.println();
         System.out.print("Escolha a analise (0 para cancelar): ");
@@ -1314,6 +1172,7 @@ public class MenuManager {
         }
     }
 
+    // Record measured values for analysis tests
     private void recordTestValues() {
         clearScreen();
         System.out.println("==========================================");
@@ -1322,22 +1181,7 @@ public class MenuManager {
         System.out.println();
 
         Technician currentTech = (Technician) appManager.getSession().getCurrentUser();
-        ArrayList<Service> allServices = appManager.getManageServices().listAllServices();
-        ArrayList<ServiceAnalysis> myAnalyses = new ArrayList<>();
-
-        // Buscar análises do técnico
-        Iterator<Service> serviceIterator = allServices.iterator();
-        while (serviceIterator.hasNext()) {
-            Service service = serviceIterator.next();
-            Iterator<ServiceAnalysis> analysisIterator = service.getAnalyses().iterator();
-            while (analysisIterator.hasNext()) {
-                ServiceAnalysis analysis = analysisIterator.next();
-                if (analysis.getTechnician() != null &&
-                        analysis.getTechnician().getUsername().equals(currentTech.getUsername())) {
-                    myAnalyses.add(analysis);
-                }
-            }
-        }
+        ArrayList<ServiceAnalysis> myAnalyses = appManager.getManageServices().listAnalysesByTechnician(currentTech);
 
         if (myAnalyses.isEmpty()) {
             showError("Nenhuma analise atribuida a voce.");
@@ -1348,14 +1192,7 @@ public class MenuManager {
         // Listar análises
         System.out.println("Suas analises:");
         System.out.println();
-        int index = 1;
-        Iterator<ServiceAnalysis> myIterator = myAnalyses.iterator();
-        while (myIterator.hasNext()) {
-            ServiceAnalysis analysis = myIterator.next();
-            System.out.println(index + ". " + analysis.getAnalysis().getName() +
-                    " - Testes: " + analysis.getTests().size());
-            index++;
-        }
+        appManager.getManageCatalog().displayServiceAnalysisListCompact(myAnalyses);
 
         System.out.println();
         System.out.print("Escolha a analise (0 para cancelar): ");
@@ -1378,17 +1215,7 @@ public class MenuManager {
         clearScreen();
         System.out.println("Testes da analise: " + selectedAnalysis.getAnalysis().getName());
         System.out.println();
-        index = 1;
-        Iterator<Test> testIterator = tests.iterator();
-        while (testIterator.hasNext()) {
-            Test test = testIterator.next();
-            String measured = test.getMeasuredValue().isEmpty() ? "[Pendente]" : test.getMeasuredValue();
-            System.out.println(index + ". " + test.getDesignation());
-            System.out.println("   Referencia: " + test.getReferenceValue() + " " + test.getUnit());
-            System.out.println("   Valor medido: " + measured);
-            System.out.println();
-            index++;
-        }
+        appManager.getManageCatalog().displayTestListIndexed(tests);
 
         System.out.print("Escolha o teste (0 para cancelar): ");
         int testChoice = readInt();
@@ -1408,12 +1235,13 @@ public class MenuManager {
             showSuccess("Valor registrado com sucesso!");
             logManager.log(currentTech.getUsername(),
                     "Registrou valor medido no teste '" + selectedTest.getDesignation() +
-                    "' da analise " + selectedAnalysis.getCode());
+                            "' da analise " + selectedAnalysis.getCode());
         }
 
         pause();
     }
 
+    // Set final result for completed analysis
     private void setAnalysisFinalResult() {
         clearScreen();
         System.out.println("==========================================");
@@ -1422,22 +1250,7 @@ public class MenuManager {
         System.out.println();
 
         Technician currentTech = (Technician) appManager.getSession().getCurrentUser();
-        ArrayList<Service> allServices = appManager.getManageServices().listAllServices();
-        ArrayList<ServiceAnalysis> myAnalyses = new ArrayList<>();
-
-        // Buscar análises do técnico
-        Iterator<Service> serviceIterator = allServices.iterator();
-        while (serviceIterator.hasNext()) {
-            Service service = serviceIterator.next();
-            Iterator<ServiceAnalysis> analysisIterator = service.getAnalyses().iterator();
-            while (analysisIterator.hasNext()) {
-                ServiceAnalysis analysis = analysisIterator.next();
-                if (analysis.getTechnician() != null &&
-                        analysis.getTechnician().getUsername().equals(currentTech.getUsername())) {
-                    myAnalyses.add(analysis);
-                }
-            }
-        }
+        ArrayList<ServiceAnalysis> myAnalyses = appManager.getManageServices().listAnalysesByTechnician(currentTech);
 
         if (myAnalyses.isEmpty()) {
             showError("Nenhuma analise atribuida a voce.");
@@ -1448,15 +1261,7 @@ public class MenuManager {
         // Listar análises
         System.out.println("Suas analises:");
         System.out.println();
-        int index = 1;
-        Iterator<ServiceAnalysis> myIterator = myAnalyses.iterator();
-        while (myIterator.hasNext()) {
-            ServiceAnalysis analysis = myIterator.next();
-            String result = analysis.getFinalResult().isEmpty() ? "[Pendente]" : analysis.getFinalResult();
-            System.out.println(index + ". " + analysis.getAnalysis().getName() +
-                    " - Resultado: " + result);
-            index++;
-        }
+        appManager.getManageCatalog().displayServiceAnalysisListWithResult(myAnalyses);
 
         System.out.println();
         System.out.print("Escolha a analise (0 para cancelar): ");
@@ -1477,12 +1282,13 @@ public class MenuManager {
             showSuccess("Resultado definido com sucesso!");
             logManager.log(currentTech.getUsername(),
                     "Definiu resultado final da analise " + selectedAnalysis.getCode() +
-                    ": " + result);
+                            ": " + result);
         }
 
         pause();
     }
 
+    // Mark analysis as completed with finish date
     private void finalizeAnalysis() {
         clearScreen();
         System.out.println("==========================================");
@@ -1491,22 +1297,7 @@ public class MenuManager {
         System.out.println();
 
         Technician currentTech = (Technician) appManager.getSession().getCurrentUser();
-        ArrayList<Service> allServices = appManager.getManageServices().listAllServices();
-        ArrayList<ServiceAnalysis> myAnalyses = new ArrayList<>();
-
-        // Buscar análises do técnico
-        Iterator<Service> serviceIterator = allServices.iterator();
-        while (serviceIterator.hasNext()) {
-            Service service = serviceIterator.next();
-            Iterator<ServiceAnalysis> analysisIterator = service.getAnalyses().iterator();
-            while (analysisIterator.hasNext()) {
-                ServiceAnalysis analysis = analysisIterator.next();
-                if (analysis.getTechnician() != null &&
-                        analysis.getTechnician().getUsername().equals(currentTech.getUsername())) {
-                    myAnalyses.add(analysis);
-                }
-            }
-        }
+        ArrayList<ServiceAnalysis> myAnalyses = appManager.getManageServices().listAnalysesByTechnician(currentTech);
 
         if (myAnalyses.isEmpty()) {
             showError("Nenhuma analise atribuida a voce.");
@@ -1517,15 +1308,7 @@ public class MenuManager {
         // Listar análises pendentes
         System.out.println("Suas analises:");
         System.out.println();
-        int index = 1;
-        Iterator<ServiceAnalysis> myIterator = myAnalyses.iterator();
-        while (myIterator.hasNext()) {
-            ServiceAnalysis analysis = myIterator.next();
-            System.out.println(index + ". " + analysis.getAnalysis().getName() +
-                    " - Estado: " + analysis.getStatus() +
-                    " - Testes: " + analysis.getTests().size());
-            index++;
-        }
+        appManager.getManageCatalog().displayServiceAnalysisListWithStatus(myAnalyses);
 
         System.out.println();
         System.out.print("Escolha a analise (0 para cancelar): ");
@@ -1555,11 +1338,12 @@ public class MenuManager {
         showSuccess("Analise finalizada com sucesso!");
         logManager.log(currentTech.getUsername(),
                 "Finalizou a analise " + selectedAnalysis.getCode() +
-                " em " + finishDate);
+                        " em " + finishDate);
 
         pause();
     }
 
+    // Search and list technician's assigned services
     private void listMyServices() {
         clearScreen();
         System.out.println("==========================================");
@@ -1581,7 +1365,7 @@ public class MenuManager {
             System.out.println("2 - Valor Total");
             System.out.print("Opcao: ");
             String sortOption = scanner.nextLine().trim();
-            
+
             if (sortOption.equals("2")) {
                 appManager.getManageServices().sortServicesByTotalValue(true);
             } else {
@@ -1589,29 +1373,19 @@ public class MenuManager {
             }
             results = myServices;
         } else {
-            Iterator<Service> myIterator = myServices.iterator();
-            while (myIterator.hasNext()) {
-                Service service = myIterator.next();
-                if (String.valueOf(service.getCode()).contains(term) ||
-                        service.getDescription().toLowerCase().contains(term.toLowerCase())) {
-                    results.add(service);
-                }
-            }
+            results = appManager.getManageServices().searchServicesByCodeOrDescription(myServices, term);
         }
 
         clearScreen();
         System.out.println("Total: " + results.size() + " servicos");
         System.out.println();
 
-        Iterator<Service> displayIterator = results.iterator();
-        while (displayIterator.hasNext()) {
-            Service service = displayIterator.next();
-            displayService(service);
-        }
+        appManager.getManageServices().displayServiceList(results);
 
         pause();
     }
 
+    // Start execution of a service
     private void startServiceExecution() {
         clearScreen();
         System.out.println("==========================================");
@@ -1635,6 +1409,7 @@ public class MenuManager {
         pause();
     }
 
+    // Mark service as finished
     private void finishService() {
         clearScreen();
         System.out.println("==========================================");
@@ -1660,6 +1435,7 @@ public class MenuManager {
 
     // --- Catalog Management (Technician) ---
 
+    // Create new lab analysis
     private void createAnalysis() {
         clearScreen();
         System.out.println("==========================================");
@@ -1697,6 +1473,7 @@ public class MenuManager {
         pause();
     }
 
+    // Analysis catalog management menu
     private void manageAnalyses() {
         while (true) {
             clearScreen();
@@ -1744,6 +1521,7 @@ public class MenuManager {
         }
     }
 
+    // Search and display all analyses
     private void searchAndDisplayAnalyses() {
         clearScreen();
         System.out.println("==========================================");
@@ -1765,11 +1543,7 @@ public class MenuManager {
         System.out.println("Total de analises: " + results.size());
         System.out.println();
 
-        Iterator<LabAnalysis> analysisIterator = results.iterator();
-        while (analysisIterator.hasNext()) {
-            LabAnalysis analysis = analysisIterator.next();
-            System.out.println(analysis.toString());
-        }
+        appManager.getManageCatalog().displayAnalysisList(results);
 
         if (!results.isEmpty()) {
             System.out.println("-----------------------------------------");
@@ -1778,6 +1552,7 @@ public class MenuManager {
         pause();
     }
 
+    // Edit existing analysis (add/remove tests)
     private void editAnalysis() {
         clearScreen();
         System.out.println("==========================================");
@@ -1818,7 +1593,7 @@ public class MenuManager {
                 String refValue = scanner.nextLine().trim();
                 System.out.print("Unidade: ");
                 String unit = scanner.nextLine().trim();
-                
+
                 Test newTest = new Test(designation, refValue, unit);
                 if (analysis.addTest(newTest)) {
                     showSuccess("Teste adicionado!");
@@ -1828,7 +1603,7 @@ public class MenuManager {
                     showError("Erro ao adicionar teste.");
                 }
                 break;
-                
+
             case 2:
                 System.out.print("Designacao do teste a remover: ");
                 String testName = scanner.nextLine().trim();
@@ -1840,30 +1615,19 @@ public class MenuManager {
                     showError("Teste nao encontrado.");
                 }
                 break;
-                
+
             case 3:
                 ArrayList<Test> tests = analysis.getTests();
                 System.out.println();
                 System.out.println("Testes da analise:");
-                if (tests.isEmpty()) {
-                    System.out.println("Nenhum teste definido.");
-                } else {
-                    int index = 1;
-                    Iterator<Test> testIterator = tests.iterator();
-                    while (testIterator.hasNext()) {
-                        Test test = testIterator.next();
-                        System.out.println(index + ". " + test.getDesignation() + 
-                                         " (Ref: " + test.getReferenceValue() + 
-                                         " " + test.getUnit() + ")");
-                        index++;
-                    }
-                }
+                appManager.getManageCatalog().displayTestList(tests);
                 break;
         }
 
         pause();
     }
 
+    // Remove analysis from catalog
     private void removeAnalysis() {
         clearScreen();
         System.out.println("==========================================");
@@ -1886,14 +1650,7 @@ public class MenuManager {
         System.out.println("Analises encontradas:");
         System.out.println();
 
-        int index = 1;
-        Iterator<LabAnalysis> analysisIterator2 = results.iterator();
-        while (analysisIterator2.hasNext()) {
-            LabAnalysis analysis = analysisIterator2.next();
-            System.out.println(index + ".");
-            System.out.println(analysis.toString());
-            index++;
-        }
+        appManager.getManageCatalog().displayAnalysisListIndexed(results);
 
         if (!results.isEmpty()) {
             System.out.println("-----------------------------------------");
@@ -1929,6 +1686,7 @@ public class MenuManager {
         pause();
     }
 
+    // Add new chemical component to catalog
     private void addChemicalComponent() {
         clearScreen();
         System.out.println("==========================================");
@@ -1965,6 +1723,7 @@ public class MenuManager {
         pause();
     }
 
+    // Create new supplier with validation
     private void createSupplier() {
         clearScreen();
         System.out.println("==========================================");
@@ -2013,6 +1772,7 @@ public class MenuManager {
         pause();
     }
 
+    // Create new medical area
     private void createMedicalArea() {
         clearScreen();
         System.out.println("==========================================");
@@ -2043,6 +1803,7 @@ public class MenuManager {
         pause();
     }
 
+    // Create new order for chemical components
     private void createOrder() {
         clearScreen();
         System.out.println("==========================================");
@@ -2064,13 +1825,7 @@ public class MenuManager {
 
         System.out.println();
         System.out.println("Fornecedores disponiveis:");
-        int index = 1;
-        Iterator<Supplier> supplierIterator = suppliers.iterator();
-        while (supplierIterator.hasNext()) {
-            Supplier supplier = supplierIterator.next();
-            System.out.println(index + ". " + supplier.getName());
-            index++;
-        }
+        appManager.getManageCatalog().displaySupplierListIndexed(suppliers);
 
         System.out.print("Escolha o fornecedor: ");
         int supplierChoice = readInt();
@@ -2090,39 +1845,38 @@ public class MenuManager {
 
         System.out.println();
         System.out.println("Adicionar componentes quimicos a encomenda:");
-        
+
         while (true) {
             System.out.println();
             System.out.print("Codigo do componente (0 para terminar): ");
             int componentCode = readInt();
-            
+
             if (componentCode == 0) {
                 break;
             }
-            
+
             ChemicalComponent component = appManager.getManageCatalog().findComponent(componentCode);
-            
+
             if (component == null) {
                 showError("Componente nao encontrado!");
                 continue;
             }
-            
+
             System.out.print("Quantidade a encomendar: ");
             int qty = readInt();
-            
+
             if (qty <= 0) {
                 showError("Quantidade invalida!");
                 continue;
             }
-            
+
             ChemicalComponent orderItem = new ChemicalComponent(
-                component.getCode(),
-                component.getName(),
-                component.getAlphaValue(),
-                component.getBetaValue(),
-                qty
-            );
-            
+                    component.getCode(),
+                    component.getName(),
+                    component.getAlphaValue(),
+                    component.getBetaValue(),
+                    qty);
+
             order.addItem(orderItem);
             System.out.println("Adicionado: " + component.getName() + " (quantidade: " + qty + ")");
         }
@@ -2139,6 +1893,7 @@ public class MenuManager {
 
     // ==================== CLIENT MENU ====================
 
+    // Display client menu with service options
     private void showClientMenu() {
         while (appManager.getSession().isLoggedIn()) {
             clearScreen();
@@ -2177,6 +1932,7 @@ public class MenuManager {
         }
     }
 
+    // Client requests a new service
     private void requestNewService() {
         clearScreen();
         System.out.println("==========================================");
@@ -2214,6 +1970,7 @@ public class MenuManager {
         pause();
     }
 
+    // Client searches their own services
     private void searchMyServicesAsClient() {
         clearScreen();
         System.out.println("==========================================");
@@ -2234,7 +1991,7 @@ public class MenuManager {
             System.out.println("2 - Valor Total");
             System.out.print("Opcao: ");
             String sortOption = scanner.nextLine().trim();
-            
+
             if (sortOption.equals("2")) {
                 appManager.getManageServices().sortServicesByTotalValue(true);
             } else {
@@ -2242,31 +1999,21 @@ public class MenuManager {
             }
             results = allMyServices;
         } else {
-            Iterator<Service> myServicesIterator = allMyServices.iterator();
-            while (myServicesIterator.hasNext()) {
-                Service service = myServicesIterator.next();
-                if (String.valueOf(service.getCode()).contains(term) ||
-                        service.getDescription().toLowerCase().contains(term.toLowerCase())) {
-                    results.add(service);
-                }
-            }
+            results = appManager.getManageServices().searchServicesByCodeOrDescription(allMyServices, term);
         }
 
         clearScreen();
         System.out.println("Resultados encontrados: " + results.size());
         System.out.println();
 
-        Iterator<Service> clientSearchIterator = results.iterator();
-        while (clientSearchIterator.hasNext()) {
-            Service service = clientSearchIterator.next();
-            displayService(service);
-        }
+        appManager.getManageServices().displayServiceList(results);
 
         pause();
     }
 
     // ==================== COMMON FUNCTIONS ====================
 
+    // Edit current user profile information
     private void editMyProfile() {
         clearScreen();
         System.out.println("==========================================");
@@ -2388,6 +2135,7 @@ public class MenuManager {
         pause();
     }
 
+    // View system activity log
     private void viewSystemLog() {
         clearScreen();
         System.out.println("==========================================");
@@ -2397,25 +2145,18 @@ public class MenuManager {
 
         ArrayList<String> logs = logManager.readLog();
 
-        if (logs.isEmpty()) {
-            System.out.println("Nao existem registos no log.");
-        } else {
+        if (!logs.isEmpty()) {
             System.out.println("Ultimas " + Math.min(50, logs.size()) + " entradas:");
             System.out.println("(mais recentes primeiro)");
             System.out.println();
-
-            // Show last 50 entries (most recent first - já estão ordenadas)
-            int count = 0;
-            Iterator<String> logIterator = logs.iterator();
-            while (logIterator.hasNext() && count < 50) {
-                System.out.println(logIterator.next());
-                count++;
-            }
         }
+
+        logManager.displayRecentLogs(50);
 
         pause();
     }
 
+    // Export all services to CSV file
     private void exportServicesToCSV() {
         clearScreen();
         System.out.println("==========================================");
@@ -2447,6 +2188,7 @@ public class MenuManager {
         pause();
     }
 
+    // List services that contain specific analysis
     private void listServicesWithSpecificAnalysis() {
         clearScreen();
         System.out.println("==========================================");
@@ -2469,15 +2211,12 @@ public class MenuManager {
         System.out.println("Servicos com analise " + analysisCode + ": " + results.size());
         System.out.println();
 
-        Iterator<Service> serviceIterator = results.iterator();
-        while (serviceIterator.hasNext()) {
-            Service service = serviceIterator.next();
-            displayService(service);
-        }
+        appManager.getManageServices().displayServiceList(results);
 
         pause();
     }
 
+    // List all tests for a specific analysis
     private void listTestsBySpecificAnalysis() {
         clearScreen();
         System.out.println("==========================================");
@@ -2495,7 +2234,7 @@ public class MenuManager {
         }
 
         LabAnalysis analysis = appManager.getManageCatalog().findAnalysis(Integer.parseInt(analysisCode));
-        
+
         if (analysis == null) {
             showError("Analise nao encontrada!");
             pause();
@@ -2509,11 +2248,7 @@ public class MenuManager {
         System.out.println("Total: " + tests.size());
         System.out.println();
 
-        Iterator<Test> testIterator = tests.iterator();
-        while (testIterator.hasNext()) {
-            Test test = testIterator.next();
-            System.out.println(test.toString());
-        }
+        appManager.getManageCatalog().displayTestList(tests);
 
         if (!tests.isEmpty()) {
             System.out.println("-----------------------------------------");
@@ -2522,6 +2257,7 @@ public class MenuManager {
         pause();
     }
 
+    // Search analyses that use specific chemical component
     private void searchAnalysesByComponent() {
         clearScreen();
         System.out.println("==========================================");
@@ -2544,11 +2280,7 @@ public class MenuManager {
         System.out.println("Analises que usam componente " + componentCode + ": " + results.size());
         System.out.println();
 
-        Iterator<LabAnalysis> analysisIterator = results.iterator();
-        while (analysisIterator.hasNext()) {
-            LabAnalysis analysis = analysisIterator.next();
-            System.out.println(analysis.toString());
-        }
+        appManager.getManageCatalog().displayAnalysisList(results);
 
         if (!results.isEmpty()) {
             System.out.println("-----------------------------------------");
@@ -2557,15 +2289,12 @@ public class MenuManager {
         pause();
     }
 
-    private void displayService(Service service) {
-        System.out.println(service.toString());
-    }
-
     // ==================== CATALOG MANAGEMENT (TECHNICIAN) ====================
     // Component, Supplier, Medical Area, Order, and Category management
 
     // --- Component Management ---
 
+    // Chemical component management menu
     private void manageComponents() {
         while (true) {
             clearScreen();
@@ -2605,6 +2334,7 @@ public class MenuManager {
         }
     }
 
+    // Search and display chemical components
     private void searchAndDisplayComponents() {
         clearScreen();
         System.out.println("==========================================");
@@ -2626,11 +2356,7 @@ public class MenuManager {
         System.out.println("Total de componentes: " + results.size());
         System.out.println();
 
-        Iterator<ChemicalComponent> componentIterator = results.iterator();
-        while (componentIterator.hasNext()) {
-            ChemicalComponent component = componentIterator.next();
-            System.out.println(component.toString());
-        }
+        appManager.getManageCatalog().displayComponentList(results);
 
         if (!results.isEmpty()) {
             System.out.println("-----------------------------------------");
@@ -2639,6 +2365,7 @@ public class MenuManager {
         pause();
     }
 
+    // Edit component stock quantity
     private void editComponent() {
         clearScreen();
         System.out.println("==========================================");
@@ -2681,6 +2408,7 @@ public class MenuManager {
         pause();
     }
 
+    // Remove chemical component from catalog
     private void removeComponent() {
         clearScreen();
         System.out.println("==========================================");
@@ -2703,14 +2431,7 @@ public class MenuManager {
         System.out.println("Componentes encontrados:");
         System.out.println();
 
-        int index = 1;
-        Iterator<ChemicalComponent> componentIterator2 = results.iterator();
-        while (componentIterator2.hasNext()) {
-            ChemicalComponent component = componentIterator2.next();
-            System.out.println(index + ".");
-            System.out.println(component.toString());
-            index++;
-        }
+        appManager.getManageCatalog().displayComponentListIndexed(results);
 
         if (!results.isEmpty()) {
             System.out.println("-----------------------------------------");
@@ -2748,6 +2469,7 @@ public class MenuManager {
 
     // --- Supplier Management ---
 
+    // Supplier management menu
     private void manageSuppliers() {
         while (true) {
             clearScreen();
@@ -2787,6 +2509,7 @@ public class MenuManager {
         }
     }
 
+    // Search and display suppliers
     private void searchAndDisplaySuppliers() {
         clearScreen();
         System.out.println("==========================================");
@@ -2803,11 +2526,7 @@ public class MenuManager {
         System.out.println("Total de fornecedores: " + results.size());
         System.out.println();
 
-        Iterator<Supplier> supplierIterator2 = results.iterator();
-        while (supplierIterator2.hasNext()) {
-            Supplier supplier = supplierIterator2.next();
-            System.out.println(supplier.toString());
-        }
+        appManager.getManageCatalog().displaySupplierList(results);
 
         if (!results.isEmpty()) {
             System.out.println("-----------------------------------------");
@@ -2816,6 +2535,7 @@ public class MenuManager {
         pause();
     }
 
+    // Edit supplier information
     private void editSupplier() {
         clearScreen();
         System.out.println("==========================================");
@@ -2874,6 +2594,7 @@ public class MenuManager {
         pause();
     }
 
+    // Remove supplier from system
     private void removeSupplier() {
         clearScreen();
         System.out.println("==========================================");
@@ -2896,14 +2617,7 @@ public class MenuManager {
         System.out.println("Fornecedores encontrados:");
         System.out.println();
 
-        int index = 1;
-        Iterator<Supplier> supplierIterator3 = results.iterator();
-        while (supplierIterator3.hasNext()) {
-            Supplier supplier = supplierIterator3.next();
-            System.out.println(index + ".");
-            System.out.println(supplier.toString());
-            index++;
-        }
+        appManager.getManageCatalog().displaySupplierListIndexed(results);
 
         if (!results.isEmpty()) {
             System.out.println("-----------------------------------------");
@@ -2941,6 +2655,7 @@ public class MenuManager {
 
     // --- Medical Area Management ---
 
+    // Medical area management menu
     private void manageAreas() {
         while (true) {
             clearScreen();
@@ -2980,6 +2695,7 @@ public class MenuManager {
         }
     }
 
+    // Search and display medical areas
     private void searchAndDisplayAreas() {
         clearScreen();
         System.out.println("==========================================");
@@ -2996,11 +2712,7 @@ public class MenuManager {
         System.out.println("Total de areas medicas: " + results.size());
         System.out.println();
 
-        Iterator<MedicalArea> areaIterator = results.iterator();
-        while (areaIterator.hasNext()) {
-            MedicalArea area = areaIterator.next();
-            System.out.println(area.toString());
-        }
+        appManager.getManageCatalog().displayAreaList(results);
 
         if (!results.isEmpty()) {
             System.out.println("-----------------------------------------");
@@ -3009,6 +2721,7 @@ public class MenuManager {
         pause();
     }
 
+    // Edit medical area information
     private void editArea() {
         clearScreen();
         System.out.println("==========================================");
@@ -3059,6 +2772,7 @@ public class MenuManager {
         pause();
     }
 
+    // Remove medical area from system
     private void removeArea() {
         clearScreen();
         System.out.println("==========================================");
@@ -3081,14 +2795,7 @@ public class MenuManager {
         System.out.println("Areas medicas encontradas:");
         System.out.println();
 
-        int index = 1;
-        Iterator<MedicalArea> areaIterator2 = results.iterator();
-        while (areaIterator2.hasNext()) {
-            MedicalArea area = areaIterator2.next();
-            System.out.println(index + ".");
-            System.out.println(area.toString());
-            index++;
-        }
+        appManager.getManageCatalog().displayAreaListIndexed(results);
 
         if (!results.isEmpty()) {
             System.out.println("-----------------------------------------");
@@ -3126,6 +2833,7 @@ public class MenuManager {
 
     // --- Order Management ---
 
+    // Order management menu
     private void manageOrders() {
         while (true) {
             clearScreen();
@@ -3169,6 +2877,7 @@ public class MenuManager {
         }
     }
 
+    // Search and display orders
     private void searchAndDisplayOrders() {
         clearScreen();
         System.out.println("==========================================");
@@ -3190,11 +2899,7 @@ public class MenuManager {
         System.out.println("Total de encomendas: " + results.size());
         System.out.println();
 
-        Iterator<Order> orderIterator = results.iterator();
-        while (orderIterator.hasNext()) {
-            Order order = orderIterator.next();
-            System.out.println(order.toString());
-        }
+        appManager.getManageCatalog().displayOrderList(results);
 
         if (!results.isEmpty()) {
             System.out.println("-----------------------------------------");
@@ -3203,6 +2908,7 @@ public class MenuManager {
         pause();
     }
 
+    // Mark order as delivered
     private void deliverOrder() {
         clearScreen();
         System.out.println("==========================================");
@@ -3224,6 +2930,7 @@ public class MenuManager {
         pause();
     }
 
+    // List all pending orders
     private void listPendingOrders() {
         clearScreen();
         System.out.println("==========================================");
@@ -3236,11 +2943,7 @@ public class MenuManager {
         System.out.println("Total de encomendas pendentes: " + pendingOrders.size());
         System.out.println();
 
-        Iterator<Order> pendingOrderIterator = pendingOrders.iterator();
-        while (pendingOrderIterator.hasNext()) {
-            Order order = pendingOrderIterator.next();
-            System.out.println(order.toString());
-        }
+        appManager.getManageCatalog().displayOrderList(pendingOrders);
 
         if (!pendingOrders.isEmpty()) {
             System.out.println("-----------------------------------------");
@@ -3249,6 +2952,7 @@ public class MenuManager {
         pause();
     }
 
+    // Remove order from system
     private void removeOrder() {
         clearScreen();
         System.out.println("==========================================");
@@ -3271,14 +2975,7 @@ public class MenuManager {
         System.out.println("Encomendas encontradas:");
         System.out.println();
 
-        int index = 1;
-        Iterator<Order> orderIterator2 = results.iterator();
-        while (orderIterator2.hasNext()) {
-            Order order = orderIterator2.next();
-            System.out.println(index + ".");
-            System.out.println(order.toString());
-            index++;
-        }
+        appManager.getManageCatalog().displayOrderListIndexed(results);
 
         if (!results.isEmpty()) {
             System.out.println("-----------------------------------------");
@@ -3316,6 +3013,7 @@ public class MenuManager {
 
     // --- Category Management ---
 
+    // Category management menu
     private void manageCategories() {
         while (true) {
             clearScreen();
@@ -3355,6 +3053,7 @@ public class MenuManager {
         }
     }
 
+    // Create new category
     private void createCategory() {
         clearScreen();
         System.out.println("==========================================");
@@ -3388,6 +3087,7 @@ public class MenuManager {
         pause();
     }
 
+    // Search and display categories
     private void searchAndDisplayCategories() {
         clearScreen();
         System.out.println("==========================================");
@@ -3404,11 +3104,7 @@ public class MenuManager {
         System.out.println("Total de categorias: " + results.size());
         System.out.println();
 
-        Iterator<Category> categoryIterator = results.iterator();
-        while (categoryIterator.hasNext()) {
-            Category category = categoryIterator.next();
-            System.out.println(category.toString());
-        }
+        appManager.getManageCatalog().displayCategoryList(results);
 
         if (!results.isEmpty()) {
             System.out.println("-----------------------------------------");
@@ -3417,6 +3113,7 @@ public class MenuManager {
         pause();
     }
 
+    // Edit category information
     private void editCategory() {
         clearScreen();
         System.out.println("==========================================");
@@ -3457,6 +3154,7 @@ public class MenuManager {
         pause();
     }
 
+    // Remove category from system
     private void removeCategory() {
         clearScreen();
         System.out.println("==========================================");
@@ -3479,14 +3177,7 @@ public class MenuManager {
         System.out.println("Categorias encontradas:");
         System.out.println();
 
-        int index = 1;
-        Iterator<Category> categoryIterator2 = results.iterator();
-        while (categoryIterator2.hasNext()) {
-            Category category = categoryIterator2.next();
-            System.out.println(index + ".");
-            System.out.println(category.toString());
-            index++;
-        }
+        appManager.getManageCatalog().displayCategoryListIndexed(results);
 
         if (!results.isEmpty()) {
             System.out.println("-----------------------------------------");
@@ -3523,30 +3214,35 @@ public class MenuManager {
 
     // --- Utility Functions ---
 
+    // Clear console screen
     private void clearScreen() {
         for (int i = 0; i < 50; i++) {
             System.out.println();
         }
     }
 
+    // Display success message
     private void showSuccess(String message) {
         System.out.println();
         System.out.println("OK: " + message);
         System.out.println();
     }
 
+    // Display error message
     private void showError(String message) {
         System.out.println();
         System.out.println("ERRO: " + message);
         System.out.println();
     }
 
+    // Wait for user to press ENTER
     private void pause() {
         System.out.println();
         System.out.print("Pressione ENTER para continuar...");
         scanner.nextLine();
     }
 
+    // Read and validate integer input
     private int readInt() {
         while (true) {
             try {

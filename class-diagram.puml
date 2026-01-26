@@ -1,0 +1,522 @@
+@startuml Health Center Class Diagram
+
+!define LIGHTYELLOW #FFFACD
+!define LIGHTBLUE #ADD8E6
+!define LIGHTGREEN #90EE90
+!define LIGHTPINK #FFB6C1
+!define LIGHTCORAL #F08080
+
+skinparam classAttributeIconSize 0
+skinparam backgroundColor white
+skinparam class {
+    BackgroundColor<<User>> LIGHTBLUE
+    BackgroundColor<<Service>> LIGHTGREEN
+    BackgroundColor<<Data>> LIGHTYELLOW
+    BackgroundColor<<App>> LIGHTPINK
+    BackgroundColor<<Util>> LIGHTCORAL
+}
+
+package "Users" <<User>> {
+    class User <<Serializable>> {
+        - String username
+        - String email
+        - String password
+        - String name
+        - String status
+        - String type
+        - boolean reviewed
+        + verifyPassword(String): boolean
+        + setPassword(String): boolean
+        + setEmail(String): boolean
+        + setName(String): boolean
+        + setStatus(String): boolean
+        + getUsername(): String
+        + getType(): String
+        + toString(): String
+    }
+    
+    class Admin {
+        {No additional fields}
+    }
+    
+    class Technician {
+        - String nif
+        - String address
+        - String phone
+        + setAddress(String): boolean
+        + setPhone(String): boolean
+        + setNif(String): boolean
+        + getNif(): String
+        + getPhone(): String
+        + toString(): String
+    }
+    
+    class Client {
+        - String nif
+        - String address
+        - String phone
+        + setAddress(String): boolean
+        + setPhone(String): boolean
+        + setNif(String): boolean
+        + getNif(): String
+        + getPhone(): String
+        + toString(): String
+    }
+    
+    class ManageUsers {
+        - ArrayList<User> users
+        + login(String, String): User
+        + searchUser(String, String): ArrayList<User>
+        + validateUnique(User): boolean
+        + register(User): boolean
+        + aproveUser(User, boolean): boolean
+        + isAdmin(User): boolean
+        + isTechnician(User): boolean
+        + listUsers(): ArrayList<User>
+        + listUsersByType(String): ArrayList<User>
+        + displayUserList(ArrayList<User>): void
+        + displayUserListIndexed(ArrayList<User>): void
+        + displayUserListDetailed(ArrayList<User>): void
+        + listApprovedTechnicians(): ArrayList<Technician>
+    }
+}
+
+package "Services" <<Service>> {
+    class Service <<Serializable>> {
+        - int code
+        - Client client
+        - Technician technician
+        - String status
+        - String description
+        - ArrayList<ServiceAnalysis> analyses
+        - float totalValue
+        - String requestDate
+        - String finishDate
+        + setTechnician(Technician): boolean
+        + setStatus(String): boolean
+        + addAnalysis(ServiceAnalysis): boolean
+        + removeAnalysis(String): boolean
+        + calculateTotalValue(): float
+        + getCode(): int
+        + getClient(): Client
+        + getAnalyses(): ArrayList<ServiceAnalysis>
+        + toString(): String
+    }
+    
+    class ServiceAnalysis <<Serializable>> {
+        - int code
+        - LabAnalysis analysis
+        - Technician technician
+        - Technician supervisor
+        - ArrayList<Test> tests
+        - String finishDate
+        - String finalResult
+        - String status
+        + setTechnician(Technician): boolean
+        + setSupervisor(Technician): boolean
+        + addTest(Test): boolean
+        + removeTest(String): boolean
+        + setFinalResult(String): boolean
+        + setStatus(String): void
+        + getAnalysis(): LabAnalysis
+        + getTests(): ArrayList<Test>
+    }
+    
+    class LabAnalysis <<Serializable>> {
+        - int code
+        - String name
+        - Certification certification
+        - String methods
+        - float value
+        - ArrayList<ChemicalComponent> requiredComponents
+        - ArrayList<Test> tests
+        - MedicalArea[] areas
+        - Supplier[] suppliers
+        - int areaCount
+        - int supplierCount
+        + addAreaToLabAnalysis(MedicalArea): boolean
+        + addSupplierToLabAnalysis(Supplier): boolean
+        + addRequiredComponent(ChemicalComponent): boolean
+        + addTest(Test): boolean
+        + removeTest(String): boolean
+        + getCode(): int
+        + getName(): String
+        + getTests(): ArrayList<Test>
+        + toString(): String
+    }
+    
+    class Test <<Serializable>> {
+        - String designation
+        - String measuredValue
+        - String referenceValue
+        - String unit
+        + setMeasuredValue(String): boolean
+        + setReferenceValue(String): boolean
+        + getDesignation(): String
+        + getMeasuredValue(): String
+        + getReferenceValue(): String
+    }
+    
+    class Certification <<Serializable>> {
+        - String nivel
+        - String grau
+        + getNivel(): String
+        + setNivel(String): void
+        + getGrau(): String
+        + toString(): String
+    }
+    
+    class ManageServices {
+        - ArrayList<Service> services
+        - int nextServiceCode
+        + generateServiceCode(): int
+        + requestService(Client, Service): boolean
+        + assignTechnician(Admin, int, Technician): boolean
+        + assignTechnicianToAnalysis(Technician, int, int, Technician): boolean
+        + approveService(Technician, int, boolean): boolean
+        + searchService(String, String): ArrayList<Service>
+        + displayServiceList(ArrayList<Service>): void
+        + displayServiceListIndexed(ArrayList<Service>): void
+        + displayServiceListCompact(ArrayList<Service>): void
+        + displayServiceAnalysisListDetailed(ArrayList<ServiceAnalysis>): void
+        + listAnalysesByTechnician(Technician): ArrayList<ServiceAnalysis>
+    }
+    
+    class ManageCatalog {
+        - ArrayList<LabAnalysis> analyses
+        - ArrayList<Category> categories
+        - ArrayList<Test> tests
+        - ArrayList<MedicalArea> areas
+        - ArrayList<Supplier> suppliers
+        - ArrayList<Order> orders
+        - ArrayList<ChemicalComponent> components
+        - int nextAnalysisCode
+        - int nextComponentCode
+        - int nextSupplierCode
+        + generateAnalysisCode(): int
+        + generateComponentCode(): int
+        + generateSupplierCode(): int
+        + addSupplierToAnalysis(int, Supplier): boolean
+        + addAreaToAnalysis(int, MedicalArea): boolean
+        + createOrder(Technician, Supplier, Order): boolean
+        + displayAnalysisList(ArrayList<LabAnalysis>): void
+        + displayAnalysisListIndexed(ArrayList<LabAnalysis>): void
+        + displayTestList(ArrayList<Test>): void
+        + displayTestListIndexed(ArrayList<Test>): void
+        + displayComponentListIndexed(ArrayList<ChemicalComponent>): void
+        + displaySupplierListIndexed(ArrayList<Supplier>): void
+        + displayServiceAnalysisListIndexed(ArrayList<ServiceAnalysis>): void
+        + displayServiceAnalysisListCompact(ArrayList<ServiceAnalysis>): void
+    }
+    
+    class ChemicalComponent <<Serializable>> {
+        - int code
+        - String name
+        - String alphaValue
+        - String betaValue
+        - int stockQty
+        + setStockQty(int): boolean
+        + changeStockQty(int): boolean
+        + getCode(): int
+        + getName(): String
+        + getStockQty(): int
+        + toString(): String
+    }
+    
+    class Supplier <<Serializable>> {
+        - int code
+        - String name
+        - String address
+        - String phone
+        + setName(String): boolean
+        + setAddress(String): boolean
+        + setPhone(String): boolean
+        + getCode(): int
+        + getName(): String
+        + toString(): String
+    }
+    
+    class MedicalArea <<Serializable>> {
+        - int code
+        - String designation
+        - String family
+        + setFamily(String): boolean
+        + setDesignation(String): boolean
+        + getCode(): int
+        + getDesignation(): String
+        + toString(): String
+    }
+    
+    class Order <<Serializable>> {
+        - int code
+        - Supplier supplier
+        - Technician technician
+        - ArrayList<ChemicalComponent> items
+        - String requestDate
+        - String deliveryDate
+        - String status
+        + setStatus(String): boolean
+        + setDeliveryDate(String): boolean
+        + addItem(ChemicalComponent): void
+        + removeItem(ChemicalComponent): void
+        + getCode(): int
+        + getSupplier(): Supplier
+        + toString(): String
+    }
+    
+    class Category <<Serializable>> {
+        - int code
+        - String name
+        + setName(String): boolean
+        + getCode(): int
+        + getName(): String
+        + toString(): String
+    }
+}
+
+package "Data Management" <<Data>> {
+    class AppData <<Serializable>> {
+        - ArrayList<User> users
+        - ArrayList<Service> services
+        - ArrayList<LabAnalysis> analyses
+        - ArrayList<Category> categories
+        - ArrayList<Test> tests
+        - ArrayList<MedicalArea> areas
+        - ArrayList<Supplier> suppliers
+        - ArrayList<Order> orders
+        - ArrayList<ChemicalComponent> components
+        + setUsers(ArrayList<User>): boolean
+        + setServices(ArrayList<Service>): boolean
+        + getUsers(): ArrayList<User>
+        + getServices(): ArrayList<Service>
+        + getAnalyses(): ArrayList<LabAnalysis>
+        + getCategories(): ArrayList<Category>
+    }
+    
+    class CredentialsManager {
+        - String filePath
+        + saveCredentials(ArrayList<User>): boolean
+        + loadCredentials(): ArrayList<String>
+        + getFilePath(): String
+    }
+    
+    class DataStorage {
+        - String filePath
+        + loadData(AppData): boolean
+        + saveData(AppData): AppData
+        + fileExists(): boolean
+        + getFilePath(): String
+    }
+}
+
+package "Application" <<App>> {
+    class ApplicationManager {
+        - ManageUsers manageUsers
+        - ManageServices manageServices
+        - ManageCatalog manageCatalog
+        - DataStorage storage
+        - Session session
+        + startup(): boolean
+        + shutdown(): boolean
+        + buildAppData(): AppData
+        + applyAppData(AppData): boolean
+        + getManageUsers(): ManageUsers
+        + getManageServices(): ManageServices
+        + getManageCatalog(): ManageCatalog
+        + getSession(): Session
+    }
+    
+    class MenuManager {
+        - ApplicationManager appManager
+        - Scanner scanner
+        - LogManager logManager
+        - SystemInfo systemInfo
+        + showMainMenu(): void
+        + showAdminMenu(): void
+        + showTechnicianMenu(): void
+        + showClientMenu(): void
+        + handleLogin(): void
+        + handleRegister(): void
+        + manageUsers(): void
+        + manageServices(): void
+        + manageCatalog(): void
+    }
+    
+    class Session {
+        - User currentUser
+        + setCurrentUser(User): boolean
+        + getCurrentUser(): User
+        + logout(): boolean
+        + isLoggedIn(): boolean
+    }
+}
+
+package "Utilities" <<Util>> {
+    class LogManager {
+        - String filePath
+        + log(String, String): boolean
+        + readLog(): ArrayList<String>
+        + displayRecentLogs(int): void
+        + getFilePath(): String
+    }
+    
+    class SystemInfo <<Serializable>> {
+        - int executionCount
+        - String lastUsername
+        - String filePath
+        + incrementExecutionCount(): boolean
+        + setLastUsername(String): boolean
+        + getExecutionCount(): int
+        + getLastUsername(): String
+    }
+    
+    class Validator {
+        + {static} isNotEmpty(String): boolean
+        + {static} isValidEmail(String): boolean
+        + {static} isValidPhone(String): boolean
+        + {static} isValidUsername(String): boolean
+        + {static} isValidPassword(String): boolean
+        + {static} isValidName(String): boolean
+        + {static} isPositiveInteger(String): boolean
+        + {static} isNonNegativeInteger(String): boolean
+        + {static} isValidDecimal(String): boolean
+        + {static} getEmailError(): String
+    }
+    
+    class Colors {
+        + {static} RESET: String
+        + {static} BOLD_GREEN: String
+        + {static} BOLD_YELLOW: String
+        + {static} BOLD_CYAN: String
+    }
+}
+
+' ========== INHERITANCE RELATIONSHIPS ==========
+User <|-- Admin : extends
+User <|-- Technician : extends
+User <|-- Client : extends
+
+' ========== COMPOSITION RELATIONSHIPS ==========
+' Strong ownership - lifecycle dependent
+Service *-- ServiceAnalysis : contains
+ServiceAnalysis *-- Test : owns tests
+LabAnalysis *-- Test : defines tests
+LabAnalysis *-- Certification : has
+Order *-- ChemicalComponent : contains items
+
+' ========== AGGREGATION RELATIONSHIPS ==========
+' Weak ownership - shared lifecycle
+ServiceAnalysis o-- LabAnalysis : references
+ServiceAnalysis o-- Technician : assigned to
+ServiceAnalysis o-- Technician : supervised by
+Service o-- Client : requested by
+Service o-- Technician : assigned to
+Order o-- Supplier : from
+Order o-- Technician : created by
+LabAnalysis o-- MedicalArea : applies to
+LabAnalysis o-- Supplier : uses
+LabAnalysis o-- ChemicalComponent : requires
+
+' ========== MANAGEMENT ASSOCIATIONS ==========
+ManageUsers --> User : manages >
+ManageServices --> Service : manages >
+ManageCatalog --> LabAnalysis : manages >
+ManageCatalog --> ChemicalComponent : manages >
+ManageCatalog --> Supplier : manages >
+ManageCatalog --> MedicalArea : manages >
+ManageCatalog --> Order : manages >
+ManageCatalog --> Category : manages >
+ManageCatalog --> Test : manages >
+
+' ========== APPLICATION STRUCTURE ==========
+ApplicationManager *-- ManageUsers : owns
+ApplicationManager *-- ManageServices : owns
+ApplicationManager *-- ManageCatalog : owns
+ApplicationManager *-- Session : has
+ApplicationManager --> DataStorage : uses >
+
+MenuManager --> ApplicationManager : controls >
+MenuManager --> LogManager : logs to >
+MenuManager --> SystemInfo : tracks with >
+MenuManager ..> Validator : validates with
+
+Session --> User : current user >
+
+' ========== DATA LAYER ==========
+AppData --> User : stores
+AppData --> Service : stores
+AppData --> LabAnalysis : stores
+AppData --> Category : stores
+AppData --> Test : stores
+AppData --> MedicalArea : stores
+AppData --> Supplier : stores
+AppData --> Order : stores
+AppData --> ChemicalComponent : stores
+
+DataStorage ..> AppData : serializes
+CredentialsManager ..> User : exports credentials
+
+' ========== NOTES ==========
+note right of User
+  Base class for all users.
+  Implements Serializable for persistence.
+  Comparable for sorting by username.
+end note
+
+note right of Service
+  Main service request entity.
+  Client requests services containing
+  multiple analyses. Tracks workflow
+  from request to completion.
+end note
+
+note right of ServiceAnalysis
+  Links a LabAnalysis template to
+  a specific Service. Contains actual
+  test results and technician assignments.
+end note
+
+note right of LabAnalysis
+  Catalog template for analysis types.
+  Defines tests, required components,
+  medical areas, and pricing.
+end note
+
+note right of ManageCatalog
+  Central catalog management.
+  Uses generic display methods:
+  - displayList<T>()
+  - displayListIndexed<T>()
+  Generates unique codes for entities.
+end note
+
+note right of Validator
+  Static utility class.
+  Regex-based input validation:
+  - Email, phone, username
+  - Password strength
+  - Numeric values, NIF
+  Used throughout MenuManager.
+end note
+
+note right of ApplicationManager
+  Core application controller.
+  Manages all business logic layers.
+  Handles data persistence via
+  DataStorage and AppData.
+end note
+
+note left of AppData
+  Data Transfer Object.
+  Aggregates all entities for
+  serialization. Used for save/load
+  operations via DataStorage.
+end note
+
+note bottom of Session
+  Tracks logged-in user.
+  Maintains authentication state
+  throughout application lifecycle.
+end note
+
+@enduml
