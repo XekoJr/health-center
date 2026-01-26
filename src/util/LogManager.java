@@ -1,28 +1,46 @@
 package util;
 
 import java.io.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class LogManager {
     private String filePath;
-    private DateTimeFormatter formatter;
 
     public LogManager(String filePath) {
         this.filePath = filePath;
-        this.formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     }
 
     public boolean log(String username, String action) {
         try {
-            FileWriter writer = new FileWriter(filePath, true);
+            // Lê conteúdo existente do ficheiro
+            ArrayList<String> existingLogs = new ArrayList<>();
+            File file = new File(filePath);
+            
+            if (file.exists()) {
+                FileReader reader = new FileReader(filePath);
+                BufferedReader bufferedReader = new BufferedReader(reader);
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    existingLogs.add(line);
+                }
+                bufferedReader.close();
+            }
+            
+            // Escreve novo log no início, seguido dos logs antigos
+            FileWriter writer = new FileWriter(filePath, false); // false = sobrescrever
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
             
-            String timestamp = LocalDateTime.now().format(formatter);
-            String logEntry = String.format("[%s] User: %s | Action: %s%n", timestamp, username, action);
+            String logEntry = username + " " + action;
             
             bufferedWriter.write(logEntry);
+            bufferedWriter.newLine();
+            
+            // Escreve logs anteriores
+            for (String oldLog : existingLogs) {
+                bufferedWriter.write(oldLog);
+                bufferedWriter.newLine();
+            }
+            
             bufferedWriter.close();
             return true;
         } catch (IOException e) {

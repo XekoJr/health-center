@@ -2338,13 +2338,15 @@ public class MenuManager {
         if (logs.isEmpty()) {
             System.out.println("Nao existem registos no log.");
         } else {
-            System.out.println("ultimas " + Math.min(50, logs.size()) + " entradas:");
+            System.out.println("Ultimas " + Math.min(50, logs.size()) + " entradas:");
+            System.out.println("(mais recentes primeiro)");
             System.out.println();
 
-            // Show last 50 entries (most recent first)
+            // Show last 50 entries (most recent first - já estão ordenadas)
             int count = 0;
-            for (int i = logs.size() - 1; i >= 0 && count < 50; i--) {
-                System.out.println(logs.get(i));
+            Iterator<String> logIterator = logs.iterator();
+            while (logIterator.hasNext() && count < 50) {
+                System.out.println(logIterator.next());
                 count++;
             }
         }

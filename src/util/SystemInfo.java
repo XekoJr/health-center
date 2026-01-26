@@ -1,17 +1,16 @@
 package util;
 
 import java.io.*;
-import java.util.Properties;
 
-public class SystemInfo {
+public class SystemInfo implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int executionCount;
     private String lastUsername;
-    private String filePath;
-    private Properties properties;
+    private transient String filePath;
 
     public SystemInfo(String filePath) {
         this.filePath = filePath;
-        this.properties = new Properties();
         this.executionCount = 0;
         this.lastUsername = "";
         loadFromFile();
@@ -21,25 +20,30 @@ public class SystemInfo {
         try {
             File file = new File(filePath);
             if (file.exists()) {
-                FileInputStream input = new FileInputStream(filePath);
-                properties.load(input);
-                input.close();
-
-                this.executionCount = Integer.parseInt(properties.getProperty("executionCount", "0"));
-                this.lastUsername = properties.getProperty("lastUsername", "");
+                FileInputStream fileIn = new FileInputStream(filePath);
+                ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+                
+                SystemInfo loaded = (SystemInfo) objectIn.readObject();
+                this.executionCount = loaded.executionCount;
+                this.lastUsername = loaded.lastUsername;
+                
+                objectIn.close();
+                fileIn.close();
             }
-        } catch (IOException | NumberFormatException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.err.println("Error loading system info: " + e.getMessage());
         }
     }
 
     private void saveToFile() {
         try {
-            FileOutputStream output = new FileOutputStream(filePath);
-            properties.setProperty("executionCount", String.valueOf(executionCount));
-            properties.setProperty("lastUsername", lastUsername);
-            properties.store(output, "System Information");
-            output.close();
+            FileOutputStream fileOut = new FileOutputStream(filePath);
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            
+            objectOut.writeObject(this);
+            
+            objectOut.close();
+            fileOut.close();
         } catch (IOException e) {
             System.err.println("Error saving system info: " + e.getMessage());
         }
@@ -67,5 +71,9 @@ public class SystemInfo {
 
     public String getFilePath() {
         return filePath;
+    }
+    
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }
