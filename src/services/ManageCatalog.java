@@ -36,6 +36,8 @@ public class ManageCatalog {
         this.nextCategoryCode = 1;
     }
     
+    // --- Code generators ---
+    
     public int generateAnalysisCode() {
         return nextAnalysisCode++;
     }
@@ -59,6 +61,9 @@ public class ManageCatalog {
     public int generateCategoryCode() {
         return nextCategoryCode++;
     }
+
+    // --- Analysis management ---
+    // Create, edit, search, sort, and remove lab analyses
 
     public boolean addSupplierToAnalysis(int analysisCode, Supplier aSupplier) {
         Iterator<LabAnalysis> iterator = analyses.iterator();
@@ -93,6 +98,9 @@ public class ManageCatalog {
         return false;
     }
 
+    // ==================== ORDER MANAGEMENT ====================
+    // Create, deliver, search, sort, and remove orders
+
     public boolean createOrder(Technician aTechnician, Supplier aSupplier, Order aOrder) {
         if (aOrder != null) {
             orders.add(aOrder);
@@ -104,7 +112,6 @@ public class ManageCatalog {
     public boolean addOrder(Order order) {
         if (order != null) {
             orders.add(order);
-            // Update nextOrderCode if needed
             if (order.getCode() >= nextOrderCode) {
                 nextOrderCode = order.getCode() + 1;
             }
@@ -240,6 +247,9 @@ public class ManageCatalog {
         return new ArrayList<>(components);
     }
 
+    // --- Add methods ---
+    // Add new entities to catalog and update code generators
+
     public boolean addAnalysis(LabAnalysis analysis) {
         if (analysis != null) {
             analyses.add(analysis);
@@ -295,7 +305,6 @@ public class ManageCatalog {
     public boolean addComponent(ChemicalComponent component) {
         if (component != null) {
             components.add(component);
-            // Update nextComponentCode if needed
             if (component.getCode() >= nextComponentCode) {
                 nextComponentCode = component.getCode() + 1;
             }
@@ -396,7 +405,9 @@ public class ManageCatalog {
         return results;
     }
 
-    // Sorting methods for new entities
+    // ==================== SORTING METHODS ====================
+    // Sort catalog entities by code in ascending or descending order
+
     private void sortComponentsByCode(ArrayList<ChemicalComponent> components, boolean ascending) {
         Collections.sort(components);
         if (!ascending) {
@@ -420,7 +431,9 @@ public class ManageCatalog {
         return true;
     }
 
-    // Remove methods
+    // --- Remove methods ---
+    // Remove entities from catalog by code
+
     public boolean removeAnalysis(int code) {
         Iterator<LabAnalysis> iterator = analyses.iterator();
         while (iterator.hasNext()) {
@@ -555,7 +568,9 @@ public class ManageCatalog {
         return results;
     }
     
-    // Category management methods
+    // --- Category management ---
+    // Search, find, and remove categories
+
     public ArrayList<Category> searchCategories(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
             return new ArrayList<>(categories);
@@ -597,6 +612,9 @@ public class ManageCatalog {
         return false;
     }
     
+    // --- Display methods ---
+    // Generic and specific display methods for all catalog entities
+    
     // Métodos auxiliares genéricos para exibição de listas
     private <T> void displayList(ArrayList<T> list, String emptyMessage) {
         if (list.isEmpty()) {
@@ -624,6 +642,7 @@ public class ManageCatalog {
         displayList(tests, "Nenhum teste encontrado.");
     }
 
+    // Display test list with reference values and units
     public void displayTestListIndexed(ArrayList<Test> tests) {
         if (tests.isEmpty()) {
             System.out.println("Nenhum teste definido.");
@@ -645,6 +664,7 @@ public class ManageCatalog {
         displayList(analyses, "Nenhuma analise encontrada.");
     }
 
+    // Display lab analysis list with numbering
     public void displayAnalysisListIndexed(ArrayList<LabAnalysis> analyses) {
         displayListIndexed(analyses, "Nenhuma analise encontrada.");
     }
@@ -653,6 +673,7 @@ public class ManageCatalog {
         displayList(components, "Nenhum componente encontrado.");
     }
 
+    // Display chemical components with numbering
     public void displayComponentListIndexed(ArrayList<ChemicalComponent> components) {
         displayListIndexed(components, "Nenhum componente encontrado.");
     }
@@ -661,6 +682,7 @@ public class ManageCatalog {
         displayList(suppliers, "Nenhum fornecedor encontrado.");
     }
 
+    // Display suppliers with names only
     public void displaySupplierListIndexed(ArrayList<Supplier> suppliers) {
         if (suppliers.isEmpty()) {
             System.out.println("Nenhum fornecedor disponivel.");
@@ -680,6 +702,7 @@ public class ManageCatalog {
         displayList(areas, "Nenhuma area encontrada.");
     }
 
+    // Display medical areas with numbering
     public void displayAreaListIndexed(ArrayList<MedicalArea> areas) {
         displayListIndexed(areas, "Nenhuma area encontrada.");
     }
@@ -688,6 +711,7 @@ public class ManageCatalog {
         displayList(orders, "Nenhuma encomenda encontrada.");
     }
 
+    // Display orders with numbering
     public void displayOrderListIndexed(ArrayList<Order> orders) {
         displayListIndexed(orders, "Nenhuma encomenda encontrada.");
     }
@@ -696,6 +720,7 @@ public class ManageCatalog {
         displayList(categories, "Nenhuma categoria encontrada.");
     }
 
+    // Display categories with numbering
     public void displayCategoryListIndexed(ArrayList<Category> categories) {
         displayListIndexed(categories, "Nenhuma categoria encontrada.");
     }

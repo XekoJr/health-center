@@ -135,27 +135,22 @@ public class Validator {
         }
     }
     
-    // Get a descriptive error message for email validation
     public static String getEmailError() {
         return "Email invalido. Deve conter @ e um dominio valido (ex: user@example.com)";
     }
     
-    // Get a descriptive error message for phone validation
     public static String getPhoneError() {
         return "Telefone invalido. Deve conter apenas numeros (min. 9 digitos)";
     }
     
-    // Get a descriptive error message for username validation
     public static String getUsernameError() {
         return "Username invalido. Deve ter 3-20 caracteres (letras e numeros)";
     }
     
-    // Get a descriptive error message for password validation
     public static String getPasswordError() {
         return "Password invalida. Deve ter pelo menos 6 caracteres";
     }
     
-    // Get a descriptive error message for name validation
     public static String getNameError() {
         return "Nome invalido. Deve conter apenas letras e espacos";
     }
