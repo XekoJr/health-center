@@ -3,7 +3,6 @@ package services;
 import java.io.Serializable;
 
 public class MedicalArea implements Serializable, Comparable<MedicalArea> {
-    private static final long serialVersionUID = 1L;
     private int code;
     private String designation;
     private String family;

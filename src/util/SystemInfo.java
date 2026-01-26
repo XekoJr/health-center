@@ -3,8 +3,6 @@ package util;
 import java.io.*;
 
 public class SystemInfo implements Serializable {
-    private static final long serialVersionUID = 1L;
-    
     private int executionCount;
     private String lastUsername;
     private transient String filePath;

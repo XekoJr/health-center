@@ -3,7 +3,6 @@ package services;
 import java.io.Serializable;
 
 public class ChemicalComponent implements Serializable, Comparable<ChemicalComponent> {
-    private static final long serialVersionUID = 1L;
     private int code;
     private String name;
     private String alphaValue;

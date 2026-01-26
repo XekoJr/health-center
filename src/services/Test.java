@@ -3,7 +3,6 @@ package services;
 import java.io.Serializable;
 
 public class Test implements Serializable {
-    private static final long serialVersionUID = 1L;
     private String designation;
     private String measuredValue;
     private String referenceValue;

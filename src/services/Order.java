@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.io.Serializable;
 
 public class Order implements Serializable, Comparable<Order> {
-    private static final long serialVersionUID = 1L;
     private int code;
     private Supplier supplier;
     private Technician technician;

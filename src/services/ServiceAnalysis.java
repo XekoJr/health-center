@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.io.Serializable;
 
 public class ServiceAnalysis implements Serializable {
-    private static final long serialVersionUID = 1L;
     private int code;
     private LabAnalysis analysis;
     private Technician technician;

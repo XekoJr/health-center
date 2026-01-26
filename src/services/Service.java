@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.io.Serializable;
 
 public class Service implements Serializable, Comparable<Service> {
-    private static final long serialVersionUID = 1L;
     private int code;
     private Client client;
     private Technician technician;

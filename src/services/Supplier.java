@@ -3,7 +3,6 @@ package services;
 import java.io.Serializable;
 
 public class Supplier implements Serializable, Comparable<Supplier> {
-    private static final long serialVersionUID = 1L;
     private int code;
     private String name;
     private String address;

@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.io.Serializable;
 
 public class LabAnalysis implements Serializable, Comparable<LabAnalysis> {
-    private static final long serialVersionUID = 1L; // TODO - remover serialVersionUID em todo o lado antes de entregar
     private int code;
     private String name;
     private Certification certification;
