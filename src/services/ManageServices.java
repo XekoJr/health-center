@@ -4,6 +4,7 @@ import users.Admin;
 import users.Client;
 import users.Technician;
 import users.User;
+import util.LogManager;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Collections;
@@ -12,10 +13,16 @@ import java.util.Comparator;
 public class ManageServices {
     private ArrayList<Service> services;
     private int nextServiceCode;
+    private LogManager logManager;
 
     public ManageServices() {
         this.services = new ArrayList<>();
         this.nextServiceCode = 1;
+        this.logManager = null;
+    }
+    
+    public void setLogManager(LogManager logManager) {
+        this.logManager = logManager;
     }
     
     public int generateServiceCode() {

@@ -18,6 +18,10 @@ public class App {
         SystemInfo systemInfo = new SystemInfo(systemInfoPath);
         CredentialsManager credentialsManager = new CredentialsManager(credentialsPath);
         
+        // Error logging
+        appManager.setLogManager(logManager);
+        credentialsManager.setLogManager(logManager);
+        
         // Display system info
         System.out.println("==========================================");
         System.out.println("   SISTEMA DE GESTAO LABORATORIAL");

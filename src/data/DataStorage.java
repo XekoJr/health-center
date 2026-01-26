@@ -1,12 +1,19 @@
 package data;
 
+import util.LogManager;
 import java.io.*;
 
 public class DataStorage {
     private String filePath;
+    private LogManager logManager;
 
     public DataStorage(String filePath) {
         this.filePath = filePath;
+        this.logManager = null;
+    }
+    
+    public void setLogManager(LogManager logManager) {
+        this.logManager = logManager;
     }
 
     // Load data from file - returns false if file doesn't exist
@@ -36,7 +43,11 @@ public class DataStorage {
             }
             return false;
         } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Error loading data: " + e.getMessage());
+            String errorMsg = "Error loading data: " + e.getMessage();
+            System.err.println(errorMsg);
+            if (logManager != null) {
+                logManager.log("SYSTEM", errorMsg);
+            }
             return false;
         }
     }
@@ -51,7 +62,11 @@ public class DataStorage {
             fileOut.close();
             return data;
         } catch (IOException e) {
-            System.err.println("Error saving data: " + e.getMessage());
+            String errorMsg = "Error saving data: " + e.getMessage();
+            System.err.println(errorMsg);
+            if (logManager != null) {
+                logManager.log("SYSTEM", errorMsg);
+            }
             return null;
         }
     }

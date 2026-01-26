@@ -1,15 +1,22 @@
 package data;
 
 import users.User;
+import util.LogManager;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class CredentialsManager {
     private String filePath;
+    private LogManager logManager;
 
     public CredentialsManager(String filePath) {
         this.filePath = filePath;
+        this.logManager = null;
+    }
+    
+    public void setLogManager(LogManager logManager) {
+        this.logManager = logManager;
     }
 
     // Write all user credentials to file
@@ -30,7 +37,11 @@ public class CredentialsManager {
             bufferedWriter.close();
             return true;
         } catch (IOException e) {
-            System.err.println("Error saving credentials: " + e.getMessage());
+            String errorMsg = "Error saving credentials: " + e.getMessage();
+            System.err.println(errorMsg);
+            if (logManager != null) {
+                logManager.log("SYSTEM", errorMsg);
+            }
             return false;
         }
     }
@@ -53,7 +64,11 @@ public class CredentialsManager {
             
             bufferedReader.close();
         } catch (IOException e) {
-            System.err.println("Error loading credentials: " + e.getMessage());
+            String errorMsg = "Error loading credentials: " + e.getMessage();
+            System.err.println(errorMsg);
+            if (logManager != null) {
+                logManager.log("SYSTEM", errorMsg);
+            }
         }
         return credentials;
     }

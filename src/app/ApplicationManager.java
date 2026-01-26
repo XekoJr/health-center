@@ -5,6 +5,7 @@ import services.ManageServices;
 import services.ManageCatalog;
 import data.AppData;
 import data.DataStorage;
+import util.LogManager;
 import java.util.Iterator;
 
 public class ApplicationManager {
@@ -20,6 +21,11 @@ public class ApplicationManager {
         this.manageCatalog = new ManageCatalog();
         this.storage = new DataStorage(dataFilePath);
         this.session = new Session();
+    }
+    
+    public void setLogManager(LogManager logManager) {
+        this.storage.setLogManager(logManager);
+        this.manageServices.setLogManager(logManager);
     }
 
     // Load all data from file on startup
