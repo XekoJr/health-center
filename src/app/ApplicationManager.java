@@ -22,20 +22,22 @@ public class ApplicationManager {
         this.session = new Session();
     }
 
+    // Load all data from file on startup
     public boolean startup() {
         AppData data = new AppData();
         if (storage.loadData(data)) {
             return applyAppData(data);
         }
-        // If no data exists, start with empty collections
         return true;
     }
 
+    // Save all data to file on shutdown
     public boolean shutdown() {
         AppData data = buildAppData();
         return storage.saveData(data) != null;
     }
 
+    // Collect all current data from managers into one object
     public AppData buildAppData() {
         AppData data = new AppData();
         data.setUsers(manageUsers.listUsers());
@@ -50,18 +52,14 @@ public class ApplicationManager {
         return data;
     }
 
+    // Load data object into all managers
     public boolean applyAppData(AppData data) {
         if (data == null) {
             return false;
         }
 
-        // Apply users
         applyUsers(data.getUsers());
-
-        // Apply services
         manageServices.loadServices(data.getServices());
-        
-        // Apply catalog items
         applyCatalogItems(data);
 
         return true;

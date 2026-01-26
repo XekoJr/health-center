@@ -3,6 +3,7 @@ package util;
 import java.io.*;
 import java.util.ArrayList;
 
+// Manages system log file - records all user actions
 public class LogManager {
     private String filePath;
 
@@ -10,9 +11,10 @@ public class LogManager {
         this.filePath = filePath;
     }
 
+    // Write new log entry - most recent entries go first
     public boolean log(String username, String action) {
         try {
-            // Lê conteúdo existente do ficheiro
+            // Read existing log entries
             ArrayList<String> existingLogs = new ArrayList<>();
             File file = new File(filePath);
             
@@ -26,8 +28,8 @@ public class LogManager {
                 bufferedReader.close();
             }
             
-            // Escreve novo log no início, seguido dos logs antigos
-            FileWriter writer = new FileWriter(filePath, false); // false = sobrescrever
+            // Write new log at top, then old logs below
+            FileWriter writer = new FileWriter(filePath, false); // overwrite mode
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
             
             String logEntry = username + " " + action;
@@ -35,7 +37,7 @@ public class LogManager {
             bufferedWriter.write(logEntry);
             bufferedWriter.newLine();
             
-            // Escreve logs anteriores
+            // Write previous logs
             for (String oldLog : existingLogs) {
                 bufferedWriter.write(oldLog);
                 bufferedWriter.newLine();

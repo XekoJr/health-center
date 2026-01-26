@@ -14,6 +14,7 @@ public class SystemInfo implements Serializable {
         loadFromFile();
     }
 
+    // Load system info from file using object deserialization
     private void loadFromFile() {
         try {
             File file = new File(filePath);
@@ -33,6 +34,7 @@ public class SystemInfo implements Serializable {
         }
     }
 
+    // Save system info to file using object serialization
     private void saveToFile() {
         try {
             FileOutputStream fileOut = new FileOutputStream(filePath);

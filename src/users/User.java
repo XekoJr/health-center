@@ -7,9 +7,9 @@ public class User implements Serializable, Comparable<User> {
     private String email;
     private String password;
     private String name;
-    private String status;
-    private String type;
-    private boolean reviewed;
+    private String status;  // pending, approved, rejected
+    private String type;    // admin, technician, client
+    private boolean reviewed;  // has admin checked this user?
 
     public User(String username, String email, String password, String name, String status, String type, boolean reviewed) {
         this.username = username;
@@ -21,6 +21,7 @@ public class User implements Serializable, Comparable<User> {
         this.reviewed = reviewed;
     }
 
+    // Check if password matches
     public boolean verifyPassword(String aPassword) {
         return this.password.equals(aPassword);
     }

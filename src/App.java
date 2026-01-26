@@ -24,7 +24,7 @@ public class App {
         System.out.println("==========================================");
         System.out.println();
         
-        // Increment execution count
+        // Increment execution count and show stats
         systemInfo.incrementExecutionCount();
         
         System.out.println("N de execucoes: " + systemInfo.getExecutionCount());
@@ -63,7 +63,7 @@ public class App {
             try {
                 System.in.read();
             } catch (Exception e) {
-                // Ignore
+                // Ignore //TODO look into this
             }
         }
         

@@ -22,8 +22,8 @@ public class MenuManager {
 
     // ==================== MAIN MENU ====================
 
-    public void showMainMenu() { //TODO - Cololcar algo de novo investigação, algo a piscar ou assim ou cores no olá e adeus
-        while (true) {           //TODO - comentários
+    public void showMainMenu() { 
+        while (true) {
             clearScreen();
             System.out.println("==========================================");
             System.out.println("     SISTEMA DE GESTAO LABORATORIAL      ");
@@ -41,7 +41,6 @@ public class MenuManager {
                 
                 // Check if user was created successfully
                 if (appManager.getManageUsers().listUsers().isEmpty()) {
-                    // User cancelled registration or it failed, exit
                     return;
                 }
                 // Continue to show normal menu after registration
@@ -114,10 +113,10 @@ public class MenuManager {
 
         clearScreen();
         System.out.println("==========================================");
-        System.out.println("                BEM-VINDO                 ");
+        System.out.println(Colors.BOLD_CYAN + "                BEM-VINDO                 " + Colors.RESET);
         System.out.println("==========================================");
         System.out.println();
-        System.out.println("Bem-vindo " + user.getName() + "!");
+        System.out.println(Colors.BOLD_GREEN + "Bem-vindo " + user.getName() + "!" + Colors.RESET);
         System.out.println();
         pause();
 
@@ -136,7 +135,7 @@ public class MenuManager {
         logManager.log(username, "Logout realizado");
 
         clearScreen();
-        System.out.println("Adeus " + name + "!");
+        System.out.println(Colors.BOLD_YELLOW + "Adeus " + name + "!" + Colors.RESET);
         pause();
     }
 
@@ -160,8 +159,8 @@ public class MenuManager {
         System.out.print("Username: ");
         String username = scanner.nextLine().trim();
 
-        if (username.isEmpty()) {
-            showError("Username nao pode estar vazio!");
+        if (!Validator.isValidUsername(username)) {
+            showError(Validator.getUsernameError());
             pause();
             return;
         }
@@ -169,8 +168,8 @@ public class MenuManager {
         System.out.print("Email: ");
         String email = scanner.nextLine().trim();
 
-        if (email.isEmpty()) {
-            showError("Email nao pode estar vazio!");
+        if (!Validator.isValidEmail(email)) {
+            showError(Validator.getEmailError());
             pause();
             return;
         }
@@ -178,8 +177,8 @@ public class MenuManager {
         System.out.print("Password: ");
         String password = scanner.nextLine().trim();
 
-        if (password.isEmpty()) {
-            showError("Password nao pode estar vazia!");
+        if (!Validator.isValidPassword(password)) {
+            showError(Validator.getPasswordError());
             pause();
             return;
         }
@@ -187,8 +186,8 @@ public class MenuManager {
         System.out.print("Nome completo: ");
         String name = scanner.nextLine().trim();
 
-        if (name.isEmpty()) {
-            showError("Nome nao pode estar vazio!");
+        if (!Validator.isValidName(name)) {
+            showError(Validator.getNameError());
             pause();
             return;
         }
@@ -212,20 +211,50 @@ public class MenuManager {
                 type = "client";
                 System.out.print("NIF: ");
                 String nif = scanner.nextLine().trim();
+                if (!Validator.isNonNegativeInteger(nif) || nif.length() != 9) {
+                    showError("NIF invalido. Deve ter exatamente 9 digitos.");
+                    pause();
+                    return;
+                }
                 System.out.print("Morada: ");
                 String address = scanner.nextLine().trim();
+                if (!Validator.isNotEmpty(address)) {
+                    showError("Morada nao pode estar vazia!");
+                    pause();
+                    return;
+                }
                 System.out.print("Telefone: ");
                 String phone = scanner.nextLine().trim();
+                if (!Validator.isValidPhone(phone)) {
+                    showError(Validator.getPhoneError());
+                    pause();
+                    return;
+                }
 
                 newUser = new Client(username, email, password, name, "pending", type, false, nif, address, phone);
             } else if (typeChoice == 2) {
                 type = "technician";
                 System.out.print("NIF: ");
                 String nif = scanner.nextLine().trim();
+                if (!Validator.isNonNegativeInteger(nif) || nif.length() != 9) {
+                    showError("NIF invalido. Deve ter exatamente 9 digitos.");
+                    pause();
+                    return;
+                }
                 System.out.print("Morada: ");
                 String address = scanner.nextLine().trim();
+                if (!Validator.isNotEmpty(address)) {
+                    showError("Morada nao pode estar vazia!");
+                    pause();
+                    return;
+                }
                 System.out.print("Telefone: ");
                 String phone = scanner.nextLine().trim();
+                if (!Validator.isValidPhone(phone)) {
+                    showError(Validator.getPhoneError());
+                    pause();
+                    return;
+                }
 
                 newUser = new Technician(username, email, password, name, "pending", type, false, nif, address, phone);
             } else {
@@ -311,6 +340,8 @@ public class MenuManager {
             }
         }
     }
+
+    // --- User Management (Admin) ---
 
     private void manageUsers() {
         while (true) {
@@ -503,6 +534,8 @@ public class MenuManager {
 
         pause();
     }
+
+    // --- Service Management (Admin) ---
 
     private void manageServices() {
         while (true) {
@@ -953,6 +986,8 @@ public class MenuManager {
 
         pause();
     }
+
+    // --- Analysis Management (Technician) ---
 
     private void assignTechniciansToAnalyses() {
         clearScreen();
@@ -1623,6 +1658,8 @@ public class MenuManager {
         pause();
     }
 
+    // --- Catalog Management (Technician) ---
+
     private void createAnalysis() {
         clearScreen();
         System.out.println("==========================================");
@@ -1941,12 +1978,27 @@ public class MenuManager {
 
         System.out.print("Nome: ");
         String name = scanner.nextLine().trim();
+        if (!Validator.isNotEmpty(name)) {
+            showError("Nome nao pode estar vazio!");
+            pause();
+            return;
+        }
 
         System.out.print("Morada: ");
         String address = scanner.nextLine().trim();
+        if (!Validator.isNotEmpty(address)) {
+            showError("Morada nao pode estar vazia!");
+            pause();
+            return;
+        }
 
         System.out.print("Telefone: ");
         String phone = scanner.nextLine().trim();
+        if (!Validator.isValidPhone(phone)) {
+            showError(Validator.getPhoneError());
+            pause();
+            return;
+        }
 
         Supplier supplier = new Supplier(code, name, address, phone);
 
@@ -2260,7 +2312,9 @@ public class MenuManager {
             case 1:
                 System.out.print("Novo nome: ");
                 String newName = scanner.nextLine().trim();
-                if (!newName.isEmpty()) {
+                if (!Validator.isValidName(newName)) {
+                    showError(Validator.getNameError());
+                } else {
                     currentUser.setName(newName);
                     showSuccess("Nome atualizado!");
                 }
@@ -2268,7 +2322,9 @@ public class MenuManager {
             case 2:
                 System.out.print("Novo email: ");
                 String newEmail = scanner.nextLine().trim();
-                if (!newEmail.isEmpty()) {
+                if (!Validator.isValidEmail(newEmail)) {
+                    showError(Validator.getEmailError());
+                } else {
                     currentUser.setEmail(newEmail);
                     showSuccess("Email atualizado!");
                 }
@@ -2276,7 +2332,9 @@ public class MenuManager {
             case 3:
                 System.out.print("Nova password: ");
                 String newPassword = scanner.nextLine().trim();
-                if (!newPassword.isEmpty()) {
+                if (!Validator.isValidPassword(newPassword)) {
+                    showError(Validator.getPasswordError());
+                } else {
                     currentUser.setPassword(newPassword);
                     showSuccess("Password atualizada!");
                 }
@@ -2285,14 +2343,18 @@ public class MenuManager {
                 if (currentUser instanceof Client) {
                     System.out.print("Novo telefone: ");
                     String newPhone = scanner.nextLine().trim();
-                    if (!newPhone.isEmpty()) {
+                    if (!Validator.isValidPhone(newPhone)) {
+                        showError(Validator.getPhoneError());
+                    } else {
                         ((Client) currentUser).setPhone(newPhone);
                         showSuccess("Telefone atualizado!");
                     }
                 } else if (currentUser instanceof Technician) {
                     System.out.print("Novo telefone: ");
                     String newPhone = scanner.nextLine().trim();
-                    if (!newPhone.isEmpty()) {
+                    if (!Validator.isValidPhone(newPhone)) {
+                        showError(Validator.getPhoneError());
+                    } else {
                         ((Technician) currentUser).setPhone(newPhone);
                         showSuccess("Telefone atualizado!");
                     }
@@ -2499,42 +2561,10 @@ public class MenuManager {
         System.out.println(service.toString());
     }
 
-    // ==================== UTILITY FUNCTIONS ====================
+    // ==================== CATALOG MANAGEMENT (TECHNICIAN) ====================
+    // Component, Supplier, Medical Area, Order, and Category management
 
-    private void clearScreen() {
-        for (int i = 0; i < 50; i++) {
-            System.out.println();
-        }
-    }
-
-    private void showSuccess(String message) {
-        System.out.println();
-        System.out.println("OK: " + message);
-        System.out.println();
-    }
-
-    private void showError(String message) {
-        System.out.println();
-        System.out.println("ERRO: " + message);
-        System.out.println();
-    }
-
-    private void pause() {
-        System.out.println();
-        System.out.print("Pressione ENTER para continuar...");
-        scanner.nextLine();
-    }
-
-    private int readInt() {
-        while (true) {
-            try {
-                String input = scanner.nextLine().trim();
-                return Integer.parseInt(input);
-            } catch (NumberFormatException e) {
-                System.out.print("Por favor, insira um numero valido: ");
-            }
-        }
-    }
+    // --- Component Management ---
 
     private void manageComponents() {
         while (true) {
@@ -2716,7 +2746,7 @@ public class MenuManager {
         pause();
     }
 
-    // ==================== SUPPLIER MANAGEMENT ====================
+    // --- Supplier Management ---
 
     private void manageSuppliers() {
         while (true) {
@@ -2909,7 +2939,7 @@ public class MenuManager {
         pause();
     }
 
-    // ==================== MEDICAL AREA MANAGEMENT ====================
+    // --- Medical Area Management ---
 
     private void manageAreas() {
         while (true) {
@@ -3094,7 +3124,7 @@ public class MenuManager {
         pause();
     }
 
-    // ==================== ORDER MANAGEMENT ====================
+    // --- Order Management ---
 
     private void manageOrders() {
         while (true) {
@@ -3284,7 +3314,7 @@ public class MenuManager {
         pause();
     }
 
-    // ==================== CATEGORY MANAGEMENT ====================
+    // --- Category Management ---
 
     private void manageCategories() {
         while (true) {
@@ -3489,5 +3519,42 @@ public class MenuManager {
             showError("Erro ao remover categoria.");
         }
         pause();
+    }
+
+    // --- Utility Functions ---
+
+    private void clearScreen() {
+        for (int i = 0; i < 50; i++) {
+            System.out.println();
+        }
+    }
+
+    private void showSuccess(String message) {
+        System.out.println();
+        System.out.println("OK: " + message);
+        System.out.println();
+    }
+
+    private void showError(String message) {
+        System.out.println();
+        System.out.println("ERRO: " + message);
+        System.out.println();
+    }
+
+    private void pause() {
+        System.out.println();
+        System.out.print("Pressione ENTER para continuar...");
+        scanner.nextLine();
+    }
+
+    private int readInt() {
+        while (true) {
+            try {
+                String input = scanner.nextLine().trim();
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.print("Por favor, insira um numero valido: ");
+            }
+        }
     }
 }

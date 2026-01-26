@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.io.Serializable;
 
 public class AppData implements Serializable {
+    // All the different data collections
     private ArrayList<User> users;
     private ArrayList<Service> services;
     private ArrayList<LabAnalysis> analyses;

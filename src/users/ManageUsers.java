@@ -11,6 +11,7 @@ public class ManageUsers {
         this.users = new ArrayList<>();
     }
 
+    // Find user by username, returns null if not found
     private User findUserByUsername(String username) {
         Iterator<User> iterator = users.iterator();
         while (iterator.hasNext()) {
@@ -22,6 +23,7 @@ public class ManageUsers {
         return null;
     }
 
+    // Login user with username and password
     public User login(String aUsername, String aPassword) {
         User user = findUserByUsername(aUsername);
         if (user != null && user.verifyPassword(aPassword)) {
@@ -66,6 +68,7 @@ public class ManageUsers {
         return results;
     }
 
+    // Check if username, email, NIF and phone are unique
     public boolean validateUnique(User aUser) {
         Iterator<User> iterator = users.iterator();
         while (iterator.hasNext()) {
@@ -111,6 +114,7 @@ public class ManageUsers {
         return false;
     }
 
+    // Approve or reject a user registration
     public boolean aproveUser(User aUser, boolean approved) {
         User user = findUserByUsername(aUser.getUsername());
         if (user != null) {

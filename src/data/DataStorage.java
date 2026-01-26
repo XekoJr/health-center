@@ -9,6 +9,7 @@ public class DataStorage {
         this.filePath = filePath;
     }
 
+    // Load data from file - returns false if file doesn't exist
     public boolean loadData(AppData data) {
         try {
             if (!fileExists()) {
@@ -40,6 +41,7 @@ public class DataStorage {
         }
     }
 
+    // Save data to file - returns null if error occurs
     public AppData saveData(AppData data) {
         try {
             FileOutputStream fileOut = new FileOutputStream(filePath);

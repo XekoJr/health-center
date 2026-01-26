@@ -12,6 +12,7 @@ public class CredentialsManager {
         this.filePath = filePath;
     }
 
+    // Write all user credentials to file
     public boolean saveCredentials(ArrayList<User> users) {
         try {
             FileWriter writer = new FileWriter(filePath);
