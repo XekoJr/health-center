@@ -90,7 +90,7 @@ public class Validator {
         }
         
         // Only letters and spaces
-        return name.matches("[a-zA-ZÀ-ÿ\\s]+");
+        return name.matches("[\\p{L}\\s]+");
     }
     
     // Check if a string is a valid positive integer
