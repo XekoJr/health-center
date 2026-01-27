@@ -735,7 +735,7 @@ public class MenuManager {
         System.out.println("Servicos aprovados por tecnicos:");
         System.out.println();
 
-        appManager.getManageServices().displayServiceList(pendingServices);
+        appManager.getManageServices().displayServiceListIndexed(pendingServices);
 
         System.out.println();
         System.out.print("Escolha o servico (0 para cancelar): ");
@@ -958,7 +958,7 @@ public class MenuManager {
         // Listar serviços do técnico
         System.out.println("Seus servicos:");
         System.out.println();
-        appManager.getManageServices().displayServiceList(myServices);
+        appManager.getManageServices().displayServiceListIndexed(myServices);
 
         System.out.println();
         System.out.print("Escolha o servico (0 para cancelar): ");
