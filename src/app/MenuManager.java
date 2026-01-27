@@ -1439,6 +1439,29 @@ public class MenuManager {
     private void createAnalysis() {
         clearScreen();
         System.out.println("==========================================");
+        System.out.println("      SELECIONE O SERVICO PARA ANALISE    ");
+        System.out.println("==========================================");
+        System.out.println();
+
+        ArrayList<Service> allServices = appManager.getManageServices().listAllServices();
+        if (allServices.isEmpty()) {
+            showError("Nao existem servicos para associar a analise.");
+            pause();
+            return;
+        }
+        appManager.getManageServices().displayServiceListIndexed(allServices);
+        System.out.println();
+        System.out.print("Escolha o servico (0 para cancelar): ");
+        int serviceChoice = readInt();
+        if (serviceChoice < 1 || serviceChoice > allServices.size()) {
+            showError("Operacao cancelada.");
+            pause();
+            return;
+        }
+        Service selectedService = allServices.get(serviceChoice - 1);
+
+        clearScreen();
+        System.out.println("==========================================");
         System.out.println("               CRIAR ANALISE              ");
         System.out.println("==========================================");
         System.out.println();
@@ -1463,9 +1486,14 @@ public class MenuManager {
         LabAnalysis analysis = new LabAnalysis(code, name, certification, methods);
 
         if (appManager.getManageCatalog().addAnalysis(analysis)) {
-            showSuccess("Analise criada com sucesso!");
-            logManager.log(appManager.getSession().getCurrentUser().getUsername(),
-                    "Criou analise " + code);
+            ServiceAnalysis serviceAnalysis = new ServiceAnalysis(code, analysis);
+            if (selectedService.addAnalysis(serviceAnalysis)) {
+                showSuccess("Analise criada e associada ao servico com sucesso!");
+                logManager.log(appManager.getSession().getCurrentUser().getUsername(),
+                        "Criou e associou analise " + code + " ao servico " + selectedService.getCode());
+            } else {
+                showError("Analise criada, mas nao foi possivel associar ao servico.");
+            }
         } else {
             showError("Erro ao criar analise.");
         }
