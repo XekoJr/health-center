@@ -1,4 +1,4 @@
-# Health Center — Programming Final Project (LEI, ESTGC-Coimbra)
+# Health Center — Programming Final Project (LEI, ESTGOH-Coimbra)
 
 A text-based Java application (no GUI), built with Object-Oriented Programming, to manage a **medical analysis clinic**. Final project for the **Programação** course (LEI, 1st semester, 2025/2026 academic year, ESTGC — Polytechnic Institute of Coimbra), Periodic Assessment 3 / Exam Assessment.
 
